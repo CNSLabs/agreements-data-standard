@@ -142,42 +142,6 @@ The protocol includes variables that define blockchain networks and smart contra
 }
 ```
 
-#### Network Configuration
-
-The protocol defines blockchain networks that are referenced by contract variables:
-
-```json
-"blockchain": {
-    "networks": [
-        {
-            "type": "evm",
-            "chainId": 11155111,
-            "name": "Sepolia",
-            "contracts": [
-                {
-                    "id": "grantContract",
-                    "address": "0x86f2F989D8ba54785427EE3d18D4D849362C7448",
-                    "chainId": 11155111,
-                    "name": "Sepolia",
-                    "type": "evm",
-                    "symbol": "NST",
-                    "abi": [...]
-                },
-                {
-                    "id": "sablierContract",
-                    "address": "0x86f2F989D8ba54785427EE3d18D4D849362C7448",
-                    "type": "evm",
-                    "symbol": "NST",
-                    "abi": [...]
-                }
-            ]
-        }
-    ]
-}
-```
-
-These network definitions establish the blockchain context for smart contract interactions, enabling the protocol to reference on-chain data and execute transactions as part of the agreement workflow.
-
 ## Prose Section
 
 The prose section defines the human-readable legal text of the agreement using a structured content model:
