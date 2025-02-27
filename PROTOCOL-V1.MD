@@ -21,7 +21,6 @@ The metadata section contains critical identity and status information:
 - **version**: Semantic versioning of the document format
 - **jurisdiction**: Legal jurisdiction governing the agreement
 - **createdAt**: ISO-8601 timestamp for document creation
-- **status**: Current state in the agreement lifecycle
 
 ## Variables Section
 
