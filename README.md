@@ -1,3 +1,15 @@
+# Relevant links
+
+[Figma describing progression of protocol from proof of concept, to V1 and V2](https://www.figma.com/board/AnLztpPdXshLLxjXZlU6jP/Ideas-Around-Agreements-Protocol?node-id=0-1&p=f&t=N3SUGWDvrYrS132x-0)
+
+Relevant files in this repo:
+
+[First version of the protocol](https://github.com/ConsenSysMesh/agreements-protocol/blob/master/PROTOCOL-V1.MD)
+
+[First sample V1 agreement](https://github.com/ConsenSysMesh/agreements-protocol/blob/master/src/templates/grant-agreement-DFSM.json)
+
+The next section of this document just describes some of the interesting differences between the V1 and V2 proposed versions.
+
 # V1 Example: DFSM-Based Grant Legal Agreement
 
 Deterministic Finite State Machine (DFSM)
