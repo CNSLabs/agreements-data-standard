@@ -51,8 +51,6 @@ Variables are organized into functional categories:
 
 Each variable contains properties controlling its behavior:
 - **value**: Current data value
-- **mutable**: Whether the value can change after initialization
-- **required**: Whether a value must be provided
 - **displayName/description**: Human-readable metadata
 
 ### Example Variable: Zero-Knowledge Proof
@@ -69,9 +67,7 @@ Each variable contains properties controlling its behavior:
         "value": null,
         "publicInputs": {
             "identityCommitment": "${foundation.id}"
-        },
-        "required": true,
-        "mutable": false
+        }
     }
 }
 ```
@@ -141,10 +137,7 @@ The protocol includes variables that define blockchain networks and smart contra
         "merkleProof": "${merkleProof}",
         "signature": "${senderSignature}",
         "status": "${transactionStatus}",
-        "chainId": "${chainId}",
-        "required": true,
-        "mutable": false,
-        "value": null
+        "chainId": "${chainId}"
     }
 }
 ```
