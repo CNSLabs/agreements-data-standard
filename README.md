@@ -1,4 +1,4 @@
-$\color{red}{\Huge{\textsf{This is a WIP. TODO: Separate into V1 based on an a DFSM (Deterministic Finite State Machine) and V2 based on an ASM (Abstract State Machine)}}}$
+$\color{red}{\Huge{\textsf{This is a WIP. TODO: Separate into V1 based on an a DFSM and V2 based on an ASM}}}$
 
 # V1 Example: DFSM-Based Grant Legal Agreement
 
