@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document describes the structure and functionality of the Grant Agreement Protocol (v1), a JSON-based format for creating and executing legally binding grant agreements. Version 1 implements a deterministic finite state machine approach to agreement execution, providing a structured, predictable workflow for grant funding processes.
+This document describes the structure and functionality of the Grant Agreement Protocol (v1), a JSON-based format for creating and executing legally binding grant agreements. Version 1 implements a deterministic finite state machine approach to describing an agreement via a JSON standard (that ends up wrapped as a VC) and passed to an execution engine which will then receive verifiable inputs to drive the state transitions.
 
 ## Document Structure
 
