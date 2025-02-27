@@ -4,6 +4,8 @@
 
 This document describes the structure and functionality of the Grant Agreement Protocol (v1), a JSON-based format for creating and executing legally binding grant agreements. Version 1 implements a deterministic finite state machine approach to describing an agreement via a JSON standard (that ends up wrapped as a VC) and passed to an execution engine which will then receive verifiable inputs to drive the state transitions.
 
+View a [Sample JSON of this standard](https://github.com/ConsenSysMesh/agreements-protocol/blob/master/src/templates/grant-agreement-DFSM.json) or dive into the documentation details below.
+
 ## Document Structure
 
 The protocol consists of four main sections:
