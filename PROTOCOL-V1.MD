@@ -32,7 +32,7 @@ The variables section defines all data elements used throughout the agreement, i
 | Type | Description | Example Use |
 |------|-------------|-------------|
 | `date` | Calendar date values | Effective dates, term end dates |
-| `identity` | Entity identification | Foundation, grant recipient |
+| `identity` | DID-based entity identification | Foundation, grant recipient |
 | `zkproof` | Zero-knowledge proof | Proof of ownership, proof of humanity |
 | `uint256` | 256-bit unsigned integer | Grant amounts |
 | `eip712Signature` | Ethereum typed data signature | Agreement approval signatures |
@@ -44,7 +44,7 @@ The variables section defines all data elements used throughout the agreement, i
 Variables are organized into functional categories:
 - **agreementVariable**: Basic agreement parameters
 - **verifiableInput**: Cryptographic proofs and verifications
-- **identities**: Parties to the agreement
+- **identities**: DID-based parties to the agreement
 - **blockchain**: On-chain assets and interactions
 
 ### Variable Properties
