@@ -1,4 +1,4 @@
-# WIP: TODO: Separate into V1 based on an a DFSM and V2 based on an ASM
+$\color{red}{\Huge{\textsf{This is a WIP. TODO: Separate into V1 based on an a DFSM and V2 based on an ASM}}}$
 
 # Grant Agreement Template Variables and State Machine
 
