@@ -298,3 +298,11 @@ With the abstract state machine approach, agreements will be able to:
    - Game-theoretic incentive structures
 
 The transition from a finite state machine (v1) to an abstract state machine (v2) represents a quantum leap in agreement protocol capabilities, moving from rigid, predetermined execution paths to a fully programmable, Turing-complete agreement definition language. 
+
+| Feature                              | DFSM | ASM |
+|--------------------------------------|------|-----|
+| **State Transitions**                | ✅   | ✅  |
+| **Provable Inputs Only (VC/ZK Proofs)** | ✅ | ✅ |
+| **Memory (Counters, Stack)**         | ❌   | ✅  |
+| **Computation Between Transitions**  | ❌   | ✅  |
+| **Complex Logic (Assertions, Conditions)** | ❌ | ✅ |
