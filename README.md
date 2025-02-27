@@ -1,6 +1,6 @@
-$\color{red}{\Huge{\textsf{This is a WIP. TODO: Separate into V1 based on an a DFSM and V2 based on an ASM}}}$
+$\color{red}{\Huge{\textsf{This is a WIP. TODO: Separate into V1 based on an a DFSM (Deterministic Finite State Machine) and V2 based on an ASM (Abstract State Machine)}}}$
 
-# V1 Example: DFSM-Based Grant Legal Agreement State Machine
+# V1 Example: DFSM-Based Grant Legal Agreement
 
 Deterministic Finite State Machine (DFSM)
 
@@ -22,7 +22,7 @@ stateDiagram-v2
 Each transition is strictly triggered by a Verifiable Credential (VC) or ZK Proof.
 No variables, counters, or complex computation—only state-to-state transitions.
 
-# V2 Example: ASM-Based Grant Legal Agreement State Machine
+# V2 Example: ASM-Based Grant Legal Agreement
 ```mermaid
 stateDiagram-v2
     [*] --> ProposalSubmitted
