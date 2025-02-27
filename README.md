@@ -51,8 +51,23 @@ Still event-driven and reliant on provable inputs (VCs, ZK proofs).
 
 ----
 
+Sample Grant Agreeement using DFSM (see https://github.com/ConsenSysMesh/agreements-protocol/blob/master/src/templates/grant-agreement-DFSM.json as input)
 
+```mermaid
+stateDiagram-v2
+    [*] --> DRAFT
+    DRAFT --> IDENTITY_VERIFICATION: effectiveDate && grantAmount && termEndDate set
+    IDENTITY_VERIFICATION --> AWAITING_SIGNATURES: proofOfOwnership valid && proofOfHumanity valid
+    AWAITING_SIGNATURES --> ACTIVE: completionSignature valid
+    ACTIVE --> PENDING_REVIEW: currentTimestamp >= termEndDate
+    PENDING_REVIEW --> APPROVED: completionSignature valid
+    PENDING_REVIEW --> REJECTED: rejectionSignature valid
+    APPROVED --> PAYMENT_PENDING: automatic
+    PAYMENT_PENDING --> COMPLETED: grantTransactionProof valid
+    COMPLETED --> [*]
+```
 
+----
 
 # Grant Agreement Template Variables and State Machine
 
