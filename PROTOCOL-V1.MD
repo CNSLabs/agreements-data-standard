@@ -135,6 +135,13 @@ The protocol includes variables that define blockchain networks and smart contra
             "to": "${grantRecipient.props.blockchainAddress}",
             "amount": "${grantAmount}"
         },
+        "txHash": "${transactionHash}",
+        "blockNumber": "${blockNumber}",
+        "blockHash": "${blockHash}",
+        "merkleProof": "${merkleProof}",
+        "signature": "${senderSignature}",
+        "status": "${transactionStatus}",
+        "chainId": "${chainId}",
         "required": true,
         "mutable": false,
         "value": null
