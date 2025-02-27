@@ -1,0 +1,477 @@
+{
+    "metadata": {
+        "id": "did:example:123456789abcdefghi",
+        "templateId": "did:template:grant-agreement-v1",
+        "version": "1.0.0",
+        "jurisdiction": "CAYMAN_ISLANDS",
+        "createdAt": "2024-03-20T12:00:00Z",
+        "status": "DRAFT"
+    },
+    "variables": {
+        "effectiveDate": {
+            "id": "effectiveDate",
+            "type": "date",
+            "displayName": "Effective Date",
+            "description": "The date when this agreement becomes effective",
+            "category": "agreementVariable",
+            "props": {
+                "value": null,
+                "mutable": false,
+                "required": true
+            }
+        },
+        "foundation": {
+            "id": "did:example:foundation",
+            "type": "identity",
+            "props": {
+                "type": "organization",
+                "name": "Ecosystem Name Foundation",
+                "jurisdiction": "CAYMAN_ISLANDS",
+                "blockchainAddress": "${foundationAddress}",
+                "role": "GRANTOR"
+            }
+        },
+        "proofOfOwnership": {
+            "id": "proofOfOwnership",
+            "type": "zkproof",
+            "displayName": "Proof of Ownership",
+            "description": "Zero-knowledge proof verifying the foundation's ownership of grant tokens",
+            "category": "verifiableInput",
+            "props": {
+                "proofSystem": "groth16",
+                "value": null,
+                "publicInputs": {
+                    "identityCommitment": "${foundation.id}"
+                },
+                "required": true,
+                "mutable": false
+            }
+        },
+        "grantRecipient": {
+            "id": "did:example:grantRecipient",
+            "type": "identity",
+            "props": {
+                "type": "individual",
+                "name": "${recipientName}",
+                "blockchainAddress": "${recipientAddress}",
+                "role": "GRANTEE"
+            }
+        },
+        "grantRecipientProofOfHumanity": {
+            "id": "proofOfHumanity",
+            "type": "zkproof",
+            "displayName": "Proof of Humanity",
+            "description": "Zero-knowledge proof verifying the grant recipient's humanity",
+            "category": "verifiableInput",
+            "props": {
+                "proofSystem": "groth16",
+                "value": null,
+                "publicInputs": {
+                    "identityCommitment": "${grantRecipient.id}"
+                },
+                "required": true,
+                "mutable": false
+            }
+        },
+        "tokenAllocator": {
+            "id": "did:example:tokenAllocator",
+            "type": "identity",
+            "displayName": "Token Allocator",
+            "description": "The allocator of the tokens",
+            "category": "identities",
+            "props": {
+                "type": "individual",
+                "name": "${allocatortName}",
+                "blockchainAddress": "${allocatortAddress}",
+                "role": "GRANTEE"
+            }
+        },
+        "termEndDate": {
+            "id": "did:termEndDate",
+            "type": "date",
+            "displayName": "Term end Ddte",
+            "description": "This date is the agreement concludes",
+            "category": "agreementVariable",
+            "props": {
+                "value": "10/20/2025",
+                "mutable": true
+            }
+        },
+        "changeTermDateAllocatorSignature": {
+            "id": "completionSignature",
+            "type": "eip712Signature",
+            "displayName": "Agreement on Completion Signature Data",
+            "description": "Both parties must agree to this date",
+            "category": "verifiableInput",
+            "signer": [
+                "${tokenAllocator.blockchainAddress}"
+            ]
+        },
+        "changeTermDateGrantRecipientSignature": {
+            "id": "completionSignature",
+            "type": "eip712Signature",
+            "displayName": "Agreement on Completion Signature Data",
+            "description": "Both parties must agree to this date",
+            "category": "verifiableInput",
+            "signer": [
+                "${grantRecipient.blockchainAddress}"
+            ]
+        },
+        "grantAmount": {
+            "id": "grantAmount",
+            "type": "uint256",
+            "displayName": "Grant Amount",
+            "description": "Amount of tokens to be granted",
+            "value": null,
+            "mutable": true,
+            "required": true,
+            "category": "blockchain"
+        },
+        "completionSignature": {
+            "id": "completionSignature",
+            "type": "eip712Signature",
+            "displayName": "Completion Signature",
+            "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
+            "value": null,
+            "mutable": true,
+            "required": true,
+            "category": "blockchain",
+            "signer": "${tokenAllocator.blockchainAddress}"
+        },
+        "rejectionSignature": {
+            "id": "rejectionSignature",
+            "type": "eip712Signature",
+            "displayName": "Rejection Signature",
+            "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
+            "value": null,
+            "mutable": true,
+            "required": false,
+            "category": "blockchain",
+            "signer": "${tokenAllocator.blockchainAddress}"
+        },
+        "grantContract": {
+            "id": "grantContract",
+            "type": "evm",
+            "props": {
+            "address": "0x86f2F989D8ba54785427EE3d18D4D849362C7448",
+            "chainId": 11155111,
+            "name": "Sepolia",
+            "symbol": "NST",
+            "abi":
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "to",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "transfer",
+                    "outputs": [
+                        {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                }
+            }
+        },
+        "grantTransactionProof": {
+            "id": "grantTransactionProof",
+            "type": "transactionProof",
+            "displayName": "Grant Transaction Proof",
+            "description": "Proof of successful token transfer to grant recipient",
+            "category": "verifiableInput",
+            "props": {
+                "contractId": "${grantContract.id}",
+                "method": "transfer",
+                "params": {
+                    "to": "${grantRecipient.props.blockchainAddress}",
+                    "amount": "${grantAmount}"
+                },
+                "required": true,
+                "mutable": false,
+                "value": null
+            }
+        }
+    },
+    "prose": {
+        "sections": [
+            {
+                "id": "heading",
+                "type": "heading",
+                "level": 1,
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Grant Agreement",
+                        "styles": {
+                            "bold": true
+                        }
+                    }
+                ],
+                "props": {
+                    "textColor": "default",
+                    "backgroundColor": "default",
+                    "textAlignment": "left"
+                }
+            },
+            {
+                "id": "introduction",
+                "type": "paragraph",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "This Grant Agreement (",
+                        "styles": {}
+                    },
+                    {
+                        "type": "text",
+                        "text": "\"Agreement\"",
+                        "styles": {
+                            "bold": true
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": ") is entered into on ${effectiveDate}, (the ",
+                        "styles": {}
+                    },
+                    {
+                        "type": "text",
+                        "text": "\"Effective Date\"",
+                        "styles": {
+                            "bold": true
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": "), between ${foundation.name}, a ${foundation.jurisdiction} foundation company (the ",
+                        "styles": {}
+                    },
+                    {
+                        "type": "text",
+                        "text": "\"Foundation\"",
+                        "styles": {
+                            "bold": true
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": ") with D3 address ${foundation.blockchainAddress}, and ${grantRecipient.name}, an individual with address ${grantRecipient.blockchainAddress} (",
+                        "styles": {}
+                    },
+                    {
+                        "type": "text",
+                        "text": "\"Grant Recipient\"",
+                        "styles": {
+                            "bold": true
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "text": ").",
+                        "styles": {}
+                    }
+                ],
+                "props": {
+                    "textColor": "default",
+                    "backgroundColor": "default",
+                    "textAlignment": "left"
+                }
+            }
+        ]
+    },
+    "blockchain": {
+        "networks": [
+            
+            {
+                "type": "evm",
+                "chainId": 11155111,
+                "name": "Sepolia",
+                "contracts": [
+                    {
+                        "id": "grantContract",
+                        "address": "0x86f2F989D8ba54785427EE3d18D4D849362C7448",
+                        "chainId": 11155111,
+                        "name": "Sepolia",
+                        "type": "evm",
+                        "symbol": "NST",
+                        "abi": [
+                            {
+                                "inputs": [
+                                    {
+                                        "internalType": "address",
+                                        "name": "to",
+                                        "type": "address"
+                                    },
+                                    {
+                                        "internalType": "uint256",
+                                        "name": "amount",
+                                        "type": "uint256"
+                                    }
+                                ],
+                                "name": "transfer",
+                                "outputs": [
+                                    {
+                                        "internalType": "bool",
+                                        "name": "",
+                                        "type": "bool"
+                                    }
+                                ],
+                                "stateMutability": "nonpayable",
+                                "type": "function"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sablierContract",
+                        "address": "0x86f2F989D8ba54785427EE3d18D4D849362C7448",
+                        "type": "evm",
+                        "symbol": "NST",
+                        "abi": [
+                            {
+                                "inputs": [
+                                    {
+                                        "internalType": "address",
+                                        "name": "to",
+                                        "type": "address"
+                                    },
+                                    {
+                                        "internalType": "uint256",
+                                        "name": "amount",
+                                        "type": "uint256"
+                                    }
+                                ],
+                                "name": "transfer",
+                                "outputs": [
+                                    {
+                                        "internalType": "bool",
+                                        "name": "",
+                                        "type": "bool"
+                                    }
+                                ],
+                                "stateMutability": "nonpayable",
+                                "type": "function"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "executionFlow": {
+        "states": [
+            "DRAFT",
+            "IDENTITY_VERIFICATION",
+            "AWAITING_SIGNATURES",
+            "ACTIVE",
+            "PENDING_REVIEW",
+            "APPROVED",
+            "REJECTED",
+            "PAYMENT_PENDING",
+            "COMPLETED"
+        ],
+        "transitions": [
+            {
+                "from": "DRAFT",
+                "to": "IDENTITY_VERIFICATION",
+                "conditions": [
+                    {
+                        "type": "variablesSet",
+                        "variables": [
+                            "effectiveDate",
+                            "grantAmount",
+                            "termEndDate"
+                        ]
+                    }
+                ]
+            },
+            {
+                "from": "IDENTITY_VERIFICATION",
+                "to": "AWAITING_SIGNATURES",
+                "conditions": [
+                    {
+                        "type": "and",
+                        "conditions": [
+                            {
+                                "type": "proofValid",
+                                "proofId": "proofOfOwnership"
+                            },
+                            {
+                                "type": "proofValid",
+                                "proofId": "proofOfHumanity"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "from": "AWAITING_SIGNATURES",
+                "to": "ACTIVE",
+                "conditions": [
+                    {
+                        "type": "signatureValid",
+                        "signature": "completionSignature"
+                    }
+                ]
+            },
+            {
+                "from": "ACTIVE",
+                "to": "PENDING_REVIEW",
+                "conditions": [
+                    {
+                        "type": "comparison",
+                        "operator": "greaterThanOrEqual",
+                        "left": "${currentTimestamp}",
+                        "right": "${termEndDate}"
+                    }
+                ]
+            },
+            {
+                "from": "PENDING_REVIEW",
+                "to": "APPROVED",
+                "conditions": [
+                    {
+                        "type": "signatureValid",
+                        "signature": "completionSignature"
+                    }
+                ]
+            },
+            {
+                "from": "PENDING_REVIEW",
+                "to": "REJECTED",
+                "conditions": [
+                    {
+                        "type": "signatureValid",
+                        "signature": "rejectionSignature"
+                    }
+                ]
+            },
+            {
+                "from": "APPROVED",
+                "to": "PAYMENT_PENDING",
+                "conditions": [],
+                "automatic": true
+            },
+            {
+                "from": "PAYMENT_PENDING",
+                "to": "COMPLETED",
+                "conditions": [
+                    {
+                        "type": "proofValid",
+                        "proofId": "grantTransactionProof"
+                    }
+                ]
+            }
+        ]
+    }
+}
