@@ -1,8 +1,8 @@
-# Grant Agreement Protocol Documentation (v1)
+# Grant Agreement Protocol Documentation (Current version: V0.1)
 
 ## Introduction
 
-This document describes the structure and functionality of the Grant Agreement Protocol (v1), a JSON-based format for creating and executing legally binding grant agreements. Version 1 implements a deterministic finite state machine approach to describing an agreement via a JSON standard (that ends up wrapped as a VC) and passed to an execution engine which will then receive verifiable inputs to drive the state transitions.
+This document describes the structure and functionality of the Grant Agreement Protocol, a JSON-based format for creating and executing legally binding grant agreements. Version 1 implements a deterministic finite state machine approach to describing an agreement via a JSON standard (that ends up wrapped as a VC) and passed to an execution engine which will then receive verifiable inputs to drive the state transitions.
 
 View a [Sample JSON of this standard](https://github.com/ConsenSysMesh/agreements-protocol/blob/master/src/templates/grant-agreement-DFSM.json) or dive into the documentation details below.
 
@@ -220,89 +220,5 @@ The finite state machine approach means:
 - Conditions are evaluated using a fixed set of operations
 - Agreement execution is fully deterministic
 
-## Future Developments: Protocol v2 (Abstract State Machine)
-
-While Version 1 uses a deterministic finite state machine approach, **Version 2 will transition to an abstract state machine model**, enabling significantly more powerful and flexible agreement structures.
-
-### Key Enhancements in v2
-
-1. **Turing-Complete Expression Language**
-   - Support for complex expressions and computations within conditions
-   - Ability to define custom functions and operations
-   - Integration with external data sources and oracles
-
-2. **Dynamic State Generation**
-   - States can be generated dynamically based on agreement parameters
-   - Support for infinite state spaces through parametric state definitions
-   - On-demand state creation during execution
-
-3. **Rich Conditional Logic**
-   - Support for recursive conditions and operations
-   - Temporal logic with forward-looking assertions
-   - Probabilistic transitions and fuzzy logic
-
-4. **Adaptive Agreement Structure**
-   - Self-modifying agreement capabilities
-   - Runtime generation of new variables and sections
-   - Agreement structure evolution based on execution history
-
-5. **Advanced Integration Capabilities**
-   - Multi-chain orchestration
-   - Cross-protocol agreement interoperability
-   - AI-assisted agreement execution and optimization
-
-### JSON Structure Enhancements
-
-The v2 protocol will extend the JSON structure with new sections:
-
-```json
-{
-    // Existing sections...
-    
-    "abstractStateModel": {
-        "stateGenerators": [...],
-        "expressionLanguage": "...",
-        "externalConnectors": [...],
-        "computationalBounds": {...}
-    },
-    
-    "dynamicVariables": {
-        "definitions": [...],
-        "generationRules": [...]
-    }
-}
-```
-
-### New Capabilities Enabled by v2
-
-With the abstract state machine approach, agreements will be able to:
-
-1. **Implement Complex Financial Instruments**
-   - Options and derivatives with dynamic pricing
-   - Multi-stage vesting with adaptive conditions
-   - Algorithmic fund distribution based on performance metrics
-
-2. **Support Rich Governance Models**
-   - Delegated voting systems with liquid democracy
-   - Quadratic funding allocation
-   - Reputation-based permission systems
-
-3. **Enable Autonomous Agreements**
-   - Self-governing agreement systems
-   - Agreements that can spawn and manage child agreements
-   - Evolutionary agreement models that learn from execution history
-
-4. **Facilitate Multi-Party Coordination**
-   - Dynamic coalition formation and dissolution
-   - Algorithmic dispute resolution
-   - Game-theoretic incentive structures
-
-The transition from a finite state machine (v1) to an abstract state machine (v2) represents a quantum leap in agreement protocol capabilities, moving from rigid, predetermined execution paths to a fully programmable, Turing-complete agreement definition language. 
-
-| Feature                              | DFSM | ASM |
-|--------------------------------------|------|-----|
-| **State Transitions**                | ✅   | ✅  |
-| **Provable Inputs Only (VC/ZK Proofs)** | ✅ | ✅ |
-| **Memory (Counters, Stack)**         | ❌   | ✅  |
-| **Computation Between Transitions**  | ❌   | ✅  |
-| **Complex Logic (Assertions, Conditions)** | ❌ | ✅ |
+## Future Developments:
+[IP-001.MD](./Improvement-proposals/IP-001.MD) - Upgrade from a DFSM to an Abstract State Machine (ASM), for a Turing-complete expression language and dynamic state generation.
