@@ -1,4 +1,4 @@
-# Grant Agreement Protocol Documentation (Current version: V0.1)
+# Grant Agreement Protocol (Current version: V0.1)
 
 ## Introduction
 
