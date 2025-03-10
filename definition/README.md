@@ -1,4 +1,4 @@
-The next section of this document just describes some of the interesting differences between the V1 and V2 proposed versions.
+This document describes how the protocol might evolve over time.
 
 # V1 Example: DFSM-Based Grant Legal Agreement
 
