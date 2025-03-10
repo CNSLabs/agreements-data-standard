@@ -15,7 +15,7 @@
             "category": "agreementVariable",
             "props": {
                 "value": null,
-                "mutable": false,
+                "mutable": true,
                 "required": true
             }
         },
@@ -110,7 +110,7 @@
             }
         }
     },
-    "prose": {
+    "content": {
         "sections": [
             {
                 "id": "heading",
@@ -200,37 +200,46 @@
     "executionFlow": {
         "states": [
             "DRAFT",
-            "IDENTITY_VERIFICATION",
             "AWAITING_SIGNATURES",
-            "ACTIVE",
-            "PENDING_REVIEW",
+            "ACTIVE_PENDING_REVIEW",
             "APPROVED",
             "REJECTED",
             "PAYMENT_PENDING",
             "COMPLETED"
         ],
         "inputs": {
-            "completionSignature": {
-                "id": "completionSignature",
+            "grantRecipientSignature": {
+                "id": "grantRecipientSignature",
                 "type": "eip712Signature",
-                "displayName": "Completion Signature",
+                "displayName": "Grant Recipient Signature",
+                "description": "EIP712 signature from the grant recipient accepting the terms of the grant agreement",
+                "value": null,
+                "mutable": true,
+                "required": true,
+                "category": "blockchain",
+                "signer": "${grantRecipient.props.blockchainAddress}"
+            },
+            "workApprovedSignature": {
+                "id": "workApprovedSignature",
+                "type": "eip712Signature",
+                "displayName": "Work Approved Signature",
                 "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
                 "value": null,
                 "mutable": true,
                 "required": true,
                 "category": "blockchain",
-                "signer": "${tokenAllocator.blockchainAddress}"
+                "signer": "${tokenAllocator.props.blockchainAddress}"
             },
-            "rejectionSignature": {
-                "id": "rejectionSignature",
+            "workRejectedSignature": {
+                "id": "workRejectedSignature",
                 "type": "eip712Signature",
-                "displayName": "Rejection Signature",
+                "displayName": "Work Rejected Signature",
                 "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
                 "value": null,
                 "mutable": true,
                 "required": false,
                 "category": "blockchain",
-                "signer": "${tokenAllocator.blockchainAddress}"
+                "signer": "${tokenAllocator.props.blockchainAddress}"
             },
             "grantTransactionProof": {
                 "id": "grantTransactionProof",
@@ -261,11 +270,11 @@
         "transitions": [
             {
                 "from": "DRAFT",
-                "to": "IDENTITY_VERIFICATION",
+                "to": "AWAITING_SIGNATURES",
                 "conditions": [
                     {
                         "type": "variablesSet",
-                        "variables": [
+                        "inputs": [
                             "effectiveDate",
                             "grantAmount",
                             "termEndDate",
@@ -275,58 +284,42 @@
                 ]
             },
             {
-                "from": "IDENTITY_VERIFICATION",
-                "to": "AWAITING_SIGNATURES",
-                "conditions": []
-            },
-            {
                 "from": "AWAITING_SIGNATURES",
-                "to": "ACTIVE",
+                "to": "ACTIVE_PENDING_REVIEW",
                 "conditions": [
                     {
-                        "type": "signatureValid",
-                        "signature": "completionSignature"
+                        "type": "isValid",
+                        "inputs": ["grantRecipientSignature"]
                     }
                 ]
             },
             {
-                "from": "ACTIVE",
-                "to": "PENDING_REVIEW",
-                "conditions": []
-            },
-            {
-                "from": "PENDING_REVIEW",
-                "to": "APPROVED",
+                "from": "ACTIVE_PENDING_REVIEW",
+                "to": "PAYMENT_PENDING",
                 "conditions": [
                     {
-                        "type": "signatureValid",
-                        "signature": "completionSignature"
+                        "type": "isValid",
+                        "inputs": ["workApprovedSignature"]
                     }
                 ]
             },
             {
-                "from": "PENDING_REVIEW",
+                "from": "ACTIVE_PENDING_REVIEW",
                 "to": "REJECTED",
                 "conditions": [
                     {
-                        "type": "signatureValid",
-                        "signature": "rejectionSignature"
+                        "type": "isValid",
+                        "inputs": ["workRejectedSignature"]
                     }
                 ]
-            },
-            {
-                "from": "APPROVED",
-                "to": "PAYMENT_PENDING",
-                "conditions": [],
-                "automatic": true
             },
             {
                 "from": "PAYMENT_PENDING",
                 "to": "COMPLETED",
                 "conditions": [
                     {
-                        "type": "proofValid",
-                        "proofId": "grantTransactionProof"
+                        "type": "isValid",
+                        "inputs": ["grantTransactionProof"]
                     }
                 ]
             }
