@@ -1,3 +1,5 @@
+*** NOTE: THIS IS OUT OF DATE, AND WILL BE UPDATED AS PART OF FOLLOWING THE IP PROCESS ***
+
 # Grant Agreement Protocol (Current version: V0.1)
 
 ## Introduction
