@@ -27,8 +27,6 @@ We welcome contributions to the Grant Agreement Protocol! Please see our [CONTRI
 * VC Schemas - defining the VC schemas the protocol uses: agreement template, agreement instante, agreement signature
 * DID Standard Expandion - further leaning into the usage of DIDs instead of assuming ethr method
 
-Once approached, get a schema definition for Bryan so he can hit up the LLMs
-
 ## License
 
 TBD
