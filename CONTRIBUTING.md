@@ -5,12 +5,14 @@
 An IP (Improvement Proposal) is a proposed change to the protocol. In order to be fully integrated into the protocol, currently the protocol team votes on the over approval, and the following process must be followed.
 
 IP currently have two statuses:
+* IDEA - budding concept
 * DRAFT - a proposal that is not yet ready for review
 * PROPOSED - a proposal that is ready for review
 * ACCEPTED - a proposal that has been accepted and integrated into the protocol
 
 IP state PR requirements:
-* non-existent -> DRAFT: a simple markdown file in the `definition/improvement-proposals` directory
+* IDEA: a PR to the [README.md](README.me) file proposing it to be added to the list of IPs that might become drafter
+* IDEA -> DRAFT: a simple markdown file in the `definition/improvement-proposals` directory
 * DRAFT -> PROPOSED: a PR that includes the following:
   * the IP markdown file
   * modified [PROTOCOL.md](PROTOCOL.md) to include the new IP
