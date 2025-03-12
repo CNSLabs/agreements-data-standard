@@ -6,7 +6,7 @@ This document describes the structure and functionality of the Grant Agreement P
 
 [Current Protocol Definition](PROTOCOL.md)
 
-[Current Sample Template](./definition/templates/grant-agreement.json) or dive into the documentation details below.
+[Current Sample Template](./definition/templates/grant-agreement.json)
 
 ## Contributing
 
