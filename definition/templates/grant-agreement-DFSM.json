@@ -56,10 +56,22 @@
         "tokenAllocator": {
             "id": "did:example:tokenAllocator",
             "type": "identity",
-            "displayName": "Token Allocator",
+            "displayName": "Token Allocator (Party A)",
             "description": "The allocator of the tokens",
             "props": {
-                "type": "individual",
+                "identityType": "individual",
+                "requiredInputs": {
+                    "firstName": {
+                        "displayName": "First Name",
+                        "description": "The first name of the token allocator",
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "displayName": "Last Name",
+                        "description": "The last name of the token allocator",
+                        "type": "string"
+                    }
+                },
                 "name": "${allocatorName}",
                 "blockchainAddress": "${allocatorAddress}",
                 "role": "GRANTEE"
