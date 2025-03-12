@@ -12,7 +12,7 @@ IP currently have two statuses:
 
 IP state PR requirements:
 * `IDEA`: a PR to the [README.md](README.me) file proposing it to be added to the list of IPs that might become drafter
-* `IDEA -> DRAFT`: a simple markdown file in the [definition](definition) directory
+* `IDEA -> DRAFT`: a simple markdown file in the [definition](definition) directory. At this point your IP will get an assigned number.
 * `DRAFT -> PROPOSED`: a PR that includes the following:
   * the IP markdown file
   * modified [PROTOCOL.md](PROTOCOL.md) to include the new IP
