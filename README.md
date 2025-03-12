@@ -30,6 +30,3 @@ We welcome contributions to the Grant Agreement Protocol! Please see our [CONTRI
 ## License
 
 TBD
-
-https://github.com/ConsenSysMesh/agreements-protocol/blob/master/definition/improvement-proposals/IP-001.MD
-https://github.com/ConsenSysMesh/agreements-protocol/blob/master/definition/improvement-proposals/IP-001.md
