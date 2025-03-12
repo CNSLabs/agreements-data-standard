@@ -21,6 +21,13 @@ We welcome contributions to the Grant Agreement Protocol! Please see our [CONTRI
 ## Draft IPs:
 * [IP-001.md](./definition/improvement-proposals/IP-001.md) - Upgrade from a DFSM to an Abstract State Machine (ASM), for a Turing-complete expression language and dynamic state generation.
 
+## Idea IPs:
+* Global Variable Definitions - standardizing definition of agreement variables and simplifying as well
+* Formal Definitions of Proofs - agreeing on how we allow verifiable proofs to be provided to the FSM (712 signatures, tx receipts, zk proofs) 
+* VC Schemas - defining the VC schemas the protocol uses: agreement template, agreement instante, agreement signature
+* DID Standard Expandion - further leaning into the usage of DIDs instead of assuming ethr method
+
+Once approached, get a schema definition for Bryan so he can hit up the LLMs
 
 ## License
 
