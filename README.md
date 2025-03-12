@@ -11,8 +11,8 @@ This document describes the structure and functionality of the Grant Agreement P
 [Current Sample Template Description](./definition/templates/grant-agreement.md)
 
 ## Future Developments:
-* [IP-001.MD](./definition/improvement-proposals/IP-001.md) - Upgrade from a DFSM to an Abstract State Machine (ASM), for a Turing-complete expression language and dynamic state generation.
-* [IP-002.MD](./definition/improvement-proposals/IP-002.md) - Upgrade prose section to use MDAST (Markdown Abstract Syntax Tree)
+* [IP-001.md](./definition/improvement-proposals/IP-001.md) - Upgrade from a DFSM to an Abstract State Machine (ASM), for a Turing-complete expression language and dynamic state generation.
+* [IP-002.md](./definition/improvement-proposals/IP-002.md) - Upgrade prose section to use MDAST (Markdown Abstract Syntax Tree)
 
 ## Contributing
 
