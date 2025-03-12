@@ -1,5 +1,9 @@
 *** NOTE: THIS IS OUT OF DATE, AND WILL BE UPDATED AS PART OF FOLLOWING THE IP PROCESS ***
 
+This document is heavily in flux for now. Here are some relevant Figma links:
+* (Initial evolution from POC to Protocol)[https://www.figma.com/board/AnLztpPdXshLLxjXZlU6jP/Ideas-Around-Agreements-Protocol?node-id=0-1&p=f&t=xJ2cVaLBufDJKImJ-0]
+* (Incremental design on protcol)[https://www.figma.com/board/IKvVxlr20bd9qRKSxll4ss/Agreements-Protocol?node-id=335-3026&t=iJA8Q3WHIL7NdISn-0]
+
 # Grant Agreement Protocol (Current version: V0.1)
 
 ## Introduction
