@@ -6,18 +6,25 @@ This document describes the structure and functionality of the Grant Agreement P
 
 [Current Protocol Definition](PROTOCOL.md)
 
-[Current Sample Template](./definition/templates/grant-agreement.json)
-
-[Current Sample Template Description](./definition/templates/grant-agreement.md)
-
-## Future Developments:
-* [IP-001.md](./definition/improvement-proposals/IP-001.md) - Upgrade from a DFSM to an Abstract State Machine (ASM), for a Turing-complete expression language and dynamic state generation.
-* [IP-002.md](./definition/improvement-proposals/IP-002.md) - Upgrade prose section to use MDAST (Markdown Abstract Syntax Tree)
+[Current Sample Template](./definition/templates/grant-agreement.json) or dive into the documentation details below.
 
 ## Contributing
 
 We welcome contributions to the Grant Agreement Protocol! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
 
+## Approved IPs:
+* [IP-002.md](./definition/improvement-proposals/IP-002.md) - Upgrade prose section to use MDAST (Markdown Abstract Syntax Tree)
+
+## Proposed IPs:
+* None yet
+
+## Draft IPs:
+* [IP-001.md](./definition/improvement-proposals/IP-001.md) - Upgrade from a DFSM to an Abstract State Machine (ASM), for a Turing-complete expression language and dynamic state generation.
+
+
 ## License
 
 TBD
+
+https://github.com/ConsenSysMesh/agreements-protocol/blob/master/definition/improvement-proposals/IP-001.MD
+https://github.com/ConsenSysMesh/agreements-protocol/blob/master/definition/improvement-proposals/IP-001.md
