@@ -13,7 +13,7 @@ IP state PR requirements:
 * non-existent -> DRAFT: a simple markdown file in the `definition/improvement-proposals` directory
 * DRAFT -> PROPOSED: a PR that includes the following:
   * the IP markdown file
-  * modified [PROTOCOL.MD](PROTOCOL.md) to include the new IP
+  * modified [PROTOCOL.md](PROTOCOL.md) to include the new IP
   * modified [templates json file](definition/templates/grant-agreement.json) to showcase exact changes to the JSON template
   * modified [templates description file](definition/templates/grant-agreement.md) to showcase the changes to the prose
 * PROPOSED -> ACCEPTED: a vote by the protocol team to accept the proposal and merge the PROPOSED PR
