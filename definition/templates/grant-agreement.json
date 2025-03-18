@@ -248,22 +248,16 @@
                 "description": "Proof of successful token transfer to grant recipient",
                 "category": "verifiableInput",
                 "props": {
-                    "contractId": "${grantContract.id}",
-                    "method": "transfer",
-                    "params": {
-                        "to": "${grantRecipient.props.blockchainAddress}",
-                        "amount": "${grantAmount}"
-                    },
-                    "txHash": "${transactionHash}",
-                    "blockNumber": "${blockNumber}",
-                    "blockHash": "${blockHash}",
-                    "merkleProof": "${merkleProof}",
-                    "signature": "${senderSignature}",
-                    "status": "${transactionStatus}",
                     "chainId": "${chainId}",
-                    "required": true,
-                    "mutable": false,
-                    "value": null
+                    "transactionType": "contractCall",
+                    "contractCall": {
+                        "method": "transfer",
+                        "params": {
+                            "to": "${grantRecipient.props.blockchainAddress}",
+                            "amount": "${grantAmount}"
+                        },
+                        "contractReference": "${grantContract}"
+                    }
                 }
             }
         },
