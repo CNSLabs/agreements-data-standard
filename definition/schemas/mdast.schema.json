@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/mdast.schema.json",
+  "title": "Markdown Abstract Syntax Tree (mdast)",
+  "description": "A schema representing the structure of mdast nodes.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "The type of the mdast node.",
+      "type": "string",
+      "enum": [
+        "blockquote",
+        "break",
+        "code",
+        "definition",
+        "emphasis",
+        "heading",
+        "html",
+        "image",
+        "imageReference",
+        "inlineCode",
+        "link",
+        "linkReference",
+        "list",
+        "listItem",
+        "paragraph",
+        "root",
+        "strong",
+        "text",
+        "thematicBreak"
+      ]
+    },
+    "children": {
+      "description": "An array of child nodes.",
+      "type": "array",
+      "items": { "$ref": "#" }
+    },
+    "value": {
+      "description": "The textual value of the node, applicable to literal nodes.",
+      "type": "string"
+    },
+    "depth": {
+      "description": "The depth of the heading node.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6
+    },
+    "lang": {
+      "description": "The language of the code block.",
+      "type": "string"
+    },
+    "identifier": {
+      "description": "The identifier for reference nodes.",
+      "type": "string"
+    },
+    "label": {
+      "description": "The label for reference nodes.",
+      "type": "string"
+    },
+    "url": {
+      "description": "The URL for link and image nodes.",
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "description": "The title attribute for link and image nodes.",
+      "type": "string"
+    },
+    "alt": {
+      "description": "The alternative text for image nodes.",
+      "type": "string"
+    },
+    "checked": {
+      "description": "The checked state of a list item node.",
+      "type": ["boolean", "null"]
+    },
+    "spread": {
+      "description": "Whether the list is spread.",
+      "type": "boolean"
+    },
+    "ordered": {
+      "description": "Whether the list is ordered.",
+      "type": "boolean"
+    },
+    "start": {
+      "description": "The starting number of an ordered list.",
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": ["type"],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "type": { "const": "heading" } }
+      },
+      "then": {
+        "required": ["depth", "children"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "code" } }
+      },
+      "then": {
+        "required": ["value"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "image" } }
+      },
+      "then": {
+        "required": ["url"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "link" } }
+      },
+      "then": {
+        "required": ["url", "children"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "list" } }
+      },
+      "then": {
+        "required": ["children"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "listItem" } }
+      },
+      "then": {
+        "required": ["children"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "paragraph" } }
+      },
+      "then": {
+        "required": ["children"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "root" } }
+      },
+      "then": {
+        "required": ["children"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "text" } }
+      },
+      "then": {
+        "required": ["value"]
+      }
+    }
+  ]
+}
+  
