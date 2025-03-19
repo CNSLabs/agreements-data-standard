@@ -1,10 +1,10 @@
-## Risc0 Execution Implementation (TODO)
+## Risc0 Execution Implementation
 
 # IDEA
 Implement a generic zk circuit using [Risc0]((https://risczero.com)) for state machine verifiable input processing.
 Host will need to provide any network call access and thus a trusted environment for the machine will be required. EVM tx inputs can be verified using [Risc0's Steel solution](https://risczero.com/steel).
 
-# Key Benefits
+## Key Benefits
 1. Trustless Verification: All state transitions are proven via RISC Zero's zkVM
 2. EVM Integration: Using Steel for direct verification of on-chain state and transactions
 3. Flexible Input Types: Handles both EIP-712 signatures and transaction proofs
@@ -12,9 +12,9 @@ Host will need to provide any network call access and thus a trusted environment
 5. Generic Design: Can be adapted for different agreement types by modifying the state machine configuration
 6. This implementation allows for trustless verification of complex agreement workflows while keeping gas costs minimal by leveraging RISC Zero's zkVM for off-chain computation with on-chain verification.
 
-## Implementation Hypothesis
+# Implementation Hypothesis
 
-# State Machine Structure
+## State Machine Structure
 
 ```rust
 struct GrantAgreementState {
@@ -40,7 +40,7 @@ enum VerifiableInput {
 }
 ```
 
-# Steel Integration for EVM Proofs
+## Steel Integration for EVM Proofs
 
 ```rust
 use risc0_steel::{
@@ -73,7 +73,7 @@ impl GrantAgreementState {
 }
 ```
 
-# EIP-712 Signature Verification
+## EIP-712 Signature Verification
 Note this could be extended to do full VC validation (and use Veramo's VC Rust library)
 
 ```rust
@@ -95,7 +95,7 @@ impl GrantAgreementState {
 }
 ```
 
-# State Transition Logic
+## State Transition Logic
 
 ```rust
 impl GrantAgreementState {
@@ -123,7 +123,7 @@ impl GrantAgreementState {
 }
 ```
 
-# Risc0 Guest Program
+## Risc0 Guest Program
 
 ```rust
 risc0_zkvm::guest::entry!(main);
@@ -151,5 +151,3 @@ pub fn main() {
 
 * [Risc0 + Steel - zk view state proofs](https://risczero.com/steel)
 * [AO <> EVM zk Bridge](https://github.com/AO-ZKP/ao-zk-bridge/blob/main/oracle/index.ts)
-
-This folder will contain the implementation of the Risc0 execution.
