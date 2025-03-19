@@ -161,7 +161,8 @@ sequenceDiagram
 # Implementation Flow
 
 1. [Document Upload + Attestation](./document-upload.md)
-2. Interacting with [FSM contract](./fsm-with-pluggable-verifiers.sol) to provide inputs:
+2. [Providing VC against Original Document](./signature-upload.md)
+3. Interacting with [FSM contract](./fsm-with-pluggable-verifiers.sol) to provide inputs:
 
 ```typescript
 // Contract interfaces and types
