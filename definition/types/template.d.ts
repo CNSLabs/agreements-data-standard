@@ -5,7 +5,7 @@ import { Content } from './content';
 /**
  * Template structure
  */
-export interface AgreementTemplate {
+export interface Template {
   metadata: Metadata;
   variables: Variable[];
   content: Content;
