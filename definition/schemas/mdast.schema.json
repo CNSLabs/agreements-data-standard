@@ -27,7 +27,8 @@
         "root",
         "strong",
         "text",
-        "thematicBreak"
+        "thematicBreak",
+        "variable"
       ]
     },
     "children": {
@@ -86,6 +87,14 @@
       "description": "The starting number of an ordered list.",
       "type": "integer",
       "minimum": 0
+    },
+    "id": {
+      "description": "The identifier for variable nodes.",
+      "type": "string"
+    },
+    "property": {
+      "description": "The property to access for variable nodes.",
+      "type": "string"
     }
   },
   "required": ["type"],
@@ -160,6 +169,14 @@
       },
       "then": {
         "required": ["value"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "variable" } }
+      },
+      "then": {
+        "required": ["id"]
       }
     }
   ]
