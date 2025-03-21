@@ -1,5 +1,7 @@
 # Agreements Protocol
 
+[![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./definition/schemas/template.schema.json)
+
 The Agreements Protocol is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
 
 ## Protocol Overview
@@ -11,6 +13,8 @@ The protocol consists of five core components:
 3. **[Content](#3-content)** - Legal prose with variable interpolation
 4. **[Proofs](#4-proofs-🚧-in-progress)** - Verifiable blockchain evidence (transactions, ZK proofs, VCs)
 5. **[Execution Flow](#5-execution-flow-🚧-in-progress)** - State machine for agreement progression
+
+[View Full Schema Definition →](./definition/schemas/template.schema.json)
 
 ### Current Status
 
