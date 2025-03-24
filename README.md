@@ -212,7 +212,86 @@ Agreement content supports multiple formats with variable interpolation:
 }
 ```
 
-**Example Usage:**
+**MDAST Example:**
+```json
+{
+  "content": {
+    "type": "mdast",
+    "data": {
+      "type": "root",
+      "children": [
+        {
+          "type": "heading",
+          "depth": 1,
+          "children": [
+            {
+              "type": "text",
+              "value": "Grant Agreement"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "This agreement is made between "
+            },
+            {
+              "type": "variable",
+              "id": "foundation"
+            },
+            {
+              "type": "text",
+              "value": " and "
+            },
+            {
+              "type": "variable",
+              "id": "recipient"
+            },
+            {
+              "type": "text",
+              "value": "..."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Grant Amount: "
+            },
+            {
+              "type": "variable",
+              "id": "grantAmount"
+            },
+            {
+              "type": "text",
+              "value": " USD"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Recipient Address: "
+            },
+            {
+              "type": "variable",
+              "id": "recipientAddress"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+**Markdown Example:**
 ```json
 {
   "content": {
