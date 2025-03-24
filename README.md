@@ -13,6 +13,7 @@ The protocol consists of five core components:
 3. **[Content](#3-content)** - Legal prose with variable interpolation
 4. **[Proofs](#4-proofs-🚧-in-progress)** - Verifiable blockchain evidence (transactions, ZK proofs, VCs)
 5. **[Execution Flow](#5-execution-flow-🚧-in-progress)** - State machine for agreement progression
+6. **[Template](#6-template)** - Complete template structure
 
 [View Full Schema Definition →](./definition/schemas/template.schema.json)
 
@@ -139,6 +140,43 @@ Variables define typed inputs that can be referenced throughout the agreement:
 }
 ```
 
+#### Variable Usage
+
+Variables can be referenced in three different formats:
+
+1. **MDAST Format**
+```json
+{
+  "type": "variable",
+  "id": "foundationAddress"
+}
+```
+
+To reference specific properties:
+```json
+{
+  "type": "variable",
+  "id": "foundationAddress",
+  "property": "name"
+}
+```
+
+2. **Markdown Format**
+```md
+:variable{id='foundationAddress'}
+:variable{id='foundationAddress' property='name'}
+:variable{id='foundationAddress' property='description'}
+```
+
+3. **JSON Template Format**
+```json
+{
+  "recipient": "${foundationAddress}",
+  "recipientName": "${foundationAddress.name}",
+  "description": "${foundationAddress.description}"
+}
+```
+
 [View full schema →](./definition/schemas/template.schema.json#variables)
 
 ### 3. Content
@@ -219,6 +257,102 @@ State machine definition for agreement progression:
 - Proof requirements
 - Validation logic
 
+### 6. Template
+
+The complete template structure combines all components into a single JSON document:
+
+**Schema Definition:**
+```json
+{
+  "type": "object",
+  "required": ["metadata", "variables", "content"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["id", "templateId", "version", "createdAt", "name", "author", "description"]
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "name", "description"]
+      }
+    },
+    "content": {
+      "type": "object",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["mdast", "md"]
+        }
+      }
+    }
+  }
+}
+```
+
+**Example Template:**
+```json
+{
+  "metadata": {
+    "id": "did:example:123",
+    "templateId": "did:template:simple-agreement",
+    "version": "1.0.0",
+    "createdAt": "2024-03-20T12:00:00Z",
+    "name": "Simple Agreement",
+    "author": "Example Foundation",
+    "description": "A minimal example agreement"
+  },
+  "variables": [
+    {
+      "id": "partyName",
+      "type": "string",
+      "name": "Party Name",
+      "description": "Full legal name of the party",
+      "validation": {
+        "required": true
+      }
+    }
+  ],
+  "content": {
+    "type": "mdast",
+    "data": {
+      "type": "root",
+      "children": [
+        {
+          "type": "heading",
+          "depth": 1,
+          "children": [
+            {
+              "type": "text",
+              "value": "Simple Agreement"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "This agreement is made with "
+            },
+            {
+              "type": "variable",
+              "id": "partyName"
+            },
+            {
+              "type": "text",
+              "value": "."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
 ## Getting Started
 
 ### 1. Templates
@@ -245,11 +379,6 @@ You can create your own agreement templates using AI assistance. For optimal res
    - [README](./README.md)
    - [Template Schema](./definition/schemas/template.schema.json)
    - [MDAST Schema](./definition/schemas/mdast.schema.json)
-   - Type definitions:
-     - [Template Types](./definition/types/template.d.ts)
-     - [Variables Types](./definition/types/variables.d.ts)
-     - [Content Types](./definition/types/content.d.ts)
-     - [Metadata Types](./definition/types/metadata.d.ts)
    - [Example Grant Agreement](./definition/templates/grant-agreement.json)
   
 
