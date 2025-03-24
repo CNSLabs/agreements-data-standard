@@ -217,7 +217,7 @@ Agreement content supports multiple formats with variable interpolation:
 {
   "content": {
     "type": "md",
-    "data": "# Grant Agreement\n\nThis agreement is made between {{foundation}} and {{recipient}}...\n\nGrant Amount: {{grantAmount}} USD\nRecipient Address: {{recipientAddress}}"
+    "data": "# Grant Agreement\n\nThis agreement is made between :variable{id='foundation'} and :variable{id='recipient'}...\n\nGrant Amount: :variable{id='grantAmount'} USD\nRecipient Address: :variable{id='recipientAddress'}"
   }
 }
 ```
