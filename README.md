@@ -237,8 +237,6 @@ Agreement content supports multiple formats with variable interpolation:
   - [GitHub Markdown Guide](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
   - Supports [remark-directive](https://github.com/remarkjs/remark-directive) syntax for variables
 
-[View full interface →](./definition/types/content.d.ts)
-
 ### 4. Proofs (🚧 In Progress)
 
 Proofs will provide verifiable evidence for agreement progression:
@@ -401,15 +399,6 @@ Use our JSON schemas to validate your agreement templates:
 
 - [Template Schema](./definition/schemas/template.schema.json)
 - [MDAST Schema](./definition/schemas/mdast.schema.json)
-
-### 3. Type Definitions
-
-TypeScript definitions for type-safe development:
-
-- [Template Types](./definition/types/template.d.ts)
-- [Variables Types](./definition/types/variables.d.ts)
-- [Content Types](./definition/types/content.d.ts)
-- [Metadata Types](./definition/types/metadata.d.ts)
 
 ## Contributing
 
