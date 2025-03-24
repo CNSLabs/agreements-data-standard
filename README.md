@@ -33,46 +33,154 @@ The protocol consists of five core components:
 
 Agreement metadata provides essential identification and context:
 
-```typescript
-interface Metadata {
-  id: `did:${string}`;              // Unique agreement identifier
-  templateId: `did:template:${string}`; // Template reference
-  version: string;                   // Semantic version
-  createdAt: string;                // Creation timestamp
-  name: string;                     // Human readable name
-  author: string;                   // Creating organization
-  description: string;              // Purpose description
+**Schema Definition:**
+```json
+{
+  "metadata": {
+    "type": "object",
+    "required": ["id", "templateId", "version", "createdAt", "name", "author", "description"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^did:.*",
+        "description": "Unique identifier for the agreement instance"
+      },
+      "templateId": {
+        "type": "string",
+        "pattern": "^did:template:.*",
+        "description": "Identifier for the template type"
+      }
+    }
+  }
 }
 ```
 
-[View full interface →](./definition/types/metadata.d.ts)
+**Example Usage:**
+```json
+{
+  "metadata": {
+    "id": "did:example:123",
+    "templateId": "did:template:grant-v1",
+    "version": "1.0.0",
+    "createdAt": "2024-01-20T12:00:00Z",
+    "name": "Grant Agreement Template",
+    "author": "Example Foundation",
+    "description": "Standard template for ecosystem development grants"
+  }
+}
+```
+
+[View full schema →](./definition/schemas/template.schema.json#metadata)
 
 ### 2. Variables
 
 Variables define typed inputs that can be referenced throughout the agreement:
 
-```typescript
-interface Variable {
-  id: string;                    // Unique identifier
-  type: VariableType;           // Data type (string|number|address|dateTime)
-  name: string;                 // Display name
-  description: string;          // Purpose description
-  value?: VariableValue;       // Current value
-  defaultValue?: VariableValue; // Default value
-  validation?: ValidationRules; // Validation constraints
+**Schema Definition:**
+```json
+{
+  "variables": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["id", "type", "name", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the variable"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "address", "dateTime"],
+          "description": "Data type of the variable"
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "required": { "type": "boolean" },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "pattern": { "type": "string", "format": "regex" }
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
-[View full interface →](./definition/types/variables.d.ts)
+**Example Usage:**
+```json
+{
+  "variables": [
+    {
+      "id": "grantAmount",
+      "type": "number",
+      "name": "Grant Amount",
+      "description": "Total grant amount in USD",
+      "value": 50000,
+      "validation": {
+        "required": true,
+        "min": 1000,
+        "max": 100000
+      }
+    },
+    {
+      "id": "recipientAddress",
+      "type": "address",
+      "name": "Recipient Wallet",
+      "description": "Ethereum address to receive the grant",
+      "validation": {
+        "required": true,
+        "pattern": "^0x[a-fA-F0-9]{40}$"
+      }
+    }
+  ]
+}
+```
+
+[View full schema →](./definition/schemas/template.schema.json#variables)
 
 ### 3. Content
 
 Agreement content supports multiple formats with variable interpolation:
 
-```typescript
-interface Content {
-  type: 'mdast' | 'md';        // Content format
-  data: MdastNode | MdDoc;     // Content data
+**Schema Definition:**
+```json
+{
+  "content": {
+    "type": "object",
+    "required": ["type", "data"],
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": ["mdast", "md"],
+        "description": "Content format type"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "if": { "properties": { "type": { "const": "mdast" } } },
+            "then": { "$ref": "mdast.schema.json" }
+          },
+          {
+            "if": { "properties": { "type": { "const": "md" } } },
+            "then": { "type": "string" }
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+**Example Usage:**
+```json
+{
+  "content": {
+    "type": "md",
+    "data": "# Grant Agreement\n\nThis agreement is made between {{foundation}} and {{recipient}}...\n\nGrant Amount: {{grantAmount}} USD\nRecipient Address: {{recipientAddress}}"
+  }
 }
 ```
 
