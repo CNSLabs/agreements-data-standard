@@ -61,12 +61,12 @@ Agreement metadata provides essential identification and context:
 {
   "metadata": {
     "id": "did:example:123",
-    "templateId": "did:template:grant-v1",
+    "templateId": "did:template:consulting-v1",
     "version": "1.0.0",
-    "createdAt": "2024-01-20T12:00:00Z",
-    "name": "Grant Agreement Template",
-    "author": "Example Foundation",
-    "description": "Standard template for ecosystem development grants"
+    "createdAt": "2024-03-20T12:00:00Z",
+    "name": "Consulting Agreement Template",
+    "author": "Jane Doe",
+    "description": "Standard template for one-hour consulting services with USDC payment"
   }
 }
 ```
@@ -115,25 +115,42 @@ Variables define typed inputs that can be referenced throughout the agreement:
 {
   "variables": [
     {
-      "id": "grantAmount",
-      "type": "number",
-      "name": "Grant Amount",
-      "description": "Total grant amount in USD",
-      "value": 50000,
+      "id": "partyB",
+      "type": "string",
+      "name": "Party B",
+      "description": "Name of the party receiving consulting services",
       "validation": {
         "required": true,
-        "min": 1000,
-        "max": 100000
+        "minLength": 1
       }
     },
     {
-      "id": "recipientAddress",
+      "id": "amount",
+      "type": "number",
+      "name": "USDC Amount",
+      "description": "Amount of USDC to be paid for services",
+      "validation": {
+        "required": true,
+        "min": 1
+      }
+    },
+    {
+      "id": "partyBAddress",
       "type": "address",
-      "name": "Recipient Wallet",
-      "description": "Ethereum address to receive the grant",
+      "name": "Party B Ethereum Address",
+      "description": "Ethereum address of Party B",
       "validation": {
         "required": true,
         "pattern": "^0x[a-fA-F0-9]{40}$"
+      }
+    },
+    {
+      "id": "signedDate",
+      "type": "dateTime",
+      "name": "Signing Date",
+      "description": "Date when the agreement was signed",
+      "validation": {
+        "required": true
       }
     }
   ]
@@ -148,7 +165,7 @@ Variables can be referenced in three different formats:
 ```json
 {
   "type": "variable",
-  "id": "foundationAddress"
+  "id": "partyB"
 }
 ```
 
@@ -156,24 +173,24 @@ To reference specific properties:
 ```json
 {
   "type": "variable",
-  "id": "foundationAddress",
+  "id": "partyB",
   "property": "name"
 }
 ```
 
 2. **Markdown Format**
 ```md
-:variable{id='foundationAddress'}
-:variable{id='foundationAddress' property='name'}
-:variable{id='foundationAddress' property='description'}
+:variable{id='partyB'}
+:variable{id='partyB' property='name'}
+:variable{id='partyB' property='description'}
 ```
 
 3. **JSON Template Format**
 ```json
 {
-  "recipient": "${foundationAddress}",
-  "recipientName": "${foundationAddress.name}",
-  "description": "${foundationAddress.description}"
+  "client": "${partyB}",
+  "clientName": "${partyB.name}",
+  "paymentAmount": "${amount}"
 }
 ```
 
@@ -212,6 +229,16 @@ Agreement content supports multiple formats with variable interpolation:
 }
 ```
 
+**Markdown Example:**
+```json
+{
+  "content": {
+    "type": "md",
+    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signed:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signed:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}\n\n**Date:** :variable{id='signedDate'}"
+  }
+}
+```
+
 **MDAST Example:**
 ```json
 {
@@ -226,7 +253,7 @@ Agreement content supports multiple formats with variable interpolation:
           "children": [
             {
               "type": "text",
-              "value": "Grant Agreement"
+              "value": "Agreement"
             }
           ]
         },
@@ -235,23 +262,15 @@ Agreement content supports multiple formats with variable interpolation:
           "children": [
             {
               "type": "text",
-              "value": "This agreement is made between "
+              "value": "I, Jane Doe, agree to provide "
             },
             {
               "type": "variable",
-              "id": "foundation"
+              "id": "partyB"
             },
             {
               "type": "text",
-              "value": " and "
-            },
-            {
-              "type": "variable",
-              "id": "recipient"
-            },
-            {
-              "type": "text",
-              "value": "..."
+              "value": " with one hour of startup business advice."
             }
           ]
         },
@@ -260,15 +279,23 @@ Agreement content supports multiple formats with variable interpolation:
           "children": [
             {
               "type": "text",
-              "value": "Grant Amount: "
+              "value": "In exchange, "
             },
             {
               "type": "variable",
-              "id": "grantAmount"
+              "id": "partyB"
             },
             {
               "type": "text",
-              "value": " USD"
+              "value": " agrees to transfer "
+            },
+            {
+              "type": "variable",
+              "id": "amount"
+            },
+            {
+              "type": "text",
+              "value": " USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet."
             }
           ]
         },
@@ -276,27 +303,100 @@ Agreement content supports multiple formats with variable interpolation:
           "type": "paragraph",
           "children": [
             {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Signed:"
+                }
+              ]
+            },
+            {
               "type": "text",
-              "value": "Recipient Address: "
+              "value": " Jane Doe\n"
+            },
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Ethereum Address:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " 0x123...abcd"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Signed:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " "
             },
             {
               "type": "variable",
-              "id": "recipientAddress"
+              "id": "partyB"
+            },
+            {
+              "type": "text",
+              "value": "\n"
+            },
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Ethereum Address:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " "
+            },
+            {
+              "type": "variable",
+              "id": "partyBAddress"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Date:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " "
+            },
+            {
+              "type": "variable",
+              "id": "signedDate"
             }
           ]
         }
       ]
     }
-  }
-}
-```
-
-**Markdown Example:**
-```json
-{
-  "content": {
-    "type": "md",
-    "data": "# Grant Agreement\n\nThis agreement is made between :variable{id='foundation'} and :variable{id='recipient'}...\n\nGrant Amount: :variable{id='grantAmount'} USD\nRecipient Address: :variable{id='recipientAddress'}"
   }
 }
 ```
@@ -374,60 +474,76 @@ The complete template structure combines all components into a single JSON docum
 {
   "metadata": {
     "id": "did:example:123",
-    "templateId": "did:template:simple-agreement",
+    "templateId": "did:template:consulting-v1",
     "version": "1.0.0",
     "createdAt": "2024-03-20T12:00:00Z",
-    "name": "Simple Agreement",
-    "author": "Example Foundation",
-    "description": "A minimal example agreement"
+    "name": "Consulting Agreement Template",
+    "author": "Jane Doe",
+    "description": "Standard template for one-hour consulting services with USDC payment"
   },
   "variables": [
     {
-      "id": "partyName",
+      "id": "partyB",
       "type": "string",
-      "name": "Party Name",
-      "description": "Full legal name of the party",
+      "name": "Party B",
+      "description": "Name of the party receiving consulting services",
+      "validation": {
+        "required": true,
+        "minLength": 1
+      }
+    },
+    {
+      "id": "amount",
+      "type": "number",
+      "name": "USDC Amount",
+      "description": "Amount of USDC to be paid for services",
+      "validation": {
+        "required": true,
+        "min": 1
+      }
+    },
+    {
+      "id": "partyBAddress",
+      "type": "address",
+      "name": "Party B Ethereum Address",
+      "description": "Ethereum address of Party B",
+      "validation": {
+        "required": true,
+        "pattern": "^0x[a-fA-F0-9]{40}$"
+      }
+    },
+    {
+      "id": "signedDate",
+      "type": "dateTime",
+      "name": "Signing Date",
+      "description": "Date when the agreement was signed",
       "validation": {
         "required": true
       }
     }
   ],
   "content": {
-    "type": "mdast",
-    "data": {
-      "type": "root",
-      "children": [
-        {
-          "type": "heading",
-          "depth": 1,
-          "children": [
-            {
-              "type": "text",
-              "value": "Simple Agreement"
-            }
-          ]
-        },
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "This agreement is made with "
-            },
-            {
-              "type": "variable",
-              "id": "partyName"
-            },
-            {
-              "type": "text",
-              "value": "."
-            }
-          ]
-        }
-      ]
-    }
+    "type": "md",
+    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signed:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signed:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}\n\n**Date:** :variable{id='signedDate'}"
   }
 }
+```
+
+**Example Rendered Agreement:**
+```md
+# Agreement
+
+I, Jane Doe, agree to provide Acme Corp with one hour of startup business advice.
+
+In exchange, Acme Corp agrees to transfer 500 USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.
+
+**Signed:** Jane Doe
+**Ethereum Address:** 0x123...abcd
+
+**Signed:** Acme Corp
+**Ethereum Address:** 0x456...def0
+
+**Date:** March 20, 2024
 ```
 
 ## Getting Started
@@ -449,28 +565,57 @@ Available formats:
 
 #### Creating Custom Templates
 
-You can create your own agreement templates using AI assistance. For optimal results when generating templates:
+Creating agreement templates is simple with AI assistance. Here's how to get started:
 
-1. **Required Context Files**
-   Provide these files to your AI assistant:
-   - [README](./README.md)
-   - [Template Schema](./definition/schemas/template.schema.json)
-   - [MDAST Schema](./definition/schemas/mdast.schema.json)
-   - [Example Grant Agreement](./definition/templates/grant-agreement.json)
-  
+1. **Prepare Your Agreement**
+   Start with your agreement in markdown format:
+```md
+# Agreement
 
-2. **Example Prompt**
+I, Jane Doe, agree to provide [PartyB] with one hour of startup business advice.
+
+In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.
+
+**Signed:** Jane Doe  
+**Ethereum Address:** 0x123...abcd
+
+**Signed:** [PartyB]  
+**Ethereum Address:** [PartyBAddress]
+
+**Date:** [SignedDate]
+```
+
+2. **Provide Context**
+   Share these files with your AI assistant:
+   - [README](./README.md) - Protocol overview and examples
+   - [Template Schema](./definition/schemas/template.schema.json) - JSON schema definition
+   - [MDAST Schema](./definition/schemas/mdast.schema.json) - Content structure specification
+   - [Grant Agreement](./definition/templates/grant-agreement.json) - Reference implementation
+
+3. **Generate Template**
+   Use this prompt format:
    ```
-   Using the following legal agreement, help me create an agreement template following the Agreements Protocol standard. 
-   
-   Agreement Type: [Your agreement type]
-   Purpose: [Brief description of the agreement's purpose]
-   Key Variables Needed: [List main data points that should be variable]
-   
-   Please generate a complete template.json with proper metadata, typed variables, and MDAST content
+   Help me create an agreement template following the Agreements Protocol standard.
 
-   <AGREEMENT_LEGAL_PROS>
+   Agreement Type: Consulting Agreement
+   Purpose: One-hour consulting session with USDC payment
+   Variables: 
+   - Party B name and address
+   - Payment amount
+   - Signing date
+   Format: MDAST (preferred for structured content)
+
+   Here's my agreement:
+   <paste your markdown agreement>
    ```
+
+The AI will help you:
+- Identify and type your variables (string, number, address, dateTime)
+- Convert brackets to variable directives
+- Structure the complete template with metadata and MDAST content
+- Validate against the schema
+
+See [Grant Agreement](./definition/templates/grant-agreement.json) for a complete example of a properly structured template using MDAST.
 
 ### 2. Validate Your Templates
 
