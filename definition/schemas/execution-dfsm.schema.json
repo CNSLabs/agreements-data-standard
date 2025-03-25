@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/execution-dfsm.schema.json",
+  "title": "Deterministic Finite State Machine Execution Model",
+  "description": "Schema for deterministic finite state machine execution model in the agreements protocol",
+  "type": "object",
+  "required": ["states", "transitions"],
+  "properties": {
+    "states": {
+      "type": "array",
+      "description": "List of possible states for the agreement",
+      "items": {
+        "type": "string"
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Input definitions that can be used in transitions",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "type", "displayName", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the input"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the input (e.g., VerifiedCredentialEIP712)"
+          },
+          "schema": {
+            "type": "string",
+            "description": "JSON schema reference for the input type"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Human-readable name for the input"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the input's purpose"
+          },
+          "value": {
+            "type": "object",
+            "description": "An object defining the required field values that the credentialSubject should contain in order to be valid"
+          },
+          "signer": {
+            "type": "string",
+            "description": "Expression or reference to the party that should sign this input"
+          }
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "description": "State transitions with conditions",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "conditions"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Starting state of the transition"
+          },
+          "to": {
+            "type": "string",
+            "description": "Ending state of the transition"
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Conditions that must be met for the transition to occur",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Type of condition (e.g., isValid)"
+                },
+                "inputs": {
+                  "type": "array",
+                  "description": "Input identifiers to evaluate for this condition",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 

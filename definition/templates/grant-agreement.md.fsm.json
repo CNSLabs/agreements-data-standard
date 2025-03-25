@@ -166,84 +166,87 @@
       "data": "# **Grant Agreement**\n\nThis Grant Agreement (**\"Agreement\"**) is entered into on :variable{id=\"effectiveDate\"}, (the **:variable{id=\"effectiveDate\" property=\"name\"}**), between :variable{id=\"foundationName\"}, a :variable{id=\"jurisdiction\"} foundation company (the **:variable{id=\"foundationName\" property=\"name\"}**) with D3 address :address{value=\"0x123f6e75d1BE0ee699C7Eb67594FEbC14ab3AA78\" display=\"truncated\"}, and :variable{id=\"grantRecipientName\"}, an individual with address :variable{id=\"grantRecipientAddress\"} (**:variable{id=\"grantRecipientName\" property=\"name\"}**).\n\nThe Foundation has been established, in part, to help promote growth of the :variable{id=\"ecosystemName\"} ecosystem and seeks to award grants to promote development consistent with the collective decision making of the :variable{id=\"workTokenName\"} token (**:variable{id=\"workTokenName\"}**) holder community (the **:variable{id=\"workTokenName\"} Community**).\n\nThe Grant Recipient has been selected by the Foundation Designated Token Allocator :variable{id=\"tokenAllocatorName\"} (**:variable{id=\"tokenAllocatorName\" property=\"name\"}**) with address :variable{id=\"tokenAllocatorAddress\"} to receive a grant subject and in accordance with the terms and conditions of this Agreement.\n\nTHEREFORE, the parties agree as follows:\n\n## **1. GRANT RECIPIENT ACTIVITIES**\n\n1.1 Grants. Foundation and Grant Recipient are entering into this Agreement in connection with RFP#: :variable{id=\"rfpNumber\"}, as set forth at :variable{id=\"rfpLink\"}, which describes the specific activities to be performed by Grant Recipient (the **\"Grant\"**).\n\n1.2 Performance of Grant Recipient Activities. Grant Recipient will perform the activities described in the Grant (the **\"Grant Recipient Activities\"**) in accordance with the terms and conditions set forth in each such Grant and this Agreement and with any applicable laws.\n\n## **2. GRANT DISTRIBUTION**\n\nThe Token Allocator will pay Grant Recipient on behalf of the Foundation the amount of :variable{id=\"grantAmount\"} :variable{id=\"workTokenName\"} tokens in accordance with the terms set forth in this agreement.\n\nIN WITNESS WHEREOF, the Grant Recipient has executed this Agreement on the date first written above.\n\nName: :variable{id=\"grantRecipientName\"}"
     },
     "execution": {
-      "states": [
-        "AWAITING_SIGNATURES",
-        "ACTIVE_PENDING_REVIEW",
-        "APPROVED",
-        "REJECTED"
-      ],
-      "inputs": {
-        "grantRecipientSignature": {
-          "id": "grantRecipientSignature",
-          "type": "VerifiedCredentialEIP712",
-          "schema": "verified-credential-eip712.schema.json",
-          "displayName": "Grant Recipient Signature",
-          "description": "EIP712 signature from the grant recipient accepting the terms of the grant agreement",
-          "value": {
-            "isGrantRecipientApproved": true
+      "type": "dfsm",
+      "data": {
+        "states": [
+          "AWAITING_SIGNATURES",
+          "ACTIVE_PENDING_REVIEW",
+          "APPROVED",
+          "REJECTED"
+        ],
+        "inputs": {
+          "grantRecipientSignature": {
+            "id": "grantRecipientSignature",
+            "type": "VerifiedCredentialEIP712",
+            "schema": "verified-credential-eip712.schema.json",
+            "displayName": "Grant Recipient Signature",
+            "description": "EIP712 signature from the grant recipient accepting the terms of the grant agreement",
+            "value": {
+              "isGrantRecipientApproved": true
+            },
+            "signer": "${grantRecipient.props.blockchainAddress}"
           },
-          "signer": "${grantRecipient.props.blockchainAddress}"
-        },
-        "workApprovedSignature": {
-          "id": "workApprovedSignature",
-          "type": "VerifiedCredentialEIP712",
-          "schema": "verified-credential-eip712.schema.json",
-          "displayName": "Work Approved Signature",
-          "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
-          "value": {
-            "isApproved": true
+          "workApprovedSignature": {
+            "id": "workApprovedSignature",
+            "type": "VerifiedCredentialEIP712",
+            "schema": "verified-credential-eip712.schema.json",
+            "displayName": "Work Approved Signature",
+            "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
+            "value": {
+              "isApproved": true
+            },
+            "signer": "${tokenAllocator.props.blockchainAddress}"
           },
-          "signer": "${tokenAllocator.props.blockchainAddress}"
+          "workRejectedSignature": {
+            "id": "workRejectedSignature",
+            "type": "VerifiedCredentialEIP712",
+            "schema": "verified-credential-eip712.schema.json",
+            "displayName": "Work Rejected Signature",
+            "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
+            "value": {
+              "isApproved": false
+            },
+            "signer": "${tokenAllocator.props.blockchainAddress}"
+          }
         },
-        "workRejectedSignature": {
-          "id": "workRejectedSignature",
-          "type": "VerifiedCredentialEIP712",
-          "schema": "verified-credential-eip712.schema.json",
-          "displayName": "Work Rejected Signature",
-          "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
-          "value": {
-            "isApproved": false
+        "transitions": [
+          {
+            "from": "AWAITING_SIGNATURES",
+            "to": "ACTIVE_PENDING_REVIEW",
+            "conditions": [
+              {
+                "type": "isValid",
+                "inputs": [
+                  "grantRecipientSignature"
+                ]
+              }
+            ]
           },
-          "signer": "${tokenAllocator.props.blockchainAddress}"
-        }
-      },
-      "transitions": [
-        {
-          "from": "AWAITING_SIGNATURES",
-          "to": "ACTIVE_PENDING_REVIEW",
-          "conditions": [
-            {
-              "type": "isValid",
-              "inputs": [
-                "grantRecipientSignature"
-              ]
-            }
-          ]
-        },
-        {
-          "from": "ACTIVE_PENDING_REVIEW",
-          "to": "COMPLETED",
-          "conditions": [
-            {
-              "type": "isValid",
-              "inputs": [
-                "workApprovedSignature"
-              ]
-            }
-          ]
-        },
-        {
-          "from": "ACTIVE_PENDING_REVIEW",
-          "to": "REJECTED",
-          "conditions": [
-            {
-              "type": "isValid",
-              "inputs": [
-                "workRejectedSignature"
-              ]
-            }
-          ]
-        }
-      ]
+          {
+            "from": "ACTIVE_PENDING_REVIEW",
+            "to": "COMPLETED",
+            "conditions": [
+              {
+                "type": "isValid",
+                "inputs": [
+                  "workApprovedSignature"
+                ]
+              }
+            ]
+          },
+          {
+            "from": "ACTIVE_PENDING_REVIEW",
+            "to": "REJECTED",
+            "conditions": [
+              {
+                "type": "isValid",
+                "inputs": [
+                  "workRejectedSignature"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   }
