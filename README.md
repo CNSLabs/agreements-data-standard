@@ -11,20 +11,20 @@ The protocol consists of five core components:
 1. **[Metadata](#1-metadata)** - Agreement identification and context
 2. **[Variables](#2-variables)** - Typed inputs that drive the agreement
 3. **[Content](#3-content)** - Legal prose with variable interpolation
-4. **[Proofs](#4-proofs-🚧-in-progress)** - Verifiable blockchain evidence (transactions, ZK proofs, VCs)
-5. **[Execution Flow](#5-execution-flow-🚧-in-progress)** - State machine for agreement progression
-6. **[Template](#6-template)** - Complete template structure
+4. **[Execution Flow](#5-execution-flow-🚧-in-progress)** - State machine for agreement progression, driven via verifiable inputs (transaction receipts, ZK proofs, VCs)
+5. **[Template](#6-template)** - Complete template structure
 
 [View Full Schema Definition →](./definition/schemas/template.schema.json)
 
 ### Current Status
 
-- 🚧 **[IP-001](./definition/improvement-proposals/IP-001.md)**: DFSM to ASM 
+- 🚧 **[IP-001](./definition/improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./definition/improvement-proposals/IP-002.md)**: MDAST Content Representation
 - 🚧 **[IP-003](./definition/improvement-proposals/IP-003.md)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./definition/improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 
 #### Planned
+
 - VC Schema Standards
 - DID Method Extensions
 
@@ -35,6 +35,7 @@ The protocol consists of five core components:
 Agreement metadata provides essential identification and context:
 
 **Schema Definition:**
+
 ```json
 {
   "metadata": {
@@ -57,6 +58,7 @@ Agreement metadata provides essential identification and context:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "metadata": {
@@ -78,6 +80,7 @@ Agreement metadata provides essential identification and context:
 Variables define typed inputs that can be referenced throughout the agreement:
 
 **Schema Definition:**
+
 ```json
 {
   "variables": {
@@ -111,6 +114,7 @@ Variables define typed inputs that can be referenced throughout the agreement:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "variables": [
@@ -162,6 +166,7 @@ Variables define typed inputs that can be referenced throughout the agreement:
 Variables can be referenced in three different formats:
 
 1. **MDAST Format**
+
 ```json
 {
   "type": "variable",
@@ -170,6 +175,7 @@ Variables can be referenced in three different formats:
 ```
 
 To reference specific properties:
+
 ```json
 {
   "type": "variable",
@@ -179,6 +185,7 @@ To reference specific properties:
 ```
 
 2. **Markdown Format**
+
 ```md
 :variable{id='partyB'}
 :variable{id='partyB' property='name'}
@@ -186,6 +193,7 @@ To reference specific properties:
 ```
 
 3. **JSON Template Format**
+
 ```json
 {
   "client": "${partyB}",
@@ -201,6 +209,7 @@ To reference specific properties:
 Agreement content supports multiple formats with variable interpolation:
 
 **Schema Definition:**
+
 ```json
 {
   "content": {
@@ -240,6 +249,7 @@ Agreement content supports multiple formats with variable interpolation:
 ```
 
 **MDAST Example:**
+
 ```json
 {
   "content": {
@@ -404,41 +414,37 @@ Agreement content supports multiple formats with variable interpolation:
 #### Content Formats
 
 - **MDAST (Markdown Abstract Syntax Tree)**
+
   - Structured content with rich semantic information
   - [MDAST Specification](https://github.com/syntax-tree/mdast)
   - [Unist Specification](https://github.com/syntax-tree/unist) (MDAST's foundation)
   - [remark](https://github.com/remarkjs/remark) - Markdown processor powered by plugins
   - [IP-002](./definition/improvement-proposals/IP-002.md) - Our MDAST implementation details
-
 - **Markdown (MD)**
+
   - Human-readable authoring format
   - [CommonMark Spec](https://commonmark.org/) - Our supported Markdown syntax
   - [GitHub Markdown Guide](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
   - Supports [remark-directive](https://github.com/remarkjs/remark-directive) syntax for variables
 
-### 4. Proofs (🚧 In Progress)
+### 4. Execution Flow (🚧 In Progress)
 
-Proofs will provide verifiable evidence for agreement progression:
-
-- EVM Transaction Receipts
-- Zero-Knowledge Proofs
-- Verifiable Credentials
-- EIP-712 Signatures
-
-### 5. Execution Flow (🚧 In Progress)
-
-State machine definition for agreement progression:
+State machine definition for agreement progression, driven by verifiable (provable) input provided.
 
 - State definitions
-- Transition rules
-- Proof requirements
-- Validation logic
+- Inputs definitions
 
-### 6. Template
+  - Verifiable Credentials (712-signed for now)
+  - EVM Transaction Receipts (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7))
+  - Zero-Knowledge Proofs (🚧)
+- Transition rules
+
+### 5. Template
 
 The complete template structure combines all components into a single JSON document:
 
 **Schema Definition:**
+
 ```json
 {
   "type": "object",
@@ -470,6 +476,7 @@ The complete template structure combines all components into a single JSON docum
 ```
 
 **Example Template:**
+
 ```json
 {
   "metadata": {
@@ -553,13 +560,16 @@ In exchange, Acme Corp agrees to transfer 500 USDC to my Ethereum address: 0x123
 The following agreement templates are available as reference implementations:
 
 #### Grant Agreement
+
 A standardized agreement for ecosystem development funding that includes:
+
 - Foundation and grant recipient details
 - Token allocation specifications
 - RFP reference and grant activities
 - Token distribution terms
 
 Available formats:
+
 - [MDAST version](./definition/templates/grant-agreement.json) - Structured format with rich semantic information
 - [Markdown version](./definition/templates/grant-agreement.md.json) - Human-readable format with variable interpolation
 
