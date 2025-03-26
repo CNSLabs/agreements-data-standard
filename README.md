@@ -433,11 +433,138 @@ Agreement content supports multiple formats with variable interpolation:
 Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./definition/improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
 - State definitions
+```json
+{
+  "execution": {
+    "type": "dfsm",
+    "data": {
+      "states": [
+        "AWAITING_SIGNATURES",
+        "ACTIVE_PENDING_REVIEW",
+        "APPROVED",
+        "REJECTED"
+      ],
+      // Other properties omitted for brevity
+    }
+  }
+}
+```
+
+States represent the possible lifecycle stages of an agreement. The agreement transitions from one state to another based on verifiable inputs that satisfy specified conditions. Common state patterns include:
+
+- **AWAITING_SIGNATURES**: Initial state where the agreement is waiting for parties to sign
+- **ACTIVE**: State after all required signatures have been collected
+- **PENDING_REVIEW**: State where work or deliverables are awaiting approval
+- **COMPLETED/APPROVED**: Final state after successful completion
+- **REJECTED/TERMINATED**: Final state after rejection or termination
+
 - Inputs definitions
-  - Verifiable Credentials (712-signed for now)
-  - EVM Transaction Receipts (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7))
-  - Zero-Knowledge Proofs (🚧)
+```json
+{
+  "inputs": {
+    "grantRecipientSignature": {
+      "id": "grantRecipientSignature",
+      "type": "VerifiedCredentialEIP712",
+      "schema": "verified-credential-eip712.schema.json",
+      "displayName": "Grant Recipient Signature",
+      "description": "EIP712 signature from the grant recipient accepting the terms of the agreement",
+      "value": {
+        "isGrantRecipientApproved": true
+      },
+      "signer": "${grantRecipientAddress}"
+    },
+    "workApprovedSignature": {
+      "id": "workApprovedSignature",
+      "type": "VerifiedCredentialEIP712",
+      "schema": "verified-credential-eip712.schema.json",
+      "displayName": "Work Approved Signature",
+      "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
+      "value": {
+        "isWorkApproved": true
+      },
+      "signer": "${tokenAllocatorAddress}"
+    },
+    "workRejectedSignature": {
+      "id": "workRejectedSignature",
+      "type": "VerifiedCredentialEIP712",
+      "schema": "verified-credential-eip712.schema.json",
+      "displayName": "Work Rejected Signature",
+      "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
+      "value": {
+        "isWorkApproved": false
+      },
+      "signer": "${tokenAllocatorAddress}"
+    }
+  }
+}
+```
+
+Inputs represent verifiable data used to trigger state transitions:
+
+- **Verifiable Credentials with EIP-712 Signatures**:
+  - W3C Verifiable Credentials with Ethereum's typed structured data signing (EIP-712)
+  - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
+  - EIP-712 proof with domain, types, and signature
+  - [View full schema →](./definition/schemas/verified-credential-eip712.schema.json)
+
+- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7)):
+  - Transaction hash verification
+  - Event log verification
+  - Smart contract state verification
+
+- **Zero-Knowledge Proofs** (🚧):
+  - Planned support for zk-SNARKs and zk-STARKs
+  - Privacy-preserving verification
+
 - Transition rules
+```json
+{
+  "transitions": [
+    {
+      "from": "AWAITING_SIGNATURES",
+      "to": "ACTIVE_PENDING_REVIEW",
+      "conditions": [
+        {
+          "type": "isValid",
+          "inputs": ["grantRecipientSignature"]
+        }
+      ]
+    },
+    {
+      "from": "ACTIVE_PENDING_REVIEW",
+      "to": "APPROVED",
+      "conditions": [
+        {
+          "type": "isValid",
+          "inputs": ["workApprovedSignature"]
+        }
+      ]
+    },
+    {
+      "from": "ACTIVE_PENDING_REVIEW",
+      "to": "REJECTED",
+      "conditions": [
+        {
+          "type": "isValid",
+          "inputs": ["workRejectedSignature"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Transitions define how an agreement moves between states:
+
+- Each transition has a source state (`from`), destination state (`to`), and conditions
+- Conditions determine when a transition can occur
+- Conditions can reference one or more inputs that must be validated
+- Common condition types include:
+  - **isValid**: Verifies that the input is properly signed and contains valid data
+  - **hasValue**: Checks that a specific value exists in the input
+  - **matchesCondition**: Evaluates a logical expression against input values
+
+The execution model ensures that agreements follow a predictable lifecycle based on verifiable proofs, making them suitable for legal and blockchain-based applications where cryptographic certainty is required.
 
 ### 5. Template
 
