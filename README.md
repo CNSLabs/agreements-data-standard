@@ -791,10 +791,13 @@ A standardized agreement for ecosystem development funding that includes:
 - RFP reference and grant activities
 - Token distribution terms
 
-Available formats:
+Example content formats:
 
 - [MDAST version](./definition/templates/grant-agreement.json) - Structured format with rich semantic information
 - [Markdown version](./definition/templates/grant-agreement.md.json) - Human-readable format with variable interpolation
+
+Full examples including execution environment definition:
+- [Markdown content + DFSM execution](./definition/templates/grant-agreement.md.fsm.json) 
 
 #### Creating Custom Templates
 
