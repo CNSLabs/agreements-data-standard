@@ -184,7 +184,7 @@
             "value": {
               "isGrantRecipientApproved": true
             },
-            "signer": "${grantRecipient.props.blockchainAddress}"
+            "signer": "${grantRecipientAddress}"
           },
           "workApprovedSignature": {
             "id": "workApprovedSignature",
@@ -195,7 +195,7 @@
             "value": {
               "isApproved": true
             },
-            "signer": "${tokenAllocator.props.blockchainAddress}"
+            "signer": "${tokenAllocatorAddress}"
           },
           "workRejectedSignature": {
             "id": "workRejectedSignature",
@@ -206,7 +206,7 @@
             "value": {
               "isApproved": false
             },
-            "signer": "${tokenAllocator.props.blockchainAddress}"
+            "signer": "${tokenAllocatorAddress}"
           }
         },
         "transitions": [
