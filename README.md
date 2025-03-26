@@ -30,6 +30,22 @@ The protocol consists of five core components:
 
 ## Core Components
 
+Given the following example:
+
+```md
+# Agreement
+
+I, Jane Doe, agree to provide [PartyB] with one hour of startup business advice.
+
+In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.
+
+**Signature:** Jane Doe
+**Ethereum Address:** 0x123...abcd
+
+**Signature:** [PartyB]
+**Ethereum Address:** [PartyBAddress]
+```
+
 ### 1. Metadata
 
 Agreement metadata provides essential identification and context:
@@ -147,15 +163,6 @@ Variables define typed inputs that can be referenced throughout the agreement:
         "required": true,
         "pattern": "^0x[a-fA-F0-9]{40}$"
       }
-    },
-    {
-      "id": "signedDate",
-      "type": "dateTime",
-      "name": "Signing Date",
-      "description": "Date when the agreement was signed",
-      "validation": {
-        "required": true
-      }
     }
   ]
 }
@@ -243,7 +250,7 @@ Agreement content supports multiple formats with variable interpolation:
 {
   "content": {
     "type": "md",
-    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signed:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signed:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}\n\n**Date:** :variable{id='signedDate'}"
+    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signature:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signature:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}"
   }
 }
 ```
@@ -317,7 +324,7 @@ Agreement content supports multiple formats with variable interpolation:
               "children": [
                 {
                   "type": "text",
-                  "value": "Signed:"
+                  "value": "Signature:"
                 }
               ]
             },
@@ -348,7 +355,7 @@ Agreement content supports multiple formats with variable interpolation:
               "children": [
                 {
                   "type": "text",
-                  "value": "Signed:"
+                  "value": "Signature:"
                 }
               ]
             },
@@ -383,28 +390,6 @@ Agreement content supports multiple formats with variable interpolation:
             }
           ]
         },
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "strong",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Date:"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "value": " "
-            },
-            {
-              "type": "variable",
-              "id": "signedDate"
-            }
-          ]
-        }
       ]
     }
   }
@@ -432,68 +417,132 @@ Agreement content supports multiple formats with variable interpolation:
 
 Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./definition/improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
-- State definitions
+**Schema Definition:**
+
 ```json
 {
   "execution": {
-    "type": "dfsm",
-    "data": {
-      "states": [
-        "AWAITING_SIGNATURES",
-        "ACTIVE_PENDING_REVIEW",
-        "APPROVED",
-        "REJECTED"
-      ],
-      // Other properties omitted for brevity
+    "type": "object",
+    "description": "Execution model definition for agreement processing",
+    "required": ["type", "data"],
+    "properties": {
+      "type": {
+        "type": "string",
+        "description": "The type of execution model being used",
+        "enum": ["dfsm"]
+      },
+      "data": {
+        "type": "object",
+        "description": "The execution model data specific to the type",
+        "oneOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "dfsm" } },
+              "required": ["type"]
+            },
+            "then": {
+              "$ref": "execution-dfsm.schema.json"
+            }
+          }
+        ]
+      }
     }
   }
 }
 ```
 
-States represent the possible lifecycle stages of an agreement. The agreement transitions from one state to another based on verifiable inputs that satisfy specified conditions. Common state patterns include:
+[View full DFSM schema →](./definition/schemas/execution-dfsm.schema.json)
 
-- **AWAITING_SIGNATURES**: Initial state where the agreement is waiting for parties to sign
-- **ACTIVE**: State after all required signatures have been collected
-- **PENDING_REVIEW**: State where work or deliverables are awaiting approval
-- **COMPLETED/APPROVED**: Final state after successful completion
-- **REJECTED/TERMINATED**: Final state after rejection or termination
+#### States
 
-- Inputs definitions
+States represent the possible lifecycle stages of an agreement:
+
+**Schema Definition:**
+```json
+{
+  "states": {
+    "type": "array",
+    "description": "List of possible states for the agreement",
+    "items": {
+      "type": "string"
+    }
+  }
+}
+```
+
+**Example Usage:**
+```json
+{
+  "states": [
+    "PENDING_SIGNATURE",
+    "SIGNED"
+  ]
+}
+```
+
+#### Inputs
+
+Inputs represent verifiable data used to trigger state transitions:
+
+**Schema Definition:**
 ```json
 {
   "inputs": {
-    "grantRecipientSignature": {
-      "id": "grantRecipientSignature",
+    "type": "object",
+    "description": "Input definitions that can be used in transitions",
+    "additionalProperties": {
+      "type": "object",
+      "required": ["id", "type", "displayName", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the input"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the input (e.g., VerifiedCredentialEIP712)"
+        },
+        "schema": {
+          "type": "string",
+          "enum": ["verified-credential-eip712.schema.json"],
+          "description": "JSON schema reference for the input type"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Human-readable name for the input"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the input's purpose"
+        },
+        "value": {
+          "type": "object",
+          "description": "Required field values for the credentialSubject"
+        },
+        "signer": {
+          "type": "string",
+          "description": "Party that should sign this input"
+        }
+      }
+    }
+  }
+}
+```
+
+**Example Usage:**
+```json
+{
+  "inputs": {
+    "partyBSignature": {
+      "id": "partyBSignature",
       "type": "VerifiedCredentialEIP712",
       "schema": "verified-credential-eip712.schema.json",
-      "displayName": "Grant Recipient Signature",
-      "description": "EIP712 signature from the grant recipient accepting the terms of the agreement",
+      "displayName": "Party B Signature",
+      "description": "EIP712 signature from Party B accepting the agreement terms",
       "value": {
-        "isGrantRecipientApproved": true
+        "hasAcceptedTerms": true
       },
-      "signer": "${grantRecipientAddress}"
-    },
-    "workApprovedSignature": {
-      "id": "workApprovedSignature",
-      "type": "VerifiedCredentialEIP712",
-      "schema": "verified-credential-eip712.schema.json",
-      "displayName": "Work Approved Signature",
-      "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
-      "value": {
-        "isWorkApproved": true
-      },
-      "signer": "${tokenAllocatorAddress}"
-    },
-    "workRejectedSignature": {
-      "id": "workRejectedSignature",
-      "type": "VerifiedCredentialEIP712",
-      "schema": "verified-credential-eip712.schema.json",
-      "displayName": "Work Rejected Signature",
-      "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
-      "value": {
-        "isWorkApproved": false
-      },
-      "signer": "${tokenAllocatorAddress}"
+      "signer": "${partyBAddress}"
     }
   }
 }
@@ -512,57 +561,77 @@ Inputs represent verifiable data used to trigger state transitions:
   - Event log verification
   - Smart contract state verification
 
-- **Zero-Knowledge Proofs** (🚧):
+  - **Zero-Knowledge Proofs** (🚧):
   - Planned support for zk-SNARKs and zk-STARKs
   - Privacy-preserving verification
 
-- Transition rules
+#### Transitions
+
+Transitions define how an agreement moves between states:
+
+**Schema Definition:**
+```json
+{
+  "transitions": {
+    "type": "array",
+    "description": "State transitions with conditions",
+    "items": {
+      "type": "object",
+      "required": ["from", "to", "conditions"],
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "Starting state of the transition"
+        },
+        "to": {
+          "type": "string",
+          "description": "Ending state of the transition"
+        },
+        "conditions": {
+          "type": "array",
+          "description": "Conditions that must be met for the transition to occur",
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["isValid"],
+                "description": "Type of condition"
+              },
+              "inputs": {
+                "type": "array",
+                "description": "Input identifiers to evaluate",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Example Usage:**
 ```json
 {
   "transitions": [
     {
-      "from": "AWAITING_SIGNATURES",
-      "to": "ACTIVE_PENDING_REVIEW",
+      "from": "PENDING_SIGNATURE",
+      "to": "SIGNED",
       "conditions": [
         {
           "type": "isValid",
-          "inputs": ["grantRecipientSignature"]
-        }
-      ]
-    },
-    {
-      "from": "ACTIVE_PENDING_REVIEW",
-      "to": "APPROVED",
-      "conditions": [
-        {
-          "type": "isValid",
-          "inputs": ["workApprovedSignature"]
-        }
-      ]
-    },
-    {
-      "from": "ACTIVE_PENDING_REVIEW",
-      "to": "REJECTED",
-      "conditions": [
-        {
-          "type": "isValid",
-          "inputs": ["workRejectedSignature"]
+          "inputs": ["partyBSignature"]
         }
       ]
     }
   ]
 }
 ```
-
-Transitions define how an agreement moves between states:
-
-- Each transition has a source state (`from`), destination state (`to`), and conditions
-- Conditions determine when a transition can occur
-- Conditions can reference one or more inputs that must be validated
-- Common condition types include:
-  - **isValid**: Verifies that the input is properly signed and contains valid data
-  - **hasValue**: Checks that a specific value exists in the input
-  - **matchesCondition**: Evaluates a logical expression against input values
 
 The execution model ensures that agreements follow a predictable lifecycle based on verifiable proofs, making them suitable for legal and blockchain-based applications where cryptographic certainty is required.
 
@@ -607,6 +676,7 @@ The complete template structure combines all components into a single JSON docum
           "enum": ["dfsm"]
         }
       }
+    }
   }
 }
 ```
@@ -654,61 +724,40 @@ The complete template structure combines all components into a single JSON docum
         "required": true,
         "pattern": "^0x[a-fA-F0-9]{40}$"
       }
-    },
-    {
-      "id": "signedDate",
-      "type": "dateTime",
-      "name": "Signing Date",
-      "description": "Date when the agreement was signed",
-      "validation": {
-        "required": true
-      }
-    },
-    {
-      "id": "partyAddress",
-      "type": "address",
-      "name": "Party Wallet",
-      "description": "Ethereum address to sign the agreeement",
-      "validation": {
-        "required": true,
-        "pattern": "^0x[a-fA-F0-9]{40}$"
-      }
     }
   ],
   "content": {
     "type": "md",
-    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signed:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signed:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}\n\n**Date:** :variable{id='signedDate'}"
+    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signature:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signature:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}"
   },
   "execution": {
     "type": "dfsm",
     "data": {
       "states": [
-        "AWAITING_SIGNATURE",
-        "COUNTER_SIGNED"
+        "PENDING_SIGNATURE",
+        "SIGNED"
       ],
       "inputs": {
-        "partySignature": {
-          "id": "partySignature",
+        "partyBSignature": {
+          "id": "partyBSignature",
           "type": "VerifiedCredentialEIP712",
           "schema": "verified-credential-eip712.schema.json",
-          "displayName": "Party Signature",
-          "description": "EIP712 signature from the party accepting the terms of the agreement",
+          "displayName": "Party B Signature",
+          "description": "EIP712 signature from Party B accepting the agreement terms",
           "value": {
-            "isGrantRecipientApproved": true
+            "hasAcceptedTerms": true
           },
-          "signer": "${partyAddress}"
+          "signer": "${partyBAddress}"
         }
       },
       "transitions": [
         {
-          "from": "AWAITING_SIGNATURE",
-          "to": "COUNTER_SIGNED",
+          "from": "PENDING_SIGNATURE",
+          "to": "SIGNED",
           "conditions": [
             {
               "type": "isValid",
-              "inputs": [
-                "partySignature"
-              ]
+              "inputs": ["partyBSignature"]
             }
           ]
         }
@@ -716,23 +765,6 @@ The complete template structure combines all components into a single JSON docum
     }
   }
 }
-```
-
-**Example Rendered Agreement:**
-```md
-# Agreement
-
-I, Jane Doe, agree to provide Acme Corp with one hour of startup business advice.
-
-In exchange, Acme Corp agrees to transfer 500 USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.
-
-**Signed:** Jane Doe
-**Ethereum Address:** 0x123...abcd
-
-**Signed:** Acme Corp
-**Ethereum Address:** 0x456...def0
-
-**Date:** March 20, 2024
 ```
 
 ## Getting Started
@@ -760,22 +792,7 @@ Available formats:
 Creating agreement templates is simple with AI assistance. Here's how to get started:
 
 1. **Prepare Your Agreement**
-   Start with your agreement in markdown format:
-```md
-# Agreement
-
-I, Jane Doe, agree to provide [PartyB] with one hour of startup business advice.
-
-In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.
-
-**Signed:** Jane Doe  
-**Ethereum Address:** 0x123...abcd
-
-**Signed:** [PartyB]  
-**Ethereum Address:** [PartyBAddress]
-
-**Date:** [SignedDate]
-```
+   Start with your agreement in markdown format.
 
 2. **Provide Context**
    Share these files with your AI assistant:
@@ -800,14 +817,6 @@ In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0
    Here's my agreement:
    <paste your markdown agreement>
    ```
-
-The AI will help you:
-- Identify and type your variables (string, number, address, dateTime)
-- Convert brackets to variable directives
-- Structure the complete template with metadata and MDAST content
-- Validate against the schema
-
-See [Grant Agreement](./definition/templates/grant-agreement.json) for a complete example of a properly structured template using MDAST.
 
 ### 2. Validate Your Templates
 

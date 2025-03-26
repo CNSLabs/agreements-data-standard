@@ -76,7 +76,8 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "description": "Type of condition (e.g., isValid)"
+                  "enum": ["isValid"],
+                  "description": "Type of condition"
                 },
                 "inputs": {
                   "type": "array",
