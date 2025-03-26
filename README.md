@@ -30,7 +30,7 @@ The protocol consists of five core components:
 
 ## Core Components
 
-Given the following example:
+To illustrate how the Agreements Protocol works, let's start with a simple example of a written agreement:
 
 ```md
 # Agreement
@@ -45,6 +45,15 @@ In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0
 **Signature:** [PartyB]
 **Ethereum Address:** [PartyBAddress]
 ```
+
+This simple consulting agreement contains all the key elements we need to demonstrate how the protocol works. In the following sections, we'll break down how each component of this agreement maps to our protocol schema:
+
+1. **Metadata** - How we identify and version this agreement
+2. **Variables** - The dynamic inputs (`[PartyB]`, `[Amount]`, `[PartyBAddress]`)
+3. **Content** - The agreement text with variable interpolation
+4. **Execution Flow** - The signing and verification process
+
+Let's examine each component in detail:
 
 ### 1. Metadata
 
