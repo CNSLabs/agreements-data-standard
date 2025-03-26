@@ -11,8 +11,8 @@ The protocol consists of five core components:
 1. **[Metadata](#1-metadata)** - Agreement identification and context
 2. **[Variables](#2-variables)** - Typed inputs that drive the agreement
 3. **[Content](#3-content)** - Legal prose with variable interpolation
-4. **[Execution Flow](#5-execution-flow-🚧-in-progress)** - State machine for agreement progression, driven via verifiable inputs (transaction receipts, ZK proofs, VCs)
-5. **[Template](#6-template)** - Complete template structure
+4. **[Execution Flow](#4-execution-flow)** - State machine for agreement progression, driven via verifiable inputs (transaction receipts, ZK proofs, VCs)
+5. **[Template](#5-template)** - Complete template structure
 
 [View Full Schema Definition →](./definition/schemas/template.schema.json)
 
@@ -427,13 +427,13 @@ Agreement content supports multiple formats with variable interpolation:
   - [GitHub Markdown Guide](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
   - Supports [remark-directive](https://github.com/remarkjs/remark-directive) syntax for variables
 
-### 4. Execution Flow (🚧 In Progress)
+### 4. Execution Flow
 
-State machine definition for agreement progression, driven by verifiable (provable) input provided.
+
+Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./definition/improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
 - State definitions
 - Inputs definitions
-
   - Verifiable Credentials (712-signed for now)
   - EVM Transaction Receipts (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7))
   - Zero-Knowledge Proofs (🚧)
@@ -470,7 +470,16 @@ The complete template structure combines all components into a single JSON docum
           "enum": ["mdast", "md"]
         }
       }
-    }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["dfsm"]
+        }
+      }
   }
 }
 ```
@@ -527,11 +536,57 @@ The complete template structure combines all components into a single JSON docum
       "validation": {
         "required": true
       }
+    },
+    {
+      "id": "partyAddress",
+      "type": "address",
+      "name": "Party Wallet",
+      "description": "Ethereum address to sign the agreeement",
+      "validation": {
+        "required": true,
+        "pattern": "^0x[a-fA-F0-9]{40}$"
+      }
     }
   ],
   "content": {
     "type": "md",
     "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signed:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signed:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}\n\n**Date:** :variable{id='signedDate'}"
+  },
+  "execution": {
+    "type": "dfsm",
+    "data": {
+      "states": [
+        "AWAITING_SIGNATURE",
+        "COUNTER_SIGNED"
+      ],
+      "inputs": {
+        "partySignature": {
+          "id": "partySignature",
+          "type": "VerifiedCredentialEIP712",
+          "schema": "verified-credential-eip712.schema.json",
+          "displayName": "Party Signature",
+          "description": "EIP712 signature from the party accepting the terms of the agreement",
+          "value": {
+            "isGrantRecipientApproved": true
+          },
+          "signer": "${partyAddress}"
+        }
+      },
+      "transitions": [
+        {
+          "from": "AWAITING_SIGNATURE",
+          "to": "COUNTER_SIGNED",
+          "conditions": [
+            {
+              "type": "isValid",
+              "inputs": [
+                "partySignature"
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 }
 ```
