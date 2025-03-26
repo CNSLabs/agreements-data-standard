@@ -561,7 +561,7 @@ Inputs represent verifiable data used to trigger state transitions:
   - Event log verification
   - Smart contract state verification
 
-  - **Zero-Knowledge Proofs** (🚧):
+- **Zero-Knowledge Proofs** (🚧):
   - Planned support for zk-SNARKs and zk-STARKs
   - Privacy-preserving verification
 
