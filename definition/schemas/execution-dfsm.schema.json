@@ -30,6 +30,7 @@
           },
           "schema": {
             "type": "string",
+            "enum": ["verified-credential-eip712.schema.json"],
             "description": "JSON schema reference for the input type"
           },
           "displayName": {
