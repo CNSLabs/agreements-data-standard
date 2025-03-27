@@ -137,6 +137,34 @@
           ]
         }
       }
+    },
+    "execution": {
+      "type": "object",
+      "description": "Execution model definition for agreement processing",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of execution model being used",
+          "enum": ["dfsm"]
+        },
+        "data": {
+          "type": "object",
+          "description": "The execution model data specific to the type",
+          "oneOf": [
+            {
+              "if": {
+                "properties": { "type": { "const": "dfsm" } },
+                "required": ["type"]
+              },
+              "then": {
+                "$ref": "execution-dfsm.schema.json"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
     }
   }
 } 
