@@ -1,6 +1,6 @@
 # Agreements Protocol
 
-[![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./definition/schemas/template.schema.json)
+[![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./schemas/template.schema.json)
 
 The Agreements Protocol is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
 
@@ -13,15 +13,16 @@ The protocol consists of five core components:
 3. **[Content](#3-content)** - Legal prose with variable interpolation
 4. **[Execution Flow](#4-execution-flow)** - State machine for agreement progression, driven via verifiable inputs (transaction receipts, ZK proofs, VCs)
 5. **[Template](#5-template)** - Complete template structure
+6. **[Verifiable Credential Wrapper](#6-verifiable-credential-wrapper)** - Wrapping agreements in W3C Verifiable Credentials
 
-[View Full Schema Definition →](./definition/schemas/template.schema.json)
+[View Full Schema Definition →](./schemas/template.schema.json)
 
 ### Current Status
 
-- 🚧 **[IP-001](./definition/improvement-proposals/IP-001.md)**: DFSM to ASM
-- ✅ **[IP-002](./definition/improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](./definition/improvement-proposals/IP-003.md)**: Proofs and Execution Flow specifications
-- ✅ **[IP-004](./definition/improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
+- 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
+- ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
+- 🚧 **[IP-003](./improvement-proposals/IP-003.md)**: Proofs and Execution Flow specifications
+- ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 
 #### Planned
 
@@ -98,7 +99,7 @@ Agreement metadata provides essential identification and context:
 }
 ```
 
-[View full schema →](./definition/schemas/template.schema.json#metadata)
+[View full schema →](./schemas/template.schema.json#metadata)
 
 ### 2. Variables
 
@@ -218,7 +219,7 @@ To reference specific properties:
 }
 ```
 
-[View full schema →](./definition/schemas/template.schema.json#variables)
+[View full schema →](./schemas/template.schema.json#variables)
 
 ### 3. Content
 
@@ -413,7 +414,7 @@ Agreement content supports multiple formats with variable interpolation:
   - [MDAST Specification](https://github.com/syntax-tree/mdast)
   - [Unist Specification](https://github.com/syntax-tree/unist) (MDAST's foundation)
   - [remark](https://github.com/remarkjs/remark) - Markdown processor powered by plugins
-  - [IP-002](./definition/improvement-proposals/IP-002.md) - Our MDAST implementation details
+  - [IP-002](./improvement-proposals/IP-002.md) - Our MDAST implementation details
 - **Markdown (MD)**
 
   - Human-readable authoring format
@@ -424,7 +425,7 @@ Agreement content supports multiple formats with variable interpolation:
 ### 4. Execution Flow
 
 
-Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./definition/improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
+Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
 **Schema Definition:**
 
@@ -460,7 +461,7 @@ Models the expected execution of the agreement. Various models could be used in 
 }
 ```
 
-[View full DFSM schema →](./definition/schemas/execution-dfsm.schema.json)
+[View full DFSM schema →](./schemas/execution-dfsm.schema.json)
 
 #### States
 
@@ -563,7 +564,7 @@ Inputs represent verifiable data used to trigger state transitions:
   - W3C Verifiable Credentials with Ethereum's typed structured data signing (EIP-712)
   - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
   - EIP-712 proof with domain, types, and signature
-  - [View full schema →](./definition/schemas/verified-credential-eip712.schema.json)
+  - [View full schema →](./schemas/verified-credential-eip712.schema.json)
 
 - **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7)):
   - Transaction hash verification
@@ -793,11 +794,11 @@ A standardized agreement for ecosystem development funding that includes:
 
 Example content formats:
 
-- [MDAST version](./definition/templates/grant-agreement.json) - Structured format with rich semantic information
-- [Markdown version](./definition/templates/grant-agreement.md.json) - Human-readable format with variable interpolation
+- [MDAST version](./templates/grant-agreement.json) - Structured format with rich semantic information
+- [Markdown version](./templates/grant-agreement.md.json) - Human-readable format with variable interpolation
 
 Full examples including execution environment definition:
-- [Markdown content + DFSM execution](./definition/templates/grant-agreement.md.dfsm.json) ([State Machine Visualization](./definition//templates/grant-agreement.md.dfsm.json.md))
+- [Markdown content + DFSM execution](./templates/grant-agreement.md.dfsm.json) ([State Machine Visualization](./templates/grant-agreement.md.dfsm.json.md))
 
 #### Creating Custom Templates
 
@@ -809,9 +810,9 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 2. **Provide Context**
    Share these files with your AI assistant:
    - [README](./README.md) - Protocol overview and examples
-   - [Template Schema](./definition/schemas/template.schema.json) - JSON schema definition
-   - [MDAST Schema](./definition/schemas/mdast.schema.json) - Content structure specification
-   - [Grant Agreement](./definition/templates/grant-agreement.json) - Reference implementation
+   - [Template Schema](./schemas/template.schema.json) - JSON schema definition
+   - [MDAST Schema](./schemas/mdast.schema.json) - Content structure specification
+   - [Grant Agreement](./templates/grant-agreement.json) - Reference implementation
 
 3. **Generate Template**
    Use this prompt format:
@@ -834,8 +835,8 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 
 Use our JSON schemas to validate your agreement templates:
 
-- [Template Schema](./definition/schemas/template.schema.json)
-- [MDAST Schema](./definition/schemas/mdast.schema.json)
+- [Template Schema](./schemas/template.schema.json)
+- [MDAST Schema](./schemas/mdast.schema.json)
 
 ## Contributing
 
