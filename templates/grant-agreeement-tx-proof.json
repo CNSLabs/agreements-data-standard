@@ -513,6 +513,7 @@
         "grantRecipientSignature": {
           "id": "grantRecipientSignature",
           "type": "eip712Signature",
+          "schema": "verified-credential-eip712.schema.json",
           "displayName": "Grant Recipient Signature",
           "description": "EIP712 signature from the grant recipient accepting the terms of the grant agreement",
           "signer": "${grantRecipientAddress}"
@@ -520,6 +521,7 @@
         "workApprovedSignature": {
           "id": "workApprovedSignature",
           "type": "eip712Signature",
+          "schema": "verified-credential-eip712.schema.json",
           "displayName": "Work Approved Signature",
           "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
           "signer": "${tokenAllocatorAddress}"
@@ -527,6 +529,7 @@
         "workRejectedSignature": {
           "id": "workRejectedSignature",
           "type": "eip712Signature",
+          "schema": "verified-credential-eip712.schema.json",
           "displayName": "Work Rejected Signature",
           "description": "EIP712 signature from the token allocator attesting that the grant work has been rejected",
           "signer": "${tokenAllocatorAddress}"
@@ -534,6 +537,7 @@
         "grantTransactionProof": {
           "id": "grantTransactionProof",
           "type": "transactionProof",
+          "schema": "transaction-proof.schema.json",
           "displayName": "Grant Transaction Proof",
           "description": "Proof of successful token transfer to grant recipient",
           "value": {
