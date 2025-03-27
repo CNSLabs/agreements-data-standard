@@ -19,14 +19,13 @@ The protocol consists of five core components:
 
 ### Current Status
 
-- 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/16)**: Proofs and Execution Flow specifications
+- ✅ **[IP-003](./improvement-proposals/IP-003.md)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 
-#### Planned
+#### Future Plans
 
-- VC Schema Standards
+- 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - DID Method Extensions
 
 ## Core Components
@@ -256,6 +255,7 @@ Agreement content supports multiple formats with variable interpolation:
 ```
 
 **Markdown Example:**
+
 ```json
 {
   "content": {
@@ -424,7 +424,6 @@ Agreement content supports multiple formats with variable interpolation:
 
 ### 4. Execution Flow
 
-
 Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
 **Schema Definition:**
@@ -468,6 +467,7 @@ Models the expected execution of the agreement. Various models could be used in 
 States represent the possible lifecycle stages of an agreement:
 
 **Schema Definition:**
+
 ```json
 {
   "states": {
@@ -481,11 +481,14 @@ States represent the possible lifecycle stages of an agreement:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "states": [
     "PENDING_SIGNATURE",
-    "SIGNED"
+    "SIGNED",
+    "APPROVED_PAYMENT_PENDING",
+    "COMPLETED"
   ]
 }
 ```
@@ -495,6 +498,7 @@ States represent the possible lifecycle stages of an agreement:
 Inputs represent verifiable data used to trigger state transitions:
 
 **Schema Definition:**
+
 ```json
 {
   "inputs": {
@@ -540,6 +544,7 @@ Inputs represent verifiable data used to trigger state transitions:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "inputs": {
@@ -561,18 +566,19 @@ Inputs represent verifiable data used to trigger state transitions:
 Inputs represent verifiable data used to trigger state transitions:
 
 - **Verifiable Credentials with EIP-712 Signatures**:
+
   - W3C Verifiable Credentials with Ethereum's typed structured data signing (EIP-712)
   - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
   - EIP-712 proof with domain, types, and signature
-  - [View full schema →](./schemas/provable-inputs/verified-credential-eip712.schema.json)
-
+  - [View full schema →](./templates/grant-agreeement-tx-proof.json)
 - **EVM Transaction Receipts**:
+
   - Transaction hash verification
   - Event log verification
   - Smart contract state verification
   - [View full schema →](./schemas/provable-inputs/transaction-proof.schema.json)
-
 - **Zero-Knowledge Proofs** (🚧):
+
   - Planned support for zk-SNARKs and zk-STARKs
   - Privacy-preserving verification
 
@@ -581,6 +587,7 @@ Inputs represent verifiable data used to trigger state transitions:
 Transitions define how an agreement moves between states:
 
 **Schema Definition:**
+
 ```json
 {
   "transitions": {
@@ -627,6 +634,7 @@ Transitions define how an agreement moves between states:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "transitions": [
@@ -746,7 +754,9 @@ The complete template structure combines all components into a single JSON docum
     "data": {
       "states": [
         "PENDING_SIGNATURE",
-        "SIGNED"
+        "SIGNED",
+        "APPROVED_PAYMENT_PENDING",
+        "COMPLETED"
       ],
       "inputs": {
         "partyBSignature": {
@@ -759,6 +769,26 @@ The complete template structure combines all components into a single JSON docum
             "hasAcceptedTerms": true
           },
           "signer": "${partyBAddress}"
+        },
+        "paymentProof": {
+          "id": "paymentProof",
+          "type": "TransactionProof",
+          "schema": "transaction-proof.schema.json",
+          "displayName": "Payment Transaction Proof",
+          "description": "Proof of USDC transfer to Jane Doe's address",
+          "value": {
+            "txHash": "",
+            "chainId": 1,
+            "transactionType": "contractCall",
+            "contractCall": {
+              "contractAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC contract
+              "method": "transfer",
+              "params": {
+                "to": "${partyBAddress}", // Jane Doe's address
+                "amount": "${amount}"
+              }
+            }
+          }
         }
       },
       "transitions": [
@@ -769,6 +799,26 @@ The complete template structure combines all components into a single JSON docum
             {
               "type": "isValid",
               "inputs": ["partyBSignature"]
+            }
+          ]
+        },
+        {
+          "from": "SIGNED",
+          "to": "APPROVED_PAYMENT_PENDING",
+          "conditions": [
+            {
+              "type": "isValid",
+              "inputs": ["partyBSignature"]
+            }
+          ]
+        },
+        {
+          "from": "APPROVED_PAYMENT_PENDING",
+          "to": "COMPLETED",
+          "conditions": [
+            {
+              "type": "isValid",
+              "inputs": ["paymentProof"]
             }
           ]
         }
@@ -846,7 +896,17 @@ Example content formats:
 - [Markdown version](./templates/grant-agreement.md.json) - Human-readable format with variable interpolation
 
 Full examples including execution environment definition:
+
 - [Markdown content + DFSM execution](./templates/grant-agreement.md.dfsm.json) ([State Machine Visualization](./templates/grant-agreement.md.dfsm.json.md))
+
+#### Transaction Proof Templates
+
+Transaction proof templates demonstrate how to verify blockchain transactions in agreements:
+
+- [Grant Agreement with Transaction Proof](./templates/provable-inputs/grant-agreeement-tx-proof.json) - Example of verifying token transfers
+- Includes complete transaction data, receipts, and merkle proofs
+- Supports contract calls and event log verification
+- Demonstrates integration with DFSM execution model
 
 #### Creating Custom Templates
 
@@ -854,16 +914,16 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 
 1. **Prepare Your Agreement**
    Start with your agreement in markdown format.
-
 2. **Provide Context**
    Share these files with your AI assistant:
+
    - [README](./README.md) - Protocol overview and examples
    - [Template Schema](./schemas/template.schema.json) - JSON schema definition
    - [MDAST Schema](./schemas/mdast.schema.json) - Content structure specification
    - [Grant Agreement](./templates/grant-agreement.json) - Reference implementation
-
 3. **Generate Template**
    Use this prompt format:
+
    ```
    Help me create an agreement template following the Agreements Protocol standard.
 
