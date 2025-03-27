@@ -777,6 +777,53 @@ The complete template structure combines all components into a single JSON docum
 }
 ```
 
+### 6. Verifiable Credential Wrapper
+
+The entire agreement can be wrapped in a W3C Verifiable Credential to provide cryptographic proof of its authenticity and integrity. This wrapper adds several important properties:
+
+1. **Non-tamperability**: The entire agreement is cryptographically signed using EIP-712
+2. **Non-repudiation**: The issuer's signature proves they created and approved the agreement
+3. **Expiration**: The credential can have an expiration date
+4. **Context**: The credential provides rich metadata about the agreement's context
+
+**Example Usage:**
+
+```json
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld"
+  ],
+  "id": "did:example:agreement-vc-1",
+  "type": ["VerifiableCredential", "AgreementCredential"],
+  "issuer": {
+    "id": "did:example:issuer-1",
+    "name": "Agreement Issuer"
+  },
+  "issuanceDate": "2024-03-20T12:00:00Z",
+  "expirationDate": "2025-03-20T12:00:00Z",
+  "credentialSubject": {
+    "id": "did:example:subject-1",
+    "agreement": {
+      // ... full agreement content ...
+    }
+  },
+  "proof": {
+    "type": "EthereumEip712Signature2021",
+    "created": "2024-03-20T12:00:00Z",
+    "proofPurpose": "contractAgreement",
+    "verificationMethod": "did:example:issuer-1#key-1",
+    "eip712": {
+      // ... EIP-712 domain and type definitions ...
+    },
+    "proofValue": "0x..."
+  }
+}
+```
+
+See [grant-agreement-vc-wrapped.json](./templates/grant-agreement-vc-wrapped.json) for a complete example of a wrapped agreement.
+See [verified-credential-eip712.schema.json](./schemas/verified-credential-eip712.schema.json) for the wrapper format.
+
 ## Getting Started
 
 ### 1. Templates
