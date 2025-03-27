@@ -564,12 +564,13 @@ Inputs represent verifiable data used to trigger state transitions:
   - W3C Verifiable Credentials with Ethereum's typed structured data signing (EIP-712)
   - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
   - EIP-712 proof with domain, types, and signature
-  - [View full schema →](./schemas/verified-credential-eip712.schema.json)
+  - [View full schema →](./schemas/provable-inputs/verified-credential-eip712.schema.json)
 
-- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7)):
+- **EVM Transaction Receipts**:
   - Transaction hash verification
   - Event log verification
   - Smart contract state verification
+  - [View full schema →](./schemas/provable-inputs/transaction-proof.schema.json)
 
 - **Zero-Knowledge Proofs** (🚧):
   - Planned support for zk-SNARKs and zk-STARKs
@@ -822,7 +823,7 @@ The entire agreement can be wrapped in a W3C Verifiable Credential to provide cr
 ```
 
 See [grant-agreement-vc-wrapped.json](./templates/grant-agreement-vc-wrapped.json) for a complete example of a wrapped agreement.
-See [verified-credential-eip712.schema.json](./schemas/verified-credential-eip712.schema.json) for the wrapper format.
+See [verified-credential-eip712.schema.json](./schemas/provable-inputs/verified-credential-eip712.schema.json) for the wrapper format.
 
 ## Getting Started
 
