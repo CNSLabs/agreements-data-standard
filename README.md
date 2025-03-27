@@ -797,7 +797,7 @@ Example content formats:
 - [Markdown version](./definition/templates/grant-agreement.md.json) - Human-readable format with variable interpolation
 
 Full examples including execution environment definition:
-- [Markdown content + DFSM execution](./definition/templates/grant-agreement.md.fsm.json) 
+- [Markdown content + DFSM execution](./definition/templates/grant-agreement.md.dfsm.json) 
 
 #### Creating Custom Templates
 
