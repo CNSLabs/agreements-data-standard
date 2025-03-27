@@ -1,0 +1,164 @@
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld"
+  ],
+  "id": "did:example:grant-agreement-vc-1",
+  "type": ["VerifiableCredential", "AgreementCredential"],
+  "issuer": {
+    "id": "did:example:foundation-1",
+    "name": "Ecosystem Foundation"
+  },
+  "issuanceDate": "2024-03-20T12:00:00Z",
+  "expirationDate": "2025-03-20T12:00:00Z",
+  "credentialSubject": {
+    "id": "did:example:grant-recipient-1",
+    "agreement": {
+      "metadata": {
+        "id": "did:example:123",
+        "templateId": "did:template:grant-agreement-v1",
+        "version": "1.0.0",
+        "createdAt": "2024-03-20T12:00:00Z",
+        "name": "Grant Agreement",
+        "author": "Ecosystem Foundation",
+        "description": "Standard grant agreement for ecosystem development funding"
+      },
+      "variables": [
+        {
+          "id": "grantRecipientName",
+          "type": "string",
+          "name": "Grant Recipient Name",
+          "description": "Name of the grant recipient",
+          "value": "Project X",
+          "validation": {
+            "required": true,
+            "minLength": 1
+          }
+        },
+        {
+          "id": "grantAmount",
+          "type": "number",
+          "name": "Grant Amount",
+          "description": "Amount of tokens to be granted",
+          "value": 100000,
+          "validation": {
+            "required": true,
+            "min": 0
+          }
+        },
+        {
+          "id": "grantRecipientAddress",
+          "type": "address",
+          "name": "Grant Recipient Address",
+          "description": "Ethereum address of the grant recipient",
+          "value": "0x123f6e75d1BE0ee699C7Eb67594FEbC14ab3AA78",
+          "validation": {
+            "required": true,
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          }
+        }
+      ],
+      "content": {
+        "type": "md",
+        "data": "# Grant Agreement\n\nThis agreement is made between the Ecosystem Foundation (\"Foundation\") and :variable{id='grantRecipientName'} (\"Recipient\").\n\n## Grant Details\n\n1. The Foundation agrees to grant :variable{id='grantAmount'} tokens to the Recipient.\n2. The tokens will be transferred to the Recipient's address: :variable{id='grantRecipientAddress'}.\n\n## Terms and Conditions\n\n1. The Recipient agrees to use the granted tokens for the development of their project.\n2. The Foundation reserves the right to revoke the grant if the Recipient fails to meet the agreed-upon milestones.\n\n## Signatures\n\n**Foundation Representative:**\nEcosystem Foundation\n\n**Recipient:**\n:variable{id='grantRecipientName'}\nAddress: :variable{id='grantRecipientAddress'}"
+      },
+      "execution": {
+        "type": "dfsm",
+        "data": {
+          "states": [
+            "AWAITING_SIGNATURES",
+            "ACTIVE_PENDING_REVIEW",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "inputs": {
+            "grantRecipientSignature": {
+              "id": "grantRecipientSignature",
+              "type": "VerifiedCredentialEIP712",
+              "schema": "verified-credential-eip712.schema.json",
+              "displayName": "Grant Recipient Signature",
+              "description": "EIP712 signature from the grant recipient accepting the terms of the grant agreement",
+              "value": {
+                "isGrantRecipientApproved": true
+              },
+              "signer": "${grantRecipientAddress}"
+            },
+            "workApprovedSignature": {
+              "id": "workApprovedSignature",
+              "type": "VerifiedCredentialEIP712",
+              "schema": "verified-credential-eip712.schema.json",
+              "displayName": "Work Approved Signature",
+              "description": "EIP712 signature from the token allocator attesting that the grant work has been completed successfully",
+              "value": {
+                "isApproved": true
+              },
+              "signer": "${tokenAllocatorAddress}"
+            }
+          },
+          "transitions": [
+            {
+              "from": "AWAITING_SIGNATURES",
+              "to": "ACTIVE_PENDING_REVIEW",
+              "conditions": [
+                {
+                  "type": "isValid",
+                  "inputs": ["grantRecipientSignature"]
+                }
+              ]
+            },
+            {
+              "from": "ACTIVE_PENDING_REVIEW",
+              "to": "APPROVED",
+              "conditions": [
+                {
+                  "type": "isValid",
+                  "inputs": ["workApprovedSignature"]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "proof": {
+    "type": "EthereumEip712Signature2021",
+    "created": "2024-03-20T12:00:00Z",
+    "proofPurpose": "contractAgreement",
+    "verificationMethod": "did:example:foundation-1#key-1",
+    "eip712": {
+      "domain": {
+        "name": "Agreements Protocol",
+        "version": "1.0",
+        "chainId": 1,
+        "verifyingContract": "0x1234567890123456789012345678901234567890"
+      },
+      "types": {
+        "EIP712Domain": [
+          { "name": "name", "type": "string" },
+          { "name": "version", "type": "string" },
+          { "name": "chainId", "type": "uint256" },
+          { "name": "verifyingContract", "type": "address" }
+        ],
+        "AgreementCredential": [
+          { "name": "id", "type": "string" },
+          { "name": "type", "type": "string[]" },
+          { "name": "issuer", "type": "Issuer" },
+          { "name": "issuanceDate", "type": "string" },
+          { "name": "expirationDate", "type": "string" },
+          { "name": "credentialSubject", "type": "CredentialSubject" }
+        ],
+        "Issuer": [
+          { "name": "id", "type": "string" },
+          { "name": "name", "type": "string" }
+        ],
+        "CredentialSubject": [
+          { "name": "id", "type": "string" },
+          { "name": "agreement", "type": "Agreement" }
+        ]
+      },
+      "primaryType": "AgreementCredential"
+    },
+    "proofValue": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+  }
+} 

@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/template.schema.json",
+  "title": "Agreement Template",
+  "description": "Schema for agreement templates in the agreements protocol",
+  "type": "object",
+  "required": ["metadata", "variables", "content"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["id", "templateId", "version", "createdAt", "name", "author", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^did:.*",
+          "description": "Unique identifier for the agreement instance"
+        },
+        "templateId": {
+          "type": "string",
+          "pattern": "^did:template:.*",
+          "description": "Identifier for the template type"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version of the template"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human readable name of the template"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author or organization that created the template"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the template's purpose"
+        }
+      }
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "name", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the variable"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "address", "dateTime"],
+            "description": "Data type of the variable"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human readable name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the variable's purpose"
+          },
+          "value": {
+            "type": ["string", "number", "null"],
+            "description": "Current value of the variable"
+          },
+          "defaultValue": {
+            "type": ["string", "number", "null"],
+            "description": "Default value if none is provided"
+          },
+          "validation": {
+            "type": "object",
+            "properties": {
+              "required": {
+                "type": "boolean"
+              },
+              "minLength": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "maxLength": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pattern": {
+                "type": "string",
+                "format": "regex"
+              },
+              "message": {
+                "type": "string"
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["mdast", "md"],
+          "description": "Content format type"
+        },
+        "data": {
+          "oneOf": [
+            {
+              "if": {
+                "properties": { "type": { "const": "mdast" } }
+              },
+              "then": {
+                "$ref": "mdast.schema.json"
+              }
+            },
+            {
+              "if": {
+                "properties": { "type": { "const": "md" } }
+              },
+              "then": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "description": "Execution model definition for agreement processing",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of execution model being used",
+          "enum": ["dfsm"]
+        },
+        "data": {
+          "type": "object",
+          "description": "The execution model data specific to the type",
+          "oneOf": [
+            {
+              "if": {
+                "properties": { "type": { "const": "dfsm" } },
+                "required": ["type"]
+              },
+              "then": {
+                "$ref": "execution-dfsm.schema.json"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+} 
