@@ -1,0 +1,336 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transaction Proof Schema",
+  "description": "Schema for blockchain transaction proofs including raw transaction, receipt, block header, and merkle proofs",
+  "type": "object",
+  "required": ["txHash", "proofDefinitionReference", "rawTx", "txReceipt", "blockHeader", "receiptProof", "transactionProof"],
+  "properties": {
+    "txHash": {
+      "type": "string",
+      "description": "Hash of the transaction",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "proofDefinitionReference": {
+      "type": "string",
+      "description": "Reference to the proof definition being used"
+    },
+    "rawTx": {
+      "type": "object",
+      "required": ["hash", "nonce", "from", "to", "value", "gasPrice", "gas", "input", "v", "r", "s", "chainId"],
+      "properties": {
+        "hash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "nonce": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "gasPrice": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "gas": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "input": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "v": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "r": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "s": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "chainId": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "txReceipt": {
+      "type": "object",
+      "required": [
+        "transactionHash",
+        "transactionIndex",
+        "type",
+        "blockHash",
+        "blockNumber",
+        "from",
+        "to",
+        "gasUsed",
+        "cumulativeGasUsed",
+        "effectiveGasPrice",
+        "contractAddress",
+        "logs",
+        "status",
+        "logsBloom"
+      ],
+      "properties": {
+        "transactionHash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "transactionIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "type": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockHash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "blockNumber": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "gasUsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cumulativeGasUsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "effectiveGasPrice": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "contractAddress": {
+          "type": ["string", "null"],
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "address",
+              "topics",
+              "data",
+              "blockNumber",
+              "transactionHash",
+              "logIndex",
+              "removed"
+            ],
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[a-fA-F0-9]{40}$"
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^0x[a-fA-F0-9]{64}$"
+                }
+              },
+              "data": {
+                "type": "string",
+                "pattern": "^0x[a-fA-F0-9]*$"
+              },
+              "blockNumber": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "transactionHash": {
+                "type": "string",
+                "pattern": "^0x[a-fA-F0-9]{64}$"
+              },
+              "logIndex": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "removed": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "status": {
+          "type": "integer",
+          "enum": [0, 1]
+        },
+        "logsBloom": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{512}$"
+        }
+      }
+    },
+    "blockHeader": {
+      "type": "object",
+      "required": [
+        "parentHash",
+        "sha3Uncles",
+        "miner",
+        "stateRoot",
+        "transactionsRoot",
+        "receiptsRoot",
+        "logsBloom",
+        "difficulty",
+        "totalDifficulty",
+        "number",
+        "gasLimit",
+        "gasUsed",
+        "timestamp",
+        "extraData",
+        "mixHash",
+        "nonce",
+        "hash",
+        "baseFeePerGas",
+        "size"
+      ],
+      "properties": {
+        "parentHash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "sha3Uncles": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "miner": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "stateRoot": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "transactionsRoot": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "receiptsRoot": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "logsBloom": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{512}$"
+        },
+        "difficulty": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalDifficulty": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gasLimit": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gasUsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timestamp": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "extraData": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]*$"
+        },
+        "mixHash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "nonce": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{16}$"
+        },
+        "hash": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$"
+        },
+        "baseFeePerGas": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "receiptProof": {
+      "type": "object",
+      "required": ["proof", "value"],
+      "properties": {
+        "proof": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "transactionProof": {
+      "type": "object",
+      "required": ["proof", "value"],
+      "properties": {
+        "proof": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+} 
