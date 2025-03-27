@@ -821,7 +821,8 @@ The entire agreement can be wrapped in a W3C Verifiable Credential to provide cr
 }
 ```
 
-See [grant-agreement-vc-wrapped.json](./definition/templates/grant-agreement-vc-wrapped.json) for a complete example of a wrapped agreement.
+See [grant-agreement-vc-wrapped.json](./templates/grant-agreement-vc-wrapped.json) for a complete example of a wrapped agreement.
+See [verified-credential-eip712.schema.json](./schemas/verified-credential-eip712.schema.json) for the wrapper format.
 
 ## Getting Started
 
