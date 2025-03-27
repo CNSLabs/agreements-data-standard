@@ -781,10 +781,10 @@ The complete template structure combines all components into a single JSON docum
             "chainId": 1,
             "transactionType": "contractCall",
             "contractCall": {
-              "contractAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC contract
+              "contractAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
               "method": "transfer",
               "params": {
-                "to": "${partyBAddress}", // Jane Doe's address
+                "to": "${partyBAddress}",
                 "amount": "${amount}"
               }
             }
