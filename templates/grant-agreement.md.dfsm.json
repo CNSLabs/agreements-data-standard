@@ -224,7 +224,7 @@
           },
           {
             "from": "ACTIVE_PENDING_REVIEW",
-            "to": "COMPLETED",
+            "to": "APPROVED",
             "conditions": [
               {
                 "type": "isValid",
