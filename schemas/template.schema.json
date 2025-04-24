@@ -141,27 +141,101 @@
     "execution": {
       "type": "object",
       "description": "Execution model definition for agreement processing",
-      "required": ["type", "data"],
+      "required": ["states", "inputs", "transitions"],
       "properties": {
-        "type": {
-          "type": "string",
-          "description": "The type of execution model being used",
-          "enum": ["dfsm"]
-        },
-        "data": {
+        "states": {
           "type": "object",
-          "description": "The execution model data specific to the type",
-          "oneOf": [
-            {
-              "if": {
-                "properties": { "type": { "const": "dfsm" } },
-                "required": ["type"]
+          "description": "State definitions with descriptive properties",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["name", "description"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Human-readable name for the state"
               },
-              "then": {
-                "$ref": "execution-dfsm.schema.json"
+              "description": {
+                "type": "string",
+                "description": "Detailed description of what this state represents"
+              },
+              "isInitial": {
+                "type": "boolean",
+                "description": "Whether this is the starting state"
               }
             }
-          ]
+          }
+        },
+        "inputs": {
+          "type": "object",
+          "description": "Input definitions that can be used in transitions",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type", "schema", "displayName", "description"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of the input (e.g., VerifiedCredentialEIP712)"
+              },
+              "schema": {
+                "type": "string",
+                "enum": ["verified-credential-eip712.schema.json"],
+                "description": "JSON schema reference for the input type"
+              },
+              "displayName": {
+                "type": "string",
+                "description": "Human-readable name for the input"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of the input's purpose"
+              },
+              "data": {
+                "type": "object",
+                "description": "Required field values for the credentialSubject"
+              },
+              "issuer": {
+                "type": "string",
+                "description": "The identity that should sign this verified credential"
+              }
+            }
+          }
+        },
+        "transitions": {
+          "type": "array",
+          "description": "State transitions with conditions",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "conditions"],
+            "properties": {
+              "from": {
+                "type": "string",
+                "description": "Starting state of the transition"
+              },
+              "to": {
+                "type": "string",
+                "description": "Ending state of the transition"
+              },
+              "conditions": {
+                "type": "array",
+                "description": "Conditions that must be met for the transition to occur",
+                "items": {
+                  "type": "object",
+                  "required": ["type", "input"],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["isValid"],
+                      "description": "Type of condition"
+                    },
+                    "input": {
+                      "type": "string",
+                      "description": "Input identifier to evaluate"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "additionalProperties": false
