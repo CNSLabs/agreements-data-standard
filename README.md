@@ -1,12 +1,12 @@
-# Agreements Data Standard
+# Agreements Protocol
 
 [![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./schemas/template.schema.json)
 
-The Agreements Data Standard is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
+The Agreements Protocol is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
 
-## Data Standard Overview
+## Protocol Overview
 
-The data standard consists of five core components:
+The protocol consists of five core components:
 
 1. **[Metadata](#1-metadata)** - Agreement identification and context
 2. **[Variables](#2-variables)** - Typed inputs that drive the agreement
@@ -21,7 +21,7 @@ The data standard consists of five core components:
 
 - 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-data-standard/pull/16)**: Proofs and Execution Flow specifications
+- 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/16)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 
 #### Planned
@@ -31,7 +31,7 @@ The data standard consists of five core components:
 
 ## Core Components
 
-To illustrate how the Agreements Data Standard works, let's start with a simple example of a written agreement:
+To illustrate how the Agreements Protocol works, let's start with a simple example of a written agreement:
 
 ```md
 # Agreement
@@ -47,7 +47,7 @@ In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0
 **Ethereum Address:** [PartyBAddress]
 ```
 
-This simple consulting agreement contains all the key elements we need to demonstrate how the data standard works. In the following sections, we'll break down how each component of this agreement maps to our data standard schema:
+This simple consulting agreement contains all the key elements we need to demonstrate how the protocol works. In the following sections, we'll break down how each component of this agreement maps to our protocol schema:
 
 1. **Metadata** - How we identify and version this agreement
 2. **Variables** - The dynamic inputs (`[PartyB]`, `[Amount]`, `[PartyBAddress]`)
@@ -103,9 +103,7 @@ Agreement metadata provides essential identification and context:
 
 ### 2. Variables
 
-Variables define typed inputs that can be referenced throughout the agreement. The data standard supports both array-based and object-based variable formats:
-
-#### Array-Based Variables (Original Format)
+Variables define typed inputs that can be referenced throughout the agreement:
 
 **Schema Definition:**
 
@@ -141,33 +139,42 @@ Variables define typed inputs that can be referenced throughout the agreement. T
 }
 ```
 
-#### Object-Based Variables (New Format)
-
-The newest version of the data standard supports an object-based variables structure for more intuitive access:
+**Example Usage:**
 
 ```json
 {
-  "variables": {
-    "partyAEthAddress": {
-      "type": "address",
-      "name": "Party A Ethereum Address",
-      "description": "Ethereum address of the first party",
-      "initiallyRequired": true,
-      "validation": {
-        "required": true,
-        "pattern": "^0x5B38Da6a701c568545dCfcB03FcB875f56beddC4$"
-      }
-    },
-    "partyBName": {
+  "variables": [
+    {
+      "id": "partyB",
       "type": "string",
-      "name": "Party B Name",
-      "description": "Legal name of the second party",
+      "name": "Party B",
+      "description": "Name of the party receiving consulting services",
       "validation": {
         "required": true,
         "minLength": 1
       }
+    },
+    {
+      "id": "amount",
+      "type": "number",
+      "name": "USDC Amount",
+      "description": "Amount of USDC to be paid for services",
+      "validation": {
+        "required": true,
+        "min": 1
+      }
+    },
+    {
+      "id": "partyBAddress",
+      "type": "address",
+      "name": "Party B Ethereum Address",
+      "description": "Ethereum address of Party B",
+      "validation": {
+        "required": true,
+        "pattern": "^0x[a-fA-F0-9]{40}$"
+      }
     }
-  }
+  ]
 }
 ```
 
@@ -258,6 +265,147 @@ Agreement content supports multiple formats with variable interpolation:
 }
 ```
 
+**MDAST Example:**
+
+```json
+{
+  "content": {
+    "type": "mdast",
+    "data": {
+      "type": "root",
+      "children": [
+        {
+          "type": "heading",
+          "depth": 1,
+          "children": [
+            {
+              "type": "text",
+              "value": "Agreement"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "I, Jane Doe, agree to provide "
+            },
+            {
+              "type": "variable",
+              "id": "partyB"
+            },
+            {
+              "type": "text",
+              "value": " with one hour of startup business advice."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "In exchange, "
+            },
+            {
+              "type": "variable",
+              "id": "partyB"
+            },
+            {
+              "type": "text",
+              "value": " agrees to transfer "
+            },
+            {
+              "type": "variable",
+              "id": "amount"
+            },
+            {
+              "type": "text",
+              "value": " USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Signature:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " Jane Doe\n"
+            },
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Ethereum Address:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " 0x123...abcd"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Signature:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " "
+            },
+            {
+              "type": "variable",
+              "id": "partyB"
+            },
+            {
+              "type": "text",
+              "value": "\n"
+            },
+            {
+              "type": "strong",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Ethereum Address:"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "value": " "
+            },
+            {
+              "type": "variable",
+              "id": "partyBAddress"
+            }
+          ]
+        },
+      ]
+    }
+  }
+}
+```
+
 #### Content Formats
 
 - **MDAST (Markdown Abstract Syntax Tree)**
@@ -276,109 +424,71 @@ Agreement content supports multiple formats with variable interpolation:
 
 ### 4. Execution Flow
 
-Models the expected execution of the agreement. The data standard now supports two main formats for state machine definitions:
 
-#### Array-Based State Machine (Original Format)
+Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
 **Schema Definition:**
+
 ```json
 {
   "execution": {
-    "type": "dfsm",
-    "data": {
-      "states": [
-        "AWAITING_SIGNATURES",
-        "ACTIVE_PENDING_REVIEW",
-        "APPROVED",
-        "REJECTED"
-      ],
-      "inputs": {
-        "grantRecipientSignature": {
-          "id": "grantRecipientSignature",
-          "type": "VerifiedCredentialEIP712",
-          "schema": "verified-credential-eip712.schema.json",
-          "displayName": "Grant Recipient Signature",
-          "description": "EIP712 signature from the grant recipient",
-          "value": {
-            "isGrantRecipientApproved": true
-          },
-          "signer": "${grantRecipientAddress}"
-        }
+    "type": "object",
+    "description": "Execution model definition for agreement processing",
+    "required": ["type", "data"],
+    "properties": {
+      "type": {
+        "type": "string",
+        "description": "The type of execution model being used",
+        "enum": ["dfsm"]
       },
-      "transitions": [
-        {
-          "from": "AWAITING_SIGNATURES",
-          "to": "ACTIVE_PENDING_REVIEW",
-          "conditions": [
-            {
-              "type": "isValid",
-              "inputs": ["grantRecipientSignature"]
+      "data": {
+        "type": "object",
+        "description": "The execution model data specific to the type",
+        "oneOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "dfsm" } },
+              "required": ["type"]
+            },
+            "then": {
+              "$ref": "execution-dfsm.schema.json"
             }
-          ]
-        }
-      ]
+          }
+        ]
+      }
     }
   }
 }
 ```
 
-#### Object-Based State Machine (New Format)
+[View full DFSM schema →](./schemas/execution-dfsm.schema.json)
 
-The newest version of the data standard supports an object-based state machine for more descriptive states:
+#### States
 
+States represent the possible lifecycle stages of an agreement:
+
+**Schema Definition:**
 ```json
 {
-  "execution": {
-    "states": {
-      "PENDING_PARTY_A_SIGNATURE": {
-        "name": "Pending Signature From A",
-        "description": "This state awaits until Party A supplies Party B's address along with their own name.",
-        "isInitial": true
-      },
-      "PENDING_PARTY_B_SIGNATURE": {
-        "name": "Pending Signature From B",
-        "description": "This state awaits until Party B confirms their identity by supplying their name."
-      },
-      "ACCEPTED": {
-        "name": "Agreement Accepted",
-        "description": "The agreement has been accepted by both parties and is now in force."
-      }
-    },
-    "inputs": {
-      "partyAData": {
-        "type": "VerifiedCredentialEIP712",
-        "schema": "verified-credential-eip712.schema.json",
-        "displayName": "Party A Signature",
-        "description": "EIP712 signature from Party A proposing the MOU terms",
-        "data": {
-          "partyAName": "${variables.partyAName}",
-          "partyBEthAddress": "${variables.partyBEthAddress}"
-        },
-        "issuer": "${variables.partyAEthAddress.value}"
-      }
-    },
-    "transitions": [
-      {
-        "from": "PENDING_PARTY_A_SIGNATURE",
-        "to": "PENDING_PARTY_B_SIGNATURE",
-        "conditions": [
-          {
-            "type": "isValid",
-            "input": "partyAData"
-          }
-        ]
-      }
-    ]
+  "states": {
+    "type": "array",
+    "description": "List of possible states for the agreement",
+    "items": {
+      "type": "string"
+    }
   }
 }
 ```
 
-#### States
-
-In the new format, states are objects that can include:
-- `name`: Human-readable name for the state
-- `description`: Detailed description of the state
-- `isInitial`: Boolean flag indicating if this is the starting state
+**Example Usage:**
+```json
+{
+  "states": [
+    "PENDING_SIGNATURE",
+    "SIGNED"
+  ]
+}
+```
 
 #### Inputs
 
@@ -429,6 +539,25 @@ Inputs represent verifiable data used to trigger state transitions:
 }
 ```
 
+**Example Usage:**
+```json
+{
+  "inputs": {
+    "partyBSignature": {
+      "id": "partyBSignature",
+      "type": "VerifiedCredentialEIP712",
+      "schema": "verified-credential-eip712.schema.json",
+      "displayName": "Party B Signature",
+      "description": "EIP712 signature from Party B accepting the agreement terms",
+      "value": {
+        "hasAcceptedTerms": true
+      },
+      "signer": "${partyBAddress}"
+    }
+  }
+}
+```
+
 Inputs represent verifiable data used to trigger state transitions:
 
 - **Verifiable Credentials with EIP-712 Signatures**:
@@ -437,7 +566,7 @@ Inputs represent verifiable data used to trigger state transitions:
   - EIP-712 proof with domain, types, and signature
   - [View full schema →](./schemas/verified-credential-eip712.schema.json)
 
-- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-data-standard/pull/7)):
+- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7)):
   - Transaction hash verification
   - Event log verification
   - Smart contract state verification
@@ -496,14 +625,19 @@ Transitions define how an agreement moves between states:
 }
 ```
 
-In the newer format, conditions have been simplified to reference single inputs:
-
+**Example Usage:**
 ```json
 {
-  "conditions": [
+  "transitions": [
     {
-      "type": "isValid",
-      "input": "partyAData"  // Note: uses "input" instead of "inputs" array
+      "from": "PENDING_SIGNATURE",
+      "to": "SIGNED",
+      "conditions": [
+        {
+          "type": "isValid",
+          "inputs": ["partyBSignature"]
+        }
+      ]
     }
   ]
 }
@@ -513,9 +647,9 @@ The execution model ensures that agreements follow a predictable lifecycle based
 
 ### 5. Template
 
-The complete template structure combines all components into a single JSON document. The newest version wraps the components inside an `agreement` object with an optional `params` section for initial values:
+The complete template structure combines all components into a single JSON document:
 
-**Schema Definition for Original Format:**
+**Schema Definition:**
 
 ```json
 {
@@ -557,32 +691,91 @@ The complete template structure combines all components into a single JSON docum
 }
 ```
 
-**New Format with Agreement Wrapper:**
+**Example Template:**
 
 ```json
 {
-  "agreement": {
-    "metadata": {
-      // metadata properties
-    },
-    "variables": {
-      // object-based variables
-    },
-    "content": {
-      // content definition
-    },
-    "execution": {
-      // object-based state machine
-    }
+  "metadata": {
+    "id": "did:example:123",
+    "templateId": "did:template:consulting-v1",
+    "version": "1.0.0",
+    "createdAt": "2024-03-20T12:00:00Z",
+    "name": "Consulting Agreement Template",
+    "author": "Jane Doe",
+    "description": "Standard template for one-hour consulting services with USDC payment"
   },
-  "params": {
-    // initial values for variables
-    "partyAEthAddress": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"
+  "variables": [
+    {
+      "id": "partyB",
+      "type": "string",
+      "name": "Party B",
+      "description": "Name of the party receiving consulting services",
+      "validation": {
+        "required": true,
+        "minLength": 1
+      }
+    },
+    {
+      "id": "amount",
+      "type": "number",
+      "name": "USDC Amount",
+      "description": "Amount of USDC to be paid for services",
+      "validation": {
+        "required": true,
+        "min": 1
+      }
+    },
+    {
+      "id": "partyBAddress",
+      "type": "address",
+      "name": "Party B Ethereum Address",
+      "description": "Ethereum address of Party B",
+      "validation": {
+        "required": true,
+        "pattern": "^0x[a-fA-F0-9]{40}$"
+      }
+    }
+  ],
+  "content": {
+    "type": "md",
+    "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signature:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signature:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}"
+  },
+  "execution": {
+    "type": "dfsm",
+    "data": {
+      "states": [
+        "PENDING_SIGNATURE",
+        "SIGNED"
+      ],
+      "inputs": {
+        "partyBSignature": {
+          "id": "partyBSignature",
+          "type": "VerifiedCredentialEIP712",
+          "schema": "verified-credential-eip712.schema.json",
+          "displayName": "Party B Signature",
+          "description": "EIP712 signature from Party B accepting the agreement terms",
+          "value": {
+            "hasAcceptedTerms": true
+          },
+          "signer": "${partyBAddress}"
+        }
+      },
+      "transitions": [
+        {
+          "from": "PENDING_SIGNATURE",
+          "to": "SIGNED",
+          "conditions": [
+            {
+              "type": "isValid",
+              "inputs": ["partyBSignature"]
+            }
+          ]
+        }
+      ]
+    }
   }
 }
 ```
-
-The new format provides a clearer separation between the agreement definition and the parameters used to initialize it.
 
 ### 6. Verifiable Credential Wrapper
 
@@ -654,25 +847,6 @@ Example content formats:
 Full examples including execution environment definition:
 - [Markdown content + DFSM execution](./templates/grant-agreement.md.dfsm.json) ([State Machine Visualization](./templates/grant-agreement.md.dfsm.json.md))
 
-#### Memorandum of Understanding (MOU)
-
-A non-binding agreement between two parties that outlines their intention to work together:
-
-- Party details and contact information
-- Purpose and scope of collaboration
-- Roles and responsibilities
-- Term and termination conditions
-- Confidentiality provisions
-
-The MOU template uses the newest format with:
-- Object-based variables
-- Descriptive state machine with named states
-- Multi-step approval process
-- Initial parameters
-
-Example:
-- [Simple MOU](./templates/simple-grant/simple.grant.json) - Complete MOU with execution flow
-
 #### Creating Custom Templates
 
 Creating agreement templates is simple with AI assistance. Here's how to get started:
@@ -682,7 +856,7 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 
 2. **Provide Context**
    Share these files with your AI assistant:
-   - [README](./README.md) - Data standard overview and examples
+   - [README](./README.md) - Protocol overview and examples
    - [Template Schema](./schemas/template.schema.json) - JSON schema definition
    - [MDAST Schema](./schemas/mdast.schema.json) - Content structure specification
    - [Grant Agreement](./templates/grant-agreement.json) - Reference implementation
@@ -690,7 +864,7 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 3. **Generate Template**
    Use this prompt format:
    ```
-   Help me create an agreement template following the Agreements Data Standard.
+   Help me create an agreement template following the Agreements Protocol standard.
 
    Agreement Type: Consulting Agreement
    Purpose: One-hour consulting session with USDC payment
@@ -713,7 +887,7 @@ Use our JSON schemas to validate your agreement templates:
 
 ## Contributing
 
-We welcome contributions to the Agreements Data Standard! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
+We welcome contributions to the Agreements Protocol! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
 
 ## License
 
