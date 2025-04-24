@@ -75,6 +75,10 @@
             "type": ["string", "number", "null"],
             "description": "Default value if none is provided"
           },
+          "initiallyRequired": {
+            "type": "boolean",
+            "description": "Whether this variable must be provided at initialization time to the execution engine"
+          },
           "validation": {
             "type": "object",
             "properties": {
