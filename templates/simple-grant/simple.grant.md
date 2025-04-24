@@ -5,6 +5,7 @@ This document defines a non-binding Memorandum of Understanding (MOU) between tw
 ## Agreement Structure
 
 ### Metadata
+
 - **ID**: `did:example:mou-v1`
 - **Template ID**: `did:template:mou-v1`
 - **Version**: 1.0.0
@@ -12,18 +13,22 @@ This document defines a non-binding Memorandum of Understanding (MOU) between tw
 - **Type**: Memorandum of Understanding
 
 ### Key Participants
+
 1. **Party A**
+
    - Must provide legal name
    - Must provide Ethereum address of Party B
    - EIP712 Signs against Party A Data
    - Reviews Party B data and then either Accepts or Rejects via another signature
-   
 2. **Party B**
+
    - Must provide legal name
    - EIP712 Signs against Party B Data
 
 ### Agreement Content
+
 The MOU includes comprehensive sections covering:
+
 - Introduction and purpose
 - Roles and responsibilities of both parties
 - Term and termination conditions
@@ -58,12 +63,17 @@ stateDiagram-v2
     note right of REJECTED: Agreement terminated
 ```
 
+[Data Flow](./simple.grant.png)
+[Supporting Figma](https://www.figma.com/board/ZsUIUaHzEv1G3PpNlS9hyM/Agreements-Backend?node-id=0-1&p=f&t=QCnxuuXEpAU5G3ui-0)
+
 ### Signature Process
+
 1. **Initial Stage**: Party A initiates by providing their signature along with Party B's address
 2. **Secondary Stage**: Party B confirms by signing with their details
 3. **Final Stage**: Party A makes the final decision to either accept or reject the agreement
 
 ### Verification Method
+
 - All signatures are implemented using EIP712 verified credentials
 - Each signature requires specific data validation:
   - Party A's initial signature includes their name and Party B's address
@@ -71,6 +81,7 @@ stateDiagram-v2
   - Final acceptance/rejection requires explicit "ACCEPTED" or "REJECTED" string
 
 ### Security Features
+
 - All signatures are cryptographically verified through Ethereum addresses
 - Each state transition requires valid credential verification
 - Specific address validation for Party A (hardcoded in template)
