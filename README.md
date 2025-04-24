@@ -1,12 +1,12 @@
-# Agreements Protocol
+# Agreements Data Standard
 
 [![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./schemas/template.schema.json)
 
-The Agreements Protocol is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
+The Agreements Data Standard is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
 
-## Protocol Overview
+## Data Standard Overview
 
-The protocol consists of five core components:
+The data standard consists of five core components:
 
 1. **[Metadata](#1-metadata)** - Agreement identification and context
 2. **[Variables](#2-variables)** - Typed inputs that drive the agreement
@@ -23,6 +23,7 @@ The protocol consists of five core components:
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
 - 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/16)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
+- ✅ **[IP-006](./improvement-proposals/IP-006.md)**: Execution Definition Improvements
 
 #### Planned
 
@@ -31,7 +32,7 @@ The protocol consists of five core components:
 
 ## Core Components
 
-To illustrate how the Agreements Protocol works, let's start with a simple example of a written agreement:
+To illustrate how the Agreements Data Standard works, let's start with a simple example of a written agreement:
 
 ```md
 # Agreement
@@ -47,7 +48,7 @@ In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0
 **Ethereum Address:** [PartyBAddress]
 ```
 
-This simple consulting agreement contains all the key elements we need to demonstrate how the protocol works. In the following sections, we'll break down how each component of this agreement maps to our protocol schema:
+This simple consulting agreement contains all the key elements we need to demonstrate how the data standard works. In the following sections, we'll break down how each component of this agreement maps to our data standard schema:
 
 1. **Metadata** - How we identify and version this agreement
 2. **Variables** - The dynamic inputs (`[PartyB]`, `[Amount]`, `[PartyBAddress]`)
@@ -256,6 +257,7 @@ Agreement content supports multiple formats with variable interpolation:
 ```
 
 **Markdown Example:**
+
 ```json
 {
   "content": {
@@ -424,7 +426,6 @@ Agreement content supports multiple formats with variable interpolation:
 
 ### 4. Execution Flow
 
-
 Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
 **Schema Definition:**
@@ -468,6 +469,7 @@ Models the expected execution of the agreement. Various models could be used in 
 States represent the possible lifecycle stages of an agreement:
 
 **Schema Definition:**
+
 ```json
 {
   "states": {
@@ -481,6 +483,7 @@ States represent the possible lifecycle stages of an agreement:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "states": [
@@ -495,6 +498,7 @@ States represent the possible lifecycle stages of an agreement:
 Inputs represent verifiable data used to trigger state transitions:
 
 **Schema Definition:**
+
 ```json
 {
   "inputs": {
@@ -540,6 +544,7 @@ Inputs represent verifiable data used to trigger state transitions:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "inputs": {
@@ -561,17 +566,18 @@ Inputs represent verifiable data used to trigger state transitions:
 Inputs represent verifiable data used to trigger state transitions:
 
 - **Verifiable Credentials with EIP-712 Signatures**:
+
   - W3C Verifiable Credentials with Ethereum's typed structured data signing (EIP-712)
   - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
   - EIP-712 proof with domain, types, and signature
   - [View full schema →](./schemas/verified-credential-eip712.schema.json)
+- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-data standard/pull/7)):
 
-- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7)):
   - Transaction hash verification
   - Event log verification
   - Smart contract state verification
-
 - **Zero-Knowledge Proofs** (🚧):
+
   - Planned support for zk-SNARKs and zk-STARKs
   - Privacy-preserving verification
 
@@ -580,6 +586,7 @@ Inputs represent verifiable data used to trigger state transitions:
 Transitions define how an agreement moves between states:
 
 **Schema Definition:**
+
 ```json
 {
   "transitions": {
@@ -626,6 +633,7 @@ Transitions define how an agreement moves between states:
 ```
 
 **Example Usage:**
+
 ```json
 {
   "transitions": [
@@ -845,6 +853,7 @@ Example content formats:
 - [Markdown version](./templates/grant-agreement.md.json) - Human-readable format with variable interpolation
 
 Full examples including execution environment definition:
+
 - [Markdown content + DFSM execution](./templates/grant-agreement.md.dfsm.json) ([State Machine Visualization](./templates/grant-agreement.md.dfsm.json.md))
 
 #### Creating Custom Templates
@@ -853,18 +862,18 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 
 1. **Prepare Your Agreement**
    Start with your agreement in markdown format.
-
 2. **Provide Context**
    Share these files with your AI assistant:
-   - [README](./README.md) - Protocol overview and examples
+
+   - [README](./README.md) - Data Standard overview and examples
    - [Template Schema](./schemas/template.schema.json) - JSON schema definition
    - [MDAST Schema](./schemas/mdast.schema.json) - Content structure specification
    - [Grant Agreement](./templates/grant-agreement.json) - Reference implementation
-
 3. **Generate Template**
    Use this prompt format:
+
    ```
-   Help me create an agreement template following the Agreements Protocol standard.
+   Help me create an agreement template following the Agreements Data Standard standard.
 
    Agreement Type: Consulting Agreement
    Purpose: One-hour consulting session with USDC payment
@@ -887,7 +896,7 @@ Use our JSON schemas to validate your agreement templates:
 
 ## Contributing
 
-We welcome contributions to the Agreements Protocol! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
+We welcome contributions to the Agreements Data Standard! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
 
 ## License
 
