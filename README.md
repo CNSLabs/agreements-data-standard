@@ -344,8 +344,6 @@ Agreement content supports multiple formats with variable interpolation:
 
 Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
 
-
-
 [View full DFSM schema →](./schemas/execution-dfsm.schema.json)
 
 #### States
@@ -427,7 +425,7 @@ Transitions define how an agreement moves between states:
       "conditions": [
         {
           "type": "isValid",
-          "inputs": ["partyBSignature"]
+          "input": "partyBSignature"
         }
       ]
     }
@@ -557,16 +555,17 @@ Here's a complete execution flow example for our consulting agreement:
 This example demonstrates:
 
 1. **Clear State Flow**
+
    - Starts with consultant signature
    - Proceeds to client signature and payment
    - Ends with consultant's final acceptance
-
 2. **Multiple Input Types**
+
    - EIP-712 signatures for agreement terms
    - EVM transaction receipt for USDC payment
    - Variable interpolation for dynamic values
-
 3. **Conditional Transitions**
+
    - Single-input conditions for signatures
    - Multi-input condition for client stage (signature + payment)
    - Final acceptance to activate the agreement
