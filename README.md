@@ -357,8 +357,15 @@ States represent the possible lifecycle stages of an agreement:
 ```json
 {
   "states": [
-    "PENDING_SIGNATURE",
-    "SIGNED"
+    "PENDING_SIGNATURE": {
+      "name": "Pending Consultant Signature",
+      "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
+      "isInitial": true
+    },
+    "SIGNED": {
+      "name": "Received Signature",
+      "description": "Received consultant (Jane Doe) signature to indicate terms were accepted",
+    }
   ]
 }
 ```
@@ -430,7 +437,7 @@ Transitions define how an agreement moves between states:
 
 The execution model ensures that agreements follow a predictable lifecycle based on verifiable proofs, making them suitable for legal and blockchain-based applications where cryptographic certainty is required.
 
-#### Sample Usage
+#### Example Usage
 
 Here's a complete execution flow example for our consulting agreement:
 
