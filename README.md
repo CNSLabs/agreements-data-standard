@@ -352,39 +352,43 @@ States represent the possible lifecycle stages of an agreement:
 
 ```json
 {
-  "states": [
+  "states": {
     "PENDING_SIGNATURE": {
       "name": "Pending Consultant Signature",
       "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
-      "isInitial": true
+      "isInitial": true,
+      "initialParams": {
+        "partyAEthAddress": "${variables.partyAEthAddress}"
+      }
     },
     "SIGNED": {
       "name": "Received Signature",
-      "description": "Received consultant (Jane Doe) signature to indicate terms were accepted",
+      "description": "Received consultant (Jane Doe) signature to indicate terms were accepted"
     }
-  ]
+  }
 }
 ```
+
+Note that initial states can include `initialParams` to set parameters when the state machine is instantiated.
 
 #### Inputs
 
 Inputs represent verifiable data used to trigger state transitions:
-x
+
 **Example Usage:**
 
 ```json
 {
   "inputs": {
     "partyBSignature": {
-      "id": "partyBSignature",
       "type": "VerifiedCredentialEIP712",
       "schema": "verified-credential-eip712.schema.json",
       "displayName": "Party B Signature",
       "description": "EIP712 signature from Party B accepting the agreement terms",
-      "value": {
+      "data": {
         "hasAcceptedTerms": true
       },
-      "signer": "${partyBAddress}"
+      "issuer": "${variables.partyBAddress.value}"
     }
   }
 }
@@ -444,7 +448,10 @@ Here's a complete execution flow example for our consulting agreement:
       "PENDING_CONSULTANT_SIGNATURE": {
         "name": "Pending Consultant Signature",
         "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
-        "isInitial": true
+        "isInitial": true,
+        "initialParams": {
+          "consultantAddress": "0x123...abcd"
+        }
       },
       "PENDING_CLIENT_SIGNATURE": {
         "name": "Pending Client Signature",
@@ -620,7 +627,10 @@ The complete template structure combines all components into a single JSON docum
       "PENDING_CONSULTANT_SIGNATURE": {
         "name": "Pending Consultant Signature",
         "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
-        "isInitial": true
+        "isInitial": true,
+        "initialParams": {
+          "consultantAddress": "0x123...abcd"
+        }
       },
       "PENDING_CLIENT_SIGNATURE": {
         "name": "Pending Client Signature",
