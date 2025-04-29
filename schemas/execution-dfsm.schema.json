@@ -24,6 +24,10 @@
           "isInitial": {
             "type": "boolean",
             "description": "Whether this is the starting state"
+          },
+          "initialParams": {
+            "type": "object",
+            "description": "Initial parameters for this state to be set when the state machine is instantiated"
           }
         }
       }
