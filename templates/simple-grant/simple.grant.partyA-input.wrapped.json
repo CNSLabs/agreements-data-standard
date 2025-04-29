@@ -1,29 +1,29 @@
 {
   "issuer": {
-    "id": "did:pkh:eip155:1:0xB49e45Affd4963374e72f850B6Cae84939e58F78"
+    "id": "did:pkh:eip155:1:0x67fD5A5ec681b1208308813a2B3A0DD431Be7278"
   },
   "credentialSubject": {
     "id": "partyAData",
     "type": "signedFields",
     "values": {
       "partyAName": "Damian",
-      "partyBEthAddress": "0x19f88d164C7F8Cd07a311BD3eb8BC3829bc7dC76"
+      "partyBEthAddress": "0xBe32388C134a952cdBCc5673E93d46FfD8b85065"
     }
   },
   "type": [
     "VerifiableCredential",
     "AgreementInputCredential"
   ],
-  "issuanceDate": "2025-04-14T13:55:57.321Z",
+  "issuanceDate": "2025-04-28T22:33:55.609Z",
   "@context": [
     "https://www.w3.org/2018/credentials/v1"
   ],
   "proof": {
-    "verificationMethod": "did:pkh:eip155:1:0xB49e45Affd4963374e72f850B6Cae84939e58F78#blockchainAccountId",
-    "created": "2025-04-14T13:55:57.321Z",
+    "verificationMethod": "did:pkh:eip155:1:0x67fD5A5ec681b1208308813a2B3A0DD431Be7278#blockchainAccountId",
+    "created": "2025-04-28T22:33:55.609Z",
     "proofPurpose": "assertionMethod",
     "type": "EthereumEip712Signature2021",
-    "proofValue": "0x9b6e52a22403d9d28cc68f95f2a7f55ee4dd24efd452b3f2bbf939508c53576709e5a11df47d5ffb21cfe1c04a1064fa3b639333cc3cfb58995ba82829c640181c",
+    "proofValue": "0x4ba61f2f433896863be42006e4ea5635adf4a22e802c359bc3d0b1742fb30c4c4e60d768503cc01e9e0ce1d5e14b37e83a55327624f16ef1abac32a6e06900cb1b",
     "eip712": {
       "domain": {
         "chainId": 1,
