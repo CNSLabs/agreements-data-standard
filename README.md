@@ -87,43 +87,35 @@ Variables define typed inputs that can be referenced throughout the agreement:
 
 ```json
 {
-  "variables": [
-    {
-      "id": "partyB",
+  "variables": {
+    "partyB": {
       "type": "string",
       "name": "Party B",
       "description": "Name of the party receiving consulting services",
-      "initiallyRequired": true,
       "validation": {
-        "required": true,
         "minLength": 1
       }
     },
-    {
-      "id": "amount",
+    "amount": {
       "type": "number",
       "name": "USDC Amount",
       "description": "Amount of USDC to be paid for services",
       "validation": {
-        "required": true,
         "min": 1
       }
     },
-    {
-      "id": "partyBAddress",
+    "partyBAddress": {
       "type": "address",
       "name": "Party B Ethereum Address",
       "description": "Ethereum address of Party B",
       "validation": {
-        "required": true,
         "pattern": "^0x[a-fA-F0-9]{40}$"
       }
     }
-  ]
+  }
 }
 ```
 
-Note the use of `initiallyRequired` flag that indicates the variable is required for the very first instantiation of the agreement document.
 
 #### Variable Usage
 
@@ -160,10 +152,16 @@ To reference specific properties:
 
 ```json
 {
-  "client": "${partyB}",
-  "clientName": "${partyB.name}",
-  "paymentAmount": "${amount}"
+  "client": "${variables.partyB}",
+  "clientName": "${variables.partyB.name}",
+  "paymentAmount": "${variables.amount}"
 }
+```
+
+When referencing variables within other components like execution inputs, use the full path with the "variables" prefix:
+
+```json
+"issuer": "${variables.partyBAddress.value}"
 ```
 
 [View full schema →](./schemas/template.schema.json#variables)
@@ -371,7 +369,7 @@ States represent the possible lifecycle stages of an agreement:
 #### Inputs
 
 Inputs represent verifiable data used to trigger state transitions:
-
+x
 **Example Usage:**
 
 ```json
@@ -488,7 +486,7 @@ Here's a complete execution flow example for our consulting agreement:
           "clientAddress": "${variables.partyBAddress}",
           "paymentAmount": "${variables.amount}"
         },
-        "issuer": "${variables.partyBAddress}"
+        "issuer": "${variables.partyBAddress.value}"
       },
       "paymentConfirmation": {
         "type": "EVMTransactionReceipt",
@@ -587,38 +585,32 @@ The complete template structure combines all components into a single JSON docum
     "author": "Jane Doe",
     "description": "Standard template for one-hour consulting services with USDC payment"
   },
-  "variables": [
-    {
-      "id": "partyB",
+  "variables": {
+    "partyB": {
       "type": "string",
       "name": "Party B",
       "description": "Name of the party receiving consulting services",
       "validation": {
-        "required": true,
         "minLength": 1
       }
     },
-    {
-      "id": "amount",
+    "amount": {
       "type": "number",
       "name": "USDC Amount",
       "description": "Amount of USDC to be paid for services",
       "validation": {
-        "required": true,
         "min": 1
       }
     },
-    {
-      "id": "partyBAddress",
+    "partyBAddress": {
       "type": "address",
       "name": "Party B Ethereum Address",
       "description": "Ethereum address of Party B",
       "validation": {
-        "required": true,
         "pattern": "^0x[a-fA-F0-9]{40}$"
       }
     }
-  ],
+  },
   "content": {
     "type": "md",
     "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signature:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signature:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}"
@@ -670,7 +662,7 @@ The complete template structure combines all components into a single JSON docum
           "clientAddress": "${variables.partyBAddress}",
           "paymentAmount": "${variables.amount}"
         },
-        "issuer": "${variables.partyBAddress}"
+        "issuer": "${variables.partyBAddress.value}"
       },
       "paymentConfirmation": {
         "type": "EVMTransactionReceipt",
