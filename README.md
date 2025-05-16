@@ -21,7 +21,7 @@ The protocol consists of five core components:
 
 - 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](./improvement-proposals/IP-002.md)**: Transaction proof specifications
+- 🚧 **[IP-003](./improvement-proposals/IP-003.md)**: Transaction proof specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 
 #### Planned
