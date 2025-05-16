@@ -21,7 +21,7 @@ The data standard consists of five core components:
 
 - 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/16)**: Proofs and Execution Flow specifications
+- 🚧 **[IP-003](https://github.com/Consensys-Network-State/signet-data-standard/pull/7)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 - ✅ **[IP-006](./improvement-proposals/IP-006.md)**: Execution Definition Improvements
 
@@ -402,7 +402,7 @@ Inputs represent verifiable data used to trigger state transitions:
   - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
   - EIP-712 proof with domain, types, and signature
   - [View full schema →](./schemas/verified-credential-eip712.schema.json)
-- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-data standard/pull/7)):
+- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/Consensys-Network-State/signet-data-standard/pull/7)):
 
   - Transaction hash verification
   - Event log verification
