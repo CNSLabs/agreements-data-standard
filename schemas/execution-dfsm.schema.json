@@ -4,13 +4,32 @@
   "title": "Deterministic Finite State Machine Execution Model",
   "description": "Schema for deterministic finite state machine execution model in the agreements protocol",
   "type": "object",
-  "required": ["states", "transitions"],
+  "required": ["states", "inputs", "transitions"],
   "properties": {
     "states": {
-      "type": "array",
-      "description": "List of possible states for the agreement",
-      "items": {
-        "type": "string"
+      "type": "object",
+      "description": "State definitions with descriptive properties",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable name for the state"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of what this state represents"
+          },
+          "isInitial": {
+            "type": "boolean",
+            "description": "Whether this is the starting state"
+          },
+          "initialParams": {
+            "type": "object",
+            "description": "Initial parameters for this state to be set when the state machine is instantiated"
+          }
+        }
       }
     },
     "inputs": {
@@ -18,12 +37,8 @@
       "description": "Input definitions that can be used in transitions",
       "additionalProperties": {
         "type": "object",
-        "required": ["id", "type", "displayName", "description"],
+        "required": ["type", "schema", "displayName", "description"],
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier for the input"
-          },
           "type": {
             "type": "string",
             "description": "Type of the input (e.g., VerifiedCredentialEIP712)"
@@ -41,13 +56,13 @@
             "type": "string",
             "description": "Description of the input's purpose"
           },
-          "value": {
+          "data": {
             "type": "object",
-            "description": "An object defining the required field values that the credentialSubject should contain in order to be valid"
+            "description": "Required field values for the credentialSubject"
           },
-          "signer": {
+          "issuer": {
             "type": "string",
-            "description": "Expression or reference to the party that should sign this input"
+            "description": "The identity that should sign this verified credential"
           }
         }
       }
@@ -72,19 +87,16 @@
             "description": "Conditions that must be met for the transition to occur",
             "items": {
               "type": "object",
-              "required": ["type"],
+              "required": ["type", "input"],
               "properties": {
                 "type": {
                   "type": "string",
                   "enum": ["isValid"],
                   "description": "Type of condition"
                 },
-                "inputs": {
-                  "type": "array",
-                  "description": "Input identifiers to evaluate for this condition",
-                  "items": {
-                    "type": "string"
-                  }
+                "input": {
+                  "type": "string",
+                  "description": "Input identifier to evaluate"
                 }
               }
             }

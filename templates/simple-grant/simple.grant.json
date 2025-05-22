@@ -1,0 +1,173 @@
+{
+  "metadata": {
+    "id": "did:example:mou-v1",
+    "templateId": "did:template:mou-v1",
+    "version": "1.0.0",
+    "createdAt": "2024-03-20T12:00:00Z",
+    "name": "Memorandum of Understanding",
+    "author": "Agreements Protocol",
+    "description": "Template for non-binding memorandum of understanding between two parties"
+  },
+  "variables": {
+    "partyAEthAddress": {
+      "type": "address",
+      "name": "Party A Ethereum Address",
+      "description": "Ethereum address of the first party"
+    },
+    "partyAName": {
+      "type": "string",
+      "name": "Party A Name",
+      "description": "Legal name of the first party",
+      "validation": {
+        "minLength": 1
+      }
+    },
+    "partyBEthAddress": {
+      "type": "address",
+      "name": "Party B Ethereum Address",
+      "description": "Ethereum address of the second party"
+    },
+    "partyBName": {
+      "type": "string",
+      "name": "Party A Name",
+      "description": "Legal name of the second party",
+      "validation": {
+        "minLength": 1
+      }
+    },
+    "effectiveDate": {
+      "type": "dateTime",
+      "name": "Effective Date",
+      "description": "The date when this MOU becomes effective"
+    }
+  },
+  "content": {
+    "type": "md",
+    "data": "# MEMORANDUM OF UNDERSTANDING\n\nBETWEEN:\n\n**:variable{id='partyAName'}\n\n:variable{id='partyAEthAddress'}\n\nAND:\n\n:variable{id='partyBName'}\n\n:variable{id='partyBEthAddress'}\n\nEFFECTIVE DATE:** :variable{id='effectiveDate'}\n\n## 1. INTRODUCTION\n\nThis Memorandum of Understanding (\"MOU\") is entered into by and between :variable{id='partyAName'} and :variable{id='partyBName'} (collectively referred to as the \"Parties\" and individually as a \"Party\").\n\nThe purpose of this MOU is to identify the roles and responsibilities of each Party as they relate to :variable{id='briefDescription'}.\n\n## 2. PURPOSE AND SCOPE\n\n2.1 The Parties wish to :variable{id='detailedObjectives'}.\n\n2.2 The scope of cooperation under this MOU includes but is not limited to:\n   - :variable{id='cooperationArea1'}\n   - :variable{id='cooperationArea2'}\n   - :variable{id='cooperationArea3'}\n   - [ADD ADDITIONAL AREAS AS NEEDED]\n\n## 3. ROLES AND RESPONSIBILITIES\n\n### 3.1 :variable{id='partyAName'} agrees to:\n   - :variable{id='partyAResp1'}\n   - :variable{id='partyAResp2'}\n   - :variable{id='partyAResp3'}\n   - [ADD ADDITIONAL RESPONSIBILITIES AS NEEDED]\n\n### 3.2 :variable{id='partyBName'} agrees to:\n   - :variable{id='partyBResp1'}\n   - :variable{id='partyBResp2'}\n   - :variable{id='partyBResp3'}\n   - [ADD ADDITIONAL RESPONSIBILITIES AS NEEDED]\n\n### 3.3 Both Parties agree to:\n   - Maintain regular communication regarding the progress of collaborative activities.\n   - Designate representatives to coordinate the implementation of this MOU.\n   - Share relevant information and resources necessary for the successful implementation of this MOU.\n   - Acknowledge the contribution of the other Party in all public communications related to activities conducted under this MOU.\n\n## 4. TERM AND TERMINATION\n\n4.1 This MOU shall become effective on the date of the last signature below and shall remain in effect for a period of :variable{id='termDuration'} :variable{id='termUnit'}, unless extended by mutual written agreement of the Parties or terminated earlier.\n\n4.2 Either Party may terminate this MOU by providing :variable{id='terminationNoticePeriod'} :variable{id='terminationNoticeUnit'} written notice to the other Party.\n\n4.3 Termination of this MOU shall not affect the completion of any activities already in progress, unless otherwise agreed by the Parties.\n\n## 5. FINANCIAL ARRANGEMENTS\n\n5.1 This MOU does not involve the exchange of funds between the Parties.\n\n5.2 Each Party shall be responsible for its own costs and expenses incurred in connection with this MOU, unless otherwise agreed in writing.\n\n5.3 Any future financial arrangements between the Parties shall be subject to separate written agreements.\n\n## 6. CONFIDENTIALITY\n\n6.1 During the course of this MOU, the Parties may share confidential and proprietary information with each other. Each Party agrees to maintain the confidentiality of all information designated as confidential by the disclosing Party and shall not disclose such information to any third party without the prior written consent of the disclosing Party.\n\n6.2 The confidentiality obligations shall survive the termination or expiration of this MOU for a period of :variable{id='confidentialityPeriod'} :variable{id='confidentialityUnit'}.\n\n## 7. INTELLECTUAL PROPERTY\n\n7.1 This MOU does not transfer any intellectual property rights between the Parties.\n\n7.2 Each Party shall retain all rights, title, and interest in its own intellectual property.\n\n7.3 Any intellectual property created jointly by the Parties during the course of activities under this MOU shall be owned jointly by the Parties, with specific terms to be negotiated in good faith and documented in a separate written agreement.\n\n## 8. RELATIONSHIP OF THE PARTIES\n\n8.1 This MOU does not create a partnership, joint venture, agency, or employment relationship between the Parties.\n\n8.2 Neither Party has the authority to bind the other Party or to make any representations or commitments on behalf of the other Party without prior written approval.\n\n## 9. DISPUTE RESOLUTION\n\n9.1 The Parties agree to resolve any disputes arising from this MOU through good faith negotiation.\n\n9.2 If the Parties are unable to resolve a dispute through negotiation, they agree to seek mediation before pursuing any other remedies.\n\n## 10. COMPLIANCE WITH LAWS\n\n10.1 Each Party shall comply with all applicable laws, regulations, and policies in the performance of its responsibilities under this MOU.\n\n## 11. AMENDMENTS\n\n11.1 This MOU may be amended or modified only by mutual written agreement of the Parties.\n\n## 12. NON-BINDING NATURE\n\n12.1 This MOU is not intended to be legally binding and does not create any legal obligations between the Parties.\n\n12.2 This MOU represents the current understanding and intentions of the Parties and serves as a foundation for potential future agreements.\n\n12.3 Nothing in this MOU shall be construed as creating any right, benefit, or trust responsibility, substantive or procedural, enforceable at law or equity, by either Party against the other Party, its officers, employees, agents, or any other person.\n\n## 13. NOTICES\n\n13.1 All notices required or permitted under this MOU shall be in writing and shall be delivered to the addresses set forth below:\n\nIf to :variable{id='partyAName'}:\n:variable{id='partyAEmail'}\n\nIf to :variable{id='partyBName'}:\n:variable{id='partyBEmail'}\n\n## 14. ENTIRE UNDERSTANDING\n\n14.1 This MOU constitutes the entire understanding between the Parties with respect to the subject matter hereof and supersedes all prior discussions, negotiations, understandings, and communications, whether oral or written.\n\n## 15. COUNTERPARTS\n\n15.1 This MOU may be executed in counterparts, each of which shall be deemed an original, but all of which together shall constitute one and the same instrument.\n\n## 16. SIGNATURES\n\nIN WITNESS WHEREOF, the Parties have executed this Memorandum of Understanding as of the Effective Date.\n\n**:variable{id='partyAName'}:\n\n<u>:variable{id='partyASignature'}</u>\n\nSignature\n\n<u>:variable{id='partyAName'}</u>\n\nName\n\n<u>:variable{id='partyAEthAddress'}</u>\n\nEthereum Address\n\n<u>:variable{id='partyASigningDate'}</u>\n\nDate\n\n\n:variable{id='partyBName'}:**\n\n<u>:variable{id='partyBSignature'}</u>\n\nSignature\n\n<u>:variable{id='partyBName'}</u>\n\nName\n\n<u>:variable{id='partyBEthAddress'}</u>\n\nEthereum Address\n\n<u>:variable{id='partyBSigningDate'}</u>\n\nDate"
+  },
+  "execution": {
+    "states": {
+      "PENDING_PARTY_A_SIGNATURE": {
+        "name": "Pending Signature From A",
+        "description": "This state awaits until Party A supplies Party B's address along with their own name.",
+        "isInitial": true,
+        "initialParams": {
+          "partyAEthAddress": "${variables.partyAEthAddress}"
+        }
+      },
+      "PENDING_PARTY_B_SIGNATURE": {
+        "name": "Pending Signature From B",
+        "description": "This state awaits until Party B confirms their identity by supplying their name."
+      },
+      "PENDING_ACCEPTANCE": {
+        "name": "Pending Final Acceptance",
+        "description": "This state awaits Party A's final acceptance of Party B's data."
+      },
+      "ACCEPTED": {
+        "name": "Agreement Accepted",
+        "description": "The agreement has been accepted by both parties and is now in force."
+      },
+      "REJECTED": {
+        "name": "Agreement Rejected",
+        "description": "The agreement has been rejected by Party A and will not proceed."
+      }
+    },
+    "inputs": {
+      "partyAData": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Party A Signature",
+        "description": "EIP712 signature from Party A proposing the MOU terms",
+        "data": {
+          "partyAName": "${variables.partyAName}",
+          "partyBEthAddress": "${variables.partyBEthAddress}"
+        },
+        "issuer": "${variables.partyAEthAddress.value}"
+      },
+      "partyBData": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Party B Signature",
+        "description": "EIP712 signature from Party B accepting the MOU terms",
+        "data": {
+          "partyBName": "${variables.partyBName}"
+        },
+        "issuer": "${variables.partyBEthAddress.value}"
+      },
+      "accepted": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Party A Accepted Party B's Data",
+        "description": "EIP712 signature from Party A accepting Party B's data",
+        "data": {
+          "partyAAcceptance": {
+            "type": "string",
+            "validation": {
+              "required": true,
+              "pattern": "^ACCEPTED$"
+            }
+          }
+        },
+        "issuer": "${variables.partyAEthAddress.value}"
+      },
+      "rejected": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Party A Rejected Party B's Data",
+        "description": "EIP712 signature from Party A rejecting Party B's data",
+        "data": {
+          "partyARejection": {
+            "type": "string",
+            "validation": {
+              "required": true,
+              "pattern": "^REJECTED$"
+            }
+          }
+        },
+        "issuer": "${variables.partyAEthAddress.value}"
+      }
+    },
+    "transitions": [
+      {
+        "from": "PENDING_PARTY_A_SIGNATURE",
+        "to": "PENDING_PARTY_B_SIGNATURE",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "partyAData"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_PARTY_B_SIGNATURE",
+        "to": "PENDING_ACCEPTANCE",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "partyBData"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_ACCEPTANCE",
+        "to": "ACCEPTED",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "accepted"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_ACCEPTANCE",
+        "to": "REJECTED",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "rejected"
+          }
+        ]
+      }
+    ]
+  }
+}

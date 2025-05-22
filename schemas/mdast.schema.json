@@ -95,6 +95,10 @@
     "property": {
       "description": "The property to access for variable nodes.",
       "type": "string"
+    },
+    "initiallyRequired": {
+      "description": "Whether this variable must be provided at initialization time to the execution engine",
+      "type": "boolean"
     }
   },
   "required": ["type"],

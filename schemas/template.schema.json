@@ -45,15 +45,12 @@
       }
     },
     "variables": {
-      "type": "array",
-      "items": {
+      "type": "object",
+      "description": "Variable definitions with metadata",
+      "additionalProperties": {
         "type": "object",
-        "required": ["id", "type", "name", "description"],
+        "required": ["type", "name", "description"],
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier for the variable"
-          },
           "type": {
             "type": "string",
             "enum": ["string", "number", "address", "dateTime"],
@@ -74,6 +71,10 @@
           "defaultValue": {
             "type": ["string", "number", "null"],
             "description": "Default value if none is provided"
+          },
+          "initiallyRequired": {
+            "type": "boolean",
+            "description": "Whether this variable must be provided at initialization time to the execution engine"
           },
           "validation": {
             "type": "object",
@@ -139,32 +140,7 @@
       }
     },
     "execution": {
-      "type": "object",
-      "description": "Execution model definition for agreement processing",
-      "required": ["type", "data"],
-      "properties": {
-        "type": {
-          "type": "string",
-          "description": "The type of execution model being used",
-          "enum": ["dfsm"]
-        },
-        "data": {
-          "type": "object",
-          "description": "The execution model data specific to the type",
-          "oneOf": [
-            {
-              "if": {
-                "properties": { "type": { "const": "dfsm" } },
-                "required": ["type"]
-              },
-              "then": {
-                "$ref": "execution-dfsm.schema.json"
-              }
-            }
-          ]
-        }
-      },
-      "additionalProperties": false
+      "$ref": "execution-dfsm.schema.json"
     }
   }
 } 
