@@ -21,7 +21,7 @@ The data standard consists of five core components:
 
 - 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](https://github.com/Consensys-Network-State/signet-data-standard/pull/7)**: Proofs and Execution Flow specifications
+- ✅ **[IP-003](./improvement-proposals/IP-003.md)**: Transaction Proofs
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
 - ✅ **[IP-006](./improvement-proposals/IP-006.md)**: Execution Definition Improvements
 
@@ -54,6 +54,7 @@ This simple consulting agreement contains all the key elements we need to demons
 2. **Variables** - The dynamic inputs (`[PartyB]`, `[Amount]`, `[PartyBAddress]`)
 3. **Content** - The agreement text with variable interpolation
 4. **Execution Flow** - The signing and verification process
+5. **Contracts** - The EVM contracts that are referenced in the agreement
 
 Let's examine each component in detail:
 
@@ -575,7 +576,42 @@ This example demonstrates:
    - Multi-input condition for client stage (signature + payment)
    - Final acceptance to activate the agreement
 
-### 5. Template
+### 5. Contracts
+
+Contracts in the Agreements Data Standard provide a standardized way to reference and validate on-chain actions, especially for proofs involving smart contract interactions. Each contract is defined once in a dedicated contracts section, including its address, chain ID, and ABI. When specifying transaction proofs (such as contract method calls), the proof references the relevant contract by its unique identifier using the contractReference field.
+
+#### Example Usage
+
+```json
+{
+  "contracts": {
+    "workToken": {
+      "description": "The Work Token",
+      "address": "0x12be78ca652191616f49420dfa28214bafe9326c",
+      "chainId": 59141,
+      "abi": [ /* ... ABI ... */ ]
+    }
+  },
+  "variables": {
+    "workTokenSentTx": {
+      "type": "txHash",
+      "txMetadata": {
+        "transactionType": "contractCall",
+        "method": "transfer",
+        "params": {
+          "to": "0xRecipientAddress",
+          "value": 100
+        },
+        "contractReference": "${contracts.workToken}"
+      }
+    }
+  }
+}
+```
+
+In this example, the workTokenSentTx variable describes a transaction proof that references the workToken contract. This ensures that any validation logic can look up the contract’s ABI and address, decode the transaction, and verify that the correct method and parameters were used.
+
+### 6. Template
 
 The complete template structure combines all components into a single JSON document:
 
@@ -736,7 +772,7 @@ The complete template structure combines all components into a single JSON docum
 }
 ```
 
-### 6. Verifiable Credential Wrapper
+### 7. Verifiable Credential Wrapper
 
 The entire agreement can be wrapped in a W3C Verifiable Credential to provide cryptographic proof of its authenticity and integrity. This wrapper adds several important properties:
 
