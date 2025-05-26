@@ -1,12 +1,12 @@
-# Agreements Protocol
+# Agreements Data Standard
 
 [![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./schemas/template.schema.json)
 
-The Agreements Protocol is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
+The Agreements Data Standard is a JSON-based standard for creating and executing legally binding web3/blockchain agreements. Think of it as "DocuSign for web3" - providing a standardized way to create, validate, and execute digital agreements with blockchain-based proofs and state transitions.
 
-## Protocol Overview
+## Data Standard Overview
 
-The protocol consists of five core components:
+The data standard consists of five core components:
 
 1. **[Metadata](#1-metadata)** - Agreement identification and context
 2. **[Variables](#2-variables)** - Typed inputs that drive the agreement
@@ -21,8 +21,9 @@ The protocol consists of five core components:
 
 - 🚧 **[IP-001](./improvement-proposals/IP-001.md)**: DFSM to ASM
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
-- 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/16)**: Proofs and Execution Flow specifications
+- 🚧 **[IP-003](https://github.com/Consensys-Network-State/signet-data-standard/pull/7)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
+- ✅ **[IP-006](./improvement-proposals/IP-006.md)**: Execution Definition Improvements
 
 #### Planned
 
@@ -31,7 +32,7 @@ The protocol consists of five core components:
 
 ## Core Components
 
-To illustrate how the Agreements Protocol works, let's start with a simple example of a written agreement:
+To illustrate how the Agreements Data Standard works, let's start with a simple example of a written agreement:
 
 ```md
 # Agreement
@@ -47,7 +48,7 @@ In exchange, [PartyB] agrees to transfer [Amount] USDC to my Ethereum address: 0
 **Ethereum Address:** [PartyBAddress]
 ```
 
-This simple consulting agreement contains all the key elements we need to demonstrate how the protocol works. In the following sections, we'll break down how each component of this agreement maps to our protocol schema:
+This simple consulting agreement contains all the key elements we need to demonstrate how the data standard works. In the following sections, we'll break down how each component of this agreement maps to our data standard schema:
 
 1. **Metadata** - How we identify and version this agreement
 2. **Variables** - The dynamic inputs (`[PartyB]`, `[Amount]`, `[PartyBAddress]`)
@@ -59,29 +60,6 @@ Let's examine each component in detail:
 ### 1. Metadata
 
 Agreement metadata provides essential identification and context:
-
-**Schema Definition:**
-
-```json
-{
-  "metadata": {
-    "type": "object",
-    "required": ["id", "templateId", "version", "createdAt", "name", "author", "description"],
-    "properties": {
-      "id": {
-        "type": "string",
-        "pattern": "^did:.*",
-        "description": "Unique identifier for the agreement instance"
-      },
-      "templateId": {
-        "type": "string",
-        "pattern": "^did:template:.*",
-        "description": "Identifier for the template type"
-      }
-    }
-  }
-}
-```
 
 **Example Usage:**
 
@@ -105,78 +83,39 @@ Agreement metadata provides essential identification and context:
 
 Variables define typed inputs that can be referenced throughout the agreement:
 
-**Schema Definition:**
+**Example Usage:**
 
 ```json
 {
   "variables": {
-    "type": "array",
-    "items": {
-      "type": "object",
-      "required": ["id", "type", "name", "description"],
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the variable"
-        },
-        "type": {
-          "type": "string",
-          "enum": ["string", "number", "address", "dateTime"],
-          "description": "Data type of the variable"
-        },
-        "validation": {
-          "type": "object",
-          "properties": {
-            "required": { "type": "boolean" },
-            "min": { "type": "number" },
-            "max": { "type": "number" },
-            "pattern": { "type": "string", "format": "regex" }
-          }
-        }
+    "partyB": {
+      "type": "string",
+      "name": "Party B",
+      "description": "Name of the party receiving consulting services",
+      "validation": {
+        "minLength": 1
+      }
+    },
+    "amount": {
+      "type": "number",
+      "name": "USDC Amount",
+      "description": "Amount of USDC to be paid for services",
+      "validation": {
+        "min": 1
+      }
+    },
+    "partyBAddress": {
+      "type": "address",
+      "name": "Party B Ethereum Address",
+      "description": "Ethereum address of Party B",
+      "validation": {
+        "pattern": "^0x[a-fA-F0-9]{40}$"
       }
     }
   }
 }
 ```
 
-**Example Usage:**
-
-```json
-{
-  "variables": [
-    {
-      "id": "partyB",
-      "type": "string",
-      "name": "Party B",
-      "description": "Name of the party receiving consulting services",
-      "validation": {
-        "required": true,
-        "minLength": 1
-      }
-    },
-    {
-      "id": "amount",
-      "type": "number",
-      "name": "USDC Amount",
-      "description": "Amount of USDC to be paid for services",
-      "validation": {
-        "required": true,
-        "min": 1
-      }
-    },
-    {
-      "id": "partyBAddress",
-      "type": "address",
-      "name": "Party B Ethereum Address",
-      "description": "Ethereum address of Party B",
-      "validation": {
-        "required": true,
-        "pattern": "^0x[a-fA-F0-9]{40}$"
-      }
-    }
-  ]
-}
-```
 
 #### Variable Usage
 
@@ -213,10 +152,16 @@ To reference specific properties:
 
 ```json
 {
-  "client": "${partyB}",
-  "clientName": "${partyB.name}",
-  "paymentAmount": "${amount}"
+  "client": "${variables.partyB}",
+  "clientName": "${variables.partyB.name}",
+  "paymentAmount": "${variables.amount}"
 }
+```
+
+When referencing variables within other components like execution inputs, use the full path with the "variables" prefix:
+
+```json
+"issuer": "${variables.partyBAddress.value}"
 ```
 
 [View full schema →](./schemas/template.schema.json#variables)
@@ -225,37 +170,8 @@ To reference specific properties:
 
 Agreement content supports multiple formats with variable interpolation:
 
-**Schema Definition:**
-
-```json
-{
-  "content": {
-    "type": "object",
-    "required": ["type", "data"],
-    "properties": {
-      "type": {
-        "type": "string",
-        "enum": ["mdast", "md"],
-        "description": "Content format type"
-      },
-      "data": {
-        "oneOf": [
-          {
-            "if": { "properties": { "type": { "const": "mdast" } } },
-            "then": { "$ref": "mdast.schema.json" }
-          },
-          {
-            "if": { "properties": { "type": { "const": "md" } } },
-            "then": { "type": "string" }
-          }
-        ]
-      }
-    }
-  }
-}
-```
-
 **Markdown Example:**
+
 ```json
 {
   "content": {
@@ -424,42 +340,7 @@ Agreement content supports multiple formats with variable interpolation:
 
 ### 4. Execution Flow
 
-
 Models the expected execution of the agreement. Various models could be used in the future, but for now a DFSM (Deterministic Finite State Machine) is considered, with future upgrades to an [ASM possible](./improvement-proposals/IP-001.md). The key characteristic of the DFSM model is that the state machine is expected to be driven by verifiable (provable) inputs provided.
-
-**Schema Definition:**
-
-```json
-{
-  "execution": {
-    "type": "object",
-    "description": "Execution model definition for agreement processing",
-    "required": ["type", "data"],
-    "properties": {
-      "type": {
-        "type": "string",
-        "description": "The type of execution model being used",
-        "enum": ["dfsm"]
-      },
-      "data": {
-        "type": "object",
-        "description": "The execution model data specific to the type",
-        "oneOf": [
-          {
-            "if": {
-              "properties": { "type": { "const": "dfsm" } },
-              "required": ["type"]
-            },
-            "then": {
-              "$ref": "execution-dfsm.schema.json"
-            }
-          }
-        ]
-      }
-    }
-  }
-}
-```
 
 [View full DFSM schema →](./schemas/execution-dfsm.schema.json)
 
@@ -467,92 +348,47 @@ Models the expected execution of the agreement. Various models could be used in 
 
 States represent the possible lifecycle stages of an agreement:
 
-**Schema Definition:**
+**Example Usage:**
+
 ```json
 {
   "states": {
-    "type": "array",
-    "description": "List of possible states for the agreement",
-    "items": {
-      "type": "string"
+    "PENDING_SIGNATURE": {
+      "name": "Pending Consultant Signature",
+      "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
+      "isInitial": true,
+      "initialParams": {
+        "partyAEthAddress": "${variables.partyAEthAddress}"
+      }
+    },
+    "SIGNED": {
+      "name": "Received Signature",
+      "description": "Received consultant (Jane Doe) signature to indicate terms were accepted"
     }
   }
 }
 ```
 
-**Example Usage:**
-```json
-{
-  "states": [
-    "PENDING_SIGNATURE",
-    "SIGNED"
-  ]
-}
-```
+Note that initial states can include `initialParams` to set parameters when the state machine is instantiated.
 
 #### Inputs
 
 Inputs represent verifiable data used to trigger state transitions:
 
-**Schema Definition:**
-```json
-{
-  "inputs": {
-    "type": "object",
-    "description": "Input definitions that can be used in transitions",
-    "additionalProperties": {
-      "type": "object",
-      "required": ["id", "type", "displayName", "description"],
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the input"
-        },
-        "type": {
-          "type": "string",
-          "description": "Type of the input (e.g., VerifiedCredentialEIP712)"
-        },
-        "schema": {
-          "type": "string",
-          "enum": ["verified-credential-eip712.schema.json"],
-          "description": "JSON schema reference for the input type"
-        },
-        "displayName": {
-          "type": "string",
-          "description": "Human-readable name for the input"
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the input's purpose"
-        },
-        "value": {
-          "type": "object",
-          "description": "Required field values for the credentialSubject"
-        },
-        "signer": {
-          "type": "string",
-          "description": "Party that should sign this input"
-        }
-      }
-    }
-  }
-}
-```
-
 **Example Usage:**
+
 ```json
 {
   "inputs": {
     "partyBSignature": {
-      "id": "partyBSignature",
       "type": "VerifiedCredentialEIP712",
       "schema": "verified-credential-eip712.schema.json",
       "displayName": "Party B Signature",
       "description": "EIP712 signature from Party B accepting the agreement terms",
-      "value": {
+      "data": {
         "hasAcceptedTerms": true
       },
-      "signer": "${partyBAddress}"
+      "issuer": "${variables.partyBAddress.value}"
     }
   }
 }
@@ -561,17 +397,18 @@ Inputs represent verifiable data used to trigger state transitions:
 Inputs represent verifiable data used to trigger state transitions:
 
 - **Verifiable Credentials with EIP-712 Signatures**:
+
   - W3C Verifiable Credentials with Ethereum's typed structured data signing (EIP-712)
   - Includes standard VC properties like issuer, issuanceDate, and credentialSubject
   - EIP-712 proof with domain, types, and signature
   - [View full schema →](./schemas/verified-credential-eip712.schema.json)
+- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/Consensys-Network-State/signet-data-standard/pull/7)):
 
-- **EVM Transaction Receipts** (🚧 as part of [IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/7)):
   - Transaction hash verification
   - Event log verification
   - Smart contract state verification
-
 - **Zero-Knowledge Proofs** (🚧):
+
   - Planned support for zk-SNARKs and zk-STARKs
   - Privacy-preserving verification
 
@@ -579,53 +416,8 @@ Inputs represent verifiable data used to trigger state transitions:
 
 Transitions define how an agreement moves between states:
 
-**Schema Definition:**
-```json
-{
-  "transitions": {
-    "type": "array",
-    "description": "State transitions with conditions",
-    "items": {
-      "type": "object",
-      "required": ["from", "to", "conditions"],
-      "properties": {
-        "from": {
-          "type": "string",
-          "description": "Starting state of the transition"
-        },
-        "to": {
-          "type": "string",
-          "description": "Ending state of the transition"
-        },
-        "conditions": {
-          "type": "array",
-          "description": "Conditions that must be met for the transition to occur",
-          "items": {
-            "type": "object",
-            "required": ["type"],
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["isValid"],
-                "description": "Type of condition"
-              },
-              "inputs": {
-                "type": "array",
-                "description": "Input identifiers to evaluate",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
 **Example Usage:**
+
 ```json
 {
   "transitions": [
@@ -635,7 +427,7 @@ Transitions define how an agreement moves between states:
       "conditions": [
         {
           "type": "isValid",
-          "inputs": ["partyBSignature"]
+          "input": "partyBSignature"
         }
       ]
     }
@@ -645,51 +437,147 @@ Transitions define how an agreement moves between states:
 
 The execution model ensures that agreements follow a predictable lifecycle based on verifiable proofs, making them suitable for legal and blockchain-based applications where cryptographic certainty is required.
 
-### 5. Template
+#### Example Usage
 
-The complete template structure combines all components into a single JSON document:
-
-**Schema Definition:**
+Here's a complete execution flow example for our consulting agreement:
 
 ```json
 {
-  "type": "object",
-  "required": ["metadata", "variables", "content"],
-  "properties": {
-    "metadata": {
-      "type": "object",
-      "required": ["id", "templateId", "version", "createdAt", "name", "author", "description"]
-    },
-    "variables": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "type", "name", "description"]
-      }
-    },
-    "content": {
-      "type": "object",
-      "required": ["type", "data"],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["mdast", "md"]
+  "execution": {
+    "states": {
+      "PENDING_CONSULTANT_SIGNATURE": {
+        "name": "Pending Consultant Signature",
+        "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
+        "isInitial": true,
+        "initialParams": {
+          "consultantAddress": "0x123...abcd"
         }
+      },
+      "PENDING_CLIENT_SIGNATURE": {
+        "name": "Pending Client Signature",
+        "description": "Awaiting client signature and USDC payment confirmation"
+      },
+      "PENDING_ACCEPTANCE": {
+        "name": "Pending Final Acceptance",
+        "description": "Awaiting consultant's final acceptance of client details and payment"
+      },
+      "ACCEPTED": {
+        "name": "Agreement Active",
+        "description": "Consulting agreement is active and services can begin"
+      },
+      "REJECTED": {
+        "name": "Agreement Rejected",
+        "description": "Agreement was rejected by the consultant"
       }
     },
-    "execution": {
-      "type": "object",
-      "required": ["type", "data"],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["dfsm"]
+    "inputs": {
+      "consultantSignature": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Consultant Signature",
+        "description": "EIP712 signature from consultant confirming service terms",
+        "data": {
+          "consultantName": "Jane Doe",
+          "consultantAddress": "0x123...abcd",
+          "serviceDescription": "One hour of startup business advice"
+        },
+        "issuer": "0x123...abcd"
+      },
+      "clientSignature": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Client Signature",
+        "description": "EIP712 signature from client accepting terms",
+        "data": {
+          "clientName": "${variables.partyB}",
+          "clientAddress": "${variables.partyBAddress}",
+          "paymentAmount": "${variables.amount}"
+        },
+        "issuer": "${variables.partyBAddress.value}"
+      },
+      "paymentConfirmation": {
+        "type": "EVMTransactionReceipt",
+        "schema": "evm-transaction-receipt.schema.json",
+        "displayName": "USDC Payment",
+        "description": "Confirmation of USDC transfer to consultant",
+        "data": {
+          "tokenAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "amount": "${variables.amount}",
+          "recipient": "0x123...abcd"
         }
+      },
+      "consultantAcceptance": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Consultant Acceptance",
+        "description": "Final acceptance of client details and payment",
+        "data": {
+          "accepted": true
+        },
+        "issuer": "0x123...abcd"
       }
-    }
+    },
+    "transitions": [
+      {
+        "from": "PENDING_CONSULTANT_SIGNATURE",
+        "to": "PENDING_CLIENT_SIGNATURE",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "consultantSignature"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_CLIENT_SIGNATURE",
+        "to": "PENDING_ACCEPTANCE",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "clientSignature"
+          },
+          {
+            "type": "isValid",
+            "input": "paymentConfirmation"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_ACCEPTANCE",
+        "to": "ACCEPTED",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "consultantAcceptance"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
+
+This example demonstrates:
+
+1. **Clear State Flow**
+
+   - Starts with consultant signature
+   - Proceeds to client signature and payment
+   - Ends with consultant's final acceptance
+2. **Multiple Input Types**
+
+   - EIP-712 signatures for agreement terms
+   - EVM transaction receipt for USDC payment
+   - Variable interpolation for dynamic values
+3. **Conditional Transitions**
+
+   - Single-input conditions for signatures
+   - Multi-input condition for client stage (signature + payment)
+   - Final acceptance to activate the agreement
+
+### 5. Template
+
+The complete template structure combines all components into a single JSON document:
 
 **Example Template:**
 
@@ -704,75 +592,146 @@ The complete template structure combines all components into a single JSON docum
     "author": "Jane Doe",
     "description": "Standard template for one-hour consulting services with USDC payment"
   },
-  "variables": [
-    {
-      "id": "partyB",
+  "variables": {
+    "partyB": {
       "type": "string",
       "name": "Party B",
       "description": "Name of the party receiving consulting services",
       "validation": {
-        "required": true,
         "minLength": 1
       }
     },
-    {
-      "id": "amount",
+    "amount": {
       "type": "number",
       "name": "USDC Amount",
       "description": "Amount of USDC to be paid for services",
       "validation": {
-        "required": true,
         "min": 1
       }
     },
-    {
-      "id": "partyBAddress",
+    "partyBAddress": {
       "type": "address",
       "name": "Party B Ethereum Address",
       "description": "Ethereum address of Party B",
       "validation": {
-        "required": true,
         "pattern": "^0x[a-fA-F0-9]{40}$"
       }
     }
-  ],
+  },
   "content": {
     "type": "md",
     "data": "# Agreement\n\nI, Jane Doe, agree to provide :variable{id='partyB'} with one hour of startup business advice.\n\nIn exchange, :variable{id='partyB'} agrees to transfer :variable{id='amount'} USDC to my Ethereum address: 0x123...abcd on the Ethereum mainnet.\n\n**Signature:** Jane Doe\n**Ethereum Address:** 0x123...abcd\n\n**Signature:** :variable{id='partyB'}\n**Ethereum Address:** :variable{id='partyBAddress'}"
   },
   "execution": {
-    "type": "dfsm",
-    "data": {
-      "states": [
-        "PENDING_SIGNATURE",
-        "SIGNED"
-      ],
-      "inputs": {
-        "partyBSignature": {
-          "id": "partyBSignature",
-          "type": "VerifiedCredentialEIP712",
-          "schema": "verified-credential-eip712.schema.json",
-          "displayName": "Party B Signature",
-          "description": "EIP712 signature from Party B accepting the agreement terms",
-          "value": {
-            "hasAcceptedTerms": true
-          },
-          "signer": "${partyBAddress}"
+    "states": {
+      "PENDING_CONSULTANT_SIGNATURE": {
+        "name": "Pending Consultant Signature",
+        "description": "Awaiting consultant (Jane Doe) to sign and set initial terms",
+        "isInitial": true,
+        "initialParams": {
+          "consultantAddress": "0x123...abcd"
         }
       },
-      "transitions": [
-        {
-          "from": "PENDING_SIGNATURE",
-          "to": "SIGNED",
-          "conditions": [
-            {
-              "type": "isValid",
-              "inputs": ["partyBSignature"]
-            }
-          ]
+      "PENDING_CLIENT_SIGNATURE": {
+        "name": "Pending Client Signature",
+        "description": "Awaiting client signature and USDC payment confirmation"
+      },
+      "PENDING_ACCEPTANCE": {
+        "name": "Pending Final Acceptance",
+        "description": "Awaiting consultant's final acceptance of client details and payment"
+      },
+      "ACCEPTED": {
+        "name": "Agreement Active",
+        "description": "Consulting agreement is active and services can begin"
+      },
+      "REJECTED": {
+        "name": "Agreement Rejected",
+        "description": "Agreement was rejected by the consultant"
+      }
+    },
+    "inputs": {
+      "consultantSignature": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Consultant Signature",
+        "description": "EIP712 signature from consultant confirming service terms",
+        "data": {
+          "consultantName": "Jane Doe",
+          "consultantAddress": "0x123...abcd",
+          "serviceDescription": "One hour of startup business advice"
+        },
+        "issuer": "0x123...abcd"
+      },
+      "clientSignature": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Client Signature",
+        "description": "EIP712 signature from client accepting terms",
+        "data": {
+          "clientName": "${variables.partyB}",
+          "clientAddress": "${variables.partyBAddress}",
+          "paymentAmount": "${variables.amount}"
+        },
+        "issuer": "${variables.partyBAddress.value}"
+      },
+      "paymentConfirmation": {
+        "type": "EVMTransactionReceipt",
+        "schema": "evm-transaction-receipt.schema.json",
+        "displayName": "USDC Payment",
+        "description": "Confirmation of USDC transfer to consultant",
+        "data": {
+          "tokenAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "amount": "${variables.amount}",
+          "recipient": "0x123...abcd"
         }
-      ]
-    }
+      },
+      "consultantAcceptance": {
+        "type": "VerifiedCredentialEIP712",
+        "schema": "verified-credential-eip712.schema.json",
+        "displayName": "Consultant Acceptance",
+        "description": "Final acceptance of client details and payment",
+        "data": {
+          "accepted": true
+        },
+        "issuer": "0x123...abcd"
+      }
+    },
+    "transitions": [
+      {
+        "from": "PENDING_CONSULTANT_SIGNATURE",
+        "to": "PENDING_CLIENT_SIGNATURE",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "consultantSignature"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_CLIENT_SIGNATURE",
+        "to": "PENDING_ACCEPTANCE",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "clientSignature"
+          },
+          {
+            "type": "isValid",
+            "input": "paymentConfirmation"
+          }
+        ]
+      },
+      {
+        "from": "PENDING_ACCEPTANCE",
+        "to": "ACCEPTED",
+        "conditions": [
+          {
+            "type": "isValid",
+            "input": "consultantAcceptance"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
@@ -845,6 +804,7 @@ Example content formats:
 - [Markdown version](./templates/grant-agreement.md.json) - Human-readable format with variable interpolation
 
 Full examples including execution environment definition:
+
 - [Markdown content + DFSM execution](./templates/grant-agreement.md.dfsm.json) ([State Machine Visualization](./templates/grant-agreement.md.dfsm.json.md))
 
 #### Creating Custom Templates
@@ -853,18 +813,18 @@ Creating agreement templates is simple with AI assistance. Here's how to get sta
 
 1. **Prepare Your Agreement**
    Start with your agreement in markdown format.
-
 2. **Provide Context**
    Share these files with your AI assistant:
-   - [README](./README.md) - Protocol overview and examples
+
+   - [README](./README.md) - Data Standard overview and examples
    - [Template Schema](./schemas/template.schema.json) - JSON schema definition
    - [MDAST Schema](./schemas/mdast.schema.json) - Content structure specification
    - [Grant Agreement](./templates/grant-agreement.json) - Reference implementation
-
 3. **Generate Template**
    Use this prompt format:
+
    ```
-   Help me create an agreement template following the Agreements Protocol standard.
+   Help me create an agreement template following the Agreements Data Standard standard.
 
    Agreement Type: Consulting Agreement
    Purpose: One-hour consulting session with USDC payment
@@ -887,7 +847,7 @@ Use our JSON schemas to validate your agreement templates:
 
 ## Contributing
 
-We welcome contributions to the Agreements Protocol! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
+We welcome contributions to the Agreements Data Standard! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
 
 ## License
 
