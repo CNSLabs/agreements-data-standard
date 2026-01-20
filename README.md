@@ -888,7 +888,3 @@ Use our JSON schemas to validate your agreement templates:
 ## Contributing
 
 We welcome contributions to the Agreements Protocol! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get involved.
-
-## License
-
-TBD
