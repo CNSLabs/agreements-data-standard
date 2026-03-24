@@ -1,0 +1,78 @@
+{
+  "standard": {
+    "id": "agreements",
+    "coreVersion": "1.1.0-draft",
+    "profiles": []
+  },
+  "metadata": {
+    "id": "did:example:consulting-core-1",
+    "templateId": "did:template:consulting-core-v1",
+    "version": "1.0.0",
+    "createdAt": "2024-03-20T12:00:00Z",
+    "name": "Consulting Agreement",
+    "author": "Example Author",
+    "description": "Simple consulting agreement demonstrating the core document model"
+  },
+  "variables": [
+    {
+      "id": "consultantName",
+      "type": "string",
+      "name": "Consultant Name",
+      "description": "Name of the consultant providing services",
+      "value": "Jane Doe",
+      "validation": {
+        "required": true,
+        "minLength": 1
+      }
+    },
+    {
+      "id": "clientName",
+      "type": "string",
+      "name": "Client Name",
+      "description": "Name of the client receiving the services",
+      "value": "Acme Labs",
+      "validation": {
+        "required": true,
+        "minLength": 1
+      }
+    },
+    {
+      "id": "serviceDescription",
+      "type": "string",
+      "name": "Service Description",
+      "description": "Description of the consulting services",
+      "value": "one hour of startup business advice",
+      "validation": {
+        "required": true,
+        "minLength": 5
+      }
+    },
+    {
+      "id": "feeAmount",
+      "type": "number",
+      "name": "Fee Amount",
+      "description": "Amount the client will pay for the services",
+      "value": 500,
+      "validation": {
+        "required": true,
+        "min": 1
+      }
+    },
+    {
+      "id": "currency",
+      "type": "string",
+      "name": "Currency",
+      "description": "Currency of the payment amount",
+      "value": "USD",
+      "validation": {
+        "required": true,
+        "minLength": 3,
+        "maxLength": 3
+      }
+    }
+  ],
+  "content": {
+    "type": "md",
+    "data": "# Consulting Agreement\n\nThis Consulting Agreement is entered into between :variable{id='consultantName'} and :variable{id='clientName'}.\n\n:variable{id='consultantName'} agrees to provide :variable{id='serviceDescription'}.\n\nIn exchange, :variable{id='clientName'} agrees to pay :variable{id='feeAmount'} :variable{id='currency'}.\n\nSigned by both parties on the agreed effective date."
+  }
+}
