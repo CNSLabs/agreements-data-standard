@@ -24,6 +24,8 @@ When contributing to the current draft model, prefer these directories:
 
 Root-level `schemas/*.json` and `templates/*.json` files are retained as legacy reference material and should not be treated as the canonical target for new work unless the change is explicitly about legacy compatibility.
 
+The canonical schema directories are also npm workspace packages. If you change package manifests, exports, or canonical files, run `npm run verify:modules`.
+
 ## IP State Expectations
 
 ### `IDEA`
@@ -53,6 +55,7 @@ The PR should include:
 - If your change affects one concern only, update the relevant profile under `schemas/profiles/`
 - If your change combines concerns, prefer an explicit composition schema under `schemas/compositions/`
 - Add or update example documents under the matching `templates/` directory
+- Keep the workspace package exports in sync with the canonical files they publish
 
 ## Legacy Note
 

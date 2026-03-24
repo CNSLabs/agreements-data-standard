@@ -252,6 +252,45 @@ More detail:
 - [Schemas directory guide](./schemas/README.md)
 - [Templates directory guide](./templates/README.md)
 
+## Workspace Modules
+
+The canonical schema trees are now also modeled as npm workspace modules:
+
+- `@agreements-standard/core`
+- `@agreements-standard/profile-evm`
+- `@agreements-standard/profile-vc`
+- `@agreements-standard/profile-eip712`
+- `@agreements-standard/composition-evm-eip712`
+- `@agreements-standard/composition-vc-eip712`
+- `@agreements-standard/composition-evm-vc-eip712`
+- `@agreements-standard/fixtures`
+
+This keeps the schema source-of-truth in the repo while giving implementations a package boundary they can depend on directly. The canonical schema files remain under `schemas/`, and the canonical example documents remain under `templates/`.
+
+## Versioning and Verification
+
+Versioning is split by concern:
+
+- documents declare `standard.coreVersion` and explicit profile versions
+- `@agreements-standard/core` tracks the core schema version
+- profile and composition packages track their own schema versions
+- implementations should declare the package version ranges they support and reject incompatible documents
+
+The root workspace includes a package verification script:
+
+```bash
+npm run verify:modules
+```
+
+That script checks the module graph for:
+
+- workspace package coverage of the canonical schema/template trees
+- package export coverage for every canonical file
+- dependency/version consistency between modules
+- fixtures manifest consistency with the exported canonical examples
+
+This is the first line of defense against future drift between the standard and the implementation layer.
+
 ## Legacy Files
 
 The following root-level files are retained as pre-IP-005 reference material while the composable profile model is still in draft:

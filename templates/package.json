@@ -1,0 +1,34 @@
+{
+  "name": "@agreements-standard/fixtures",
+  "version": "1.0.0-draft.0",
+  "description": "Canonical example documents for the Agreements Standard.",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@agreements-standard/core": "1.1.0-draft.0",
+    "@agreements-standard/profile-evm": "1.0.0-draft.0",
+    "@agreements-standard/profile-vc": "1.0.0-draft.0",
+    "@agreements-standard/profile-eip712": "1.0.0-draft.0",
+    "@agreements-standard/composition-evm-eip712": "1.0.0-draft.0",
+    "@agreements-standard/composition-vc-eip712": "1.0.0-draft.0",
+    "@agreements-standard/composition-evm-vc-eip712": "1.0.0-draft.0"
+  },
+  "files": [
+    "fixtures.manifest.json",
+    "core/*.json",
+    "profiles/**/*.json",
+    "compositions/**/*.json",
+    "package.json"
+  ],
+  "exports": {
+    ".": "./fixtures.manifest.json",
+    "./fixtures.manifest.json": "./fixtures.manifest.json",
+    "./core/consulting-agreement.core.json": "./core/consulting-agreement.core.json",
+    "./profiles/evm/grant-agreement.evm.json": "./profiles/evm/grant-agreement.evm.json",
+    "./profiles/evm/grant-agreement.evm.mdast.json": "./profiles/evm/grant-agreement.evm.mdast.json",
+    "./profiles/vc/consulting-agreement.vc.json": "./profiles/vc/consulting-agreement.vc.json",
+    "./compositions/evm-eip712/grant-agreement.eip712.json": "./compositions/evm-eip712/grant-agreement.eip712.json",
+    "./compositions/vc-eip712/consulting-agreement.vc-eip712.json": "./compositions/vc-eip712/consulting-agreement.vc-eip712.json",
+    "./compositions/evm-vc-eip712/grant-agreement.vc-eip712.json": "./compositions/evm-vc-eip712/grant-agreement.vc-eip712.json",
+    "./package.json": "./package.json"
+  }
+}

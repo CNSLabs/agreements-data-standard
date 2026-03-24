@@ -1,0 +1,22 @@
+{
+  "name": "@agreements-standard/profile-evm",
+  "version": "1.0.0-draft.0",
+  "description": "EVM profile schemas for the Agreements Standard.",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@agreements-standard/core": "1.1.0-draft.0"
+  },
+  "files": [
+    "agreement.schema.json",
+    "execution/*.schema.json",
+    "variables/*.schema.json",
+    "package.json"
+  ],
+  "exports": {
+    ".": "./agreement.schema.json",
+    "./agreement.schema.json": "./agreement.schema.json",
+    "./execution/input-transaction-receipt.schema.json": "./execution/input-transaction-receipt.schema.json",
+    "./variables/evm-address.semantic.schema.json": "./variables/evm-address.semantic.schema.json",
+    "./package.json": "./package.json"
+  }
+}

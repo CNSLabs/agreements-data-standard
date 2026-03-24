@@ -6,6 +6,16 @@ Canonical schemas are organized into three layers:
 - `profiles/` for orthogonal concerns such as `evm`, `vc`, and `eip712`
 - `compositions/` for explicit combinations of profiles
 
+These canonical schema directories are also npm workspace packages:
+
+- `core/` -> `@agreements-standard/core`
+- `profiles/evm/` -> `@agreements-standard/profile-evm`
+- `profiles/vc/` -> `@agreements-standard/profile-vc`
+- `profiles/eip712/` -> `@agreements-standard/profile-eip712`
+- `compositions/evm-eip712/` -> `@agreements-standard/composition-evm-eip712`
+- `compositions/vc-eip712/` -> `@agreements-standard/composition-vc-eip712`
+- `compositions/evm-vc-eip712/` -> `@agreements-standard/composition-evm-vc-eip712`
+
 Use these as the authoritative schema entry points for new work:
 
 - [core/agreement.schema.json](./core/agreement.schema.json)
