@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/mdast.schema.json",
+  "title": "Agreement Markdown AST",
+  "description": "MDAST-compatible content tree for agreement documents. The core schema only standardizes generic Markdown nodes plus the variable node.",
+  "$ref": "#/$defs/node",
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "blockquote",
+            "break",
+            "code",
+            "definition",
+            "emphasis",
+            "heading",
+            "html",
+            "image",
+            "imageReference",
+            "inlineCode",
+            "link",
+            "linkReference",
+            "list",
+            "listItem",
+            "paragraph",
+            "root",
+            "strong",
+            "text",
+            "thematicBreak",
+            "variable"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "value": {
+          "type": "string"
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "lang": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "alt": {
+          "type": "string"
+        },
+        "checked": {
+          "type": ["boolean", "null"]
+        },
+        "spread": {
+          "type": "boolean"
+        },
+        "ordered": {
+          "type": "boolean"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "id": {
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "heading"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["depth", "children"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "code"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["value"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "html"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["value"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "image"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["url"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "link"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["url", "children"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "list"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["children"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "listItem"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["children"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "paragraph"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["children"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "root"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["children"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "text"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["value"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "variable"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "required": ["id"]
+          }
+        }
+      ]
+    }
+  }
+}

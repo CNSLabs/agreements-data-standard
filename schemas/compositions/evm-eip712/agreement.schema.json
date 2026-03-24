@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/compositions/evm-eip712/agreement.schema.json",
+  "title": "Agreement Document (EVM + EIP-712 Composition)",
+  "description": "Agreement document that composes the EVM and EIP-712 profiles.",
+  "allOf": [
+    {
+      "$ref": "../../profiles/evm/agreement.schema.json"
+    },
+    {
+      "$ref": "../../profiles/eip712/agreement.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "standard": {
+          "type": "object",
+          "properties": {
+            "profiles": {
+              "type": "array",
+              "allOf": [
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": {
+                      "id": {
+                        "const": "evm"
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": {
+                      "id": {
+                        "const": "eip712"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "dfsm"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "inputs": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "allOf": [
+                      {
+                        "$ref": "../../core/execution/input.schema.json"
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "format": {
+                              "const": "eip712/typed-data-signature"
+                            }
+                          },
+                          "required": ["format"]
+                        },
+                        "then": {
+                          "$ref": "./execution/input-eip712-attestation.schema.json"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

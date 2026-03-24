@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/variables.schema.json",
+  "title": "Agreement Variables",
+  "description": "Chain-neutral variable definitions for agreement documents.",
+  "$defs": {
+    "jsonValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "minLength": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxLength": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "variable": {
+      "type": "object",
+      "required": ["id", "type", "name", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+          "description": "Unique identifier for the variable"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "integer", "boolean", "dateTime", "uri", "object", "array"],
+          "description": "Primitive data type of the variable"
+        },
+        "semanticType": {
+          "type": "string",
+          "description": "Optional profile-defined semantic meaning for the primitive value"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the variable's purpose"
+        },
+        "value": {
+          "$ref": "#/$defs/jsonValue",
+          "description": "Current value of the variable"
+        },
+        "defaultValue": {
+          "$ref": "#/$defs/jsonValue",
+          "description": "Default value if none is provided"
+        },
+        "validation": {
+          "$ref": "#/$defs/validation"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/variable"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/execution/dfsm.schema.json",
+  "title": "Deterministic Finite State Machine Execution Model",
+  "description": "Chain-neutral DFSM execution model driven by verifiable inputs.",
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "required": ["type", "inputs"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["isValid"],
+          "description": "Type of transition condition"
+        },
+        "inputs": {
+          "type": "array",
+          "description": "Input identifiers to evaluate for this condition",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "transition": {
+      "type": "object",
+      "required": ["from", "to", "conditions"],
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "Starting state of the transition"
+        },
+        "to": {
+          "type": "string",
+          "description": "Ending state of the transition"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": ["states", "transitions"],
+  "properties": {
+    "states": {
+      "type": "array",
+      "description": "List of possible states for the agreement",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Input definitions that can be used in transitions",
+      "propertyNames": {
+        "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+      },
+      "additionalProperties": {
+        "$ref": "./input.schema.json"
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "description": "State transitions with conditions",
+      "items": {
+        "$ref": "#/$defs/transition"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

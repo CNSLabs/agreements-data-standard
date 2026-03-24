@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/content.schema.json",
+  "title": "Agreement Content",
+  "description": "Chain-neutral agreement content encoded as Markdown or MDAST.",
+  "type": "object",
+  "required": ["type", "data"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["md", "mdast"],
+      "description": "Content representation format"
+    },
+    "data": {}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "md"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "mdast"
+          }
+        },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "$ref": "./mdast.schema.json"
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

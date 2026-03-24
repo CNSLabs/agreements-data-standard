@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/execution/input.schema.json",
+  "title": "Execution Input Definition",
+  "description": "Chain-neutral definition of a verifiable execution input.",
+  "type": "object",
+  "required": ["id", "format", "schemaRef", "displayName", "description"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+      "description": "Unique identifier for the input"
+    },
+    "format": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:/[a-z0-9][a-z0-9-]*)+$",
+      "description": "Profile-defined input format identifier"
+    },
+    "schemaRef": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Schema path that defines the input format"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-readable name for the input"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the input's purpose"
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Format-specific constraints that a profile schema can interpret",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

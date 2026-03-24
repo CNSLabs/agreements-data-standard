@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/compositions/evm-eip712/execution/input-eip712-attestation.schema.json",
+  "title": "EVM + EIP-712 Attestation Input",
+  "description": "Execution input describing an EIP-712 typed-data signature whose signer is expected to resolve to an EVM address.",
+  "$defs": {
+    "typeField": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "../../../core/execution/input.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "const": "eip712/typed-data-signature"
+        },
+        "schemaRef": {
+          "const": "schemas/compositions/evm-eip712/execution/input-eip712-attestation.schema.json"
+        },
+        "constraints": {
+          "type": "object",
+          "required": ["signer", "signerSemanticType", "payload"],
+          "properties": {
+            "signer": {
+              "type": "string"
+            },
+            "signerSemanticType": {
+              "const": "evm/address"
+            },
+            "payload": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "proofPurpose": {
+              "type": "string",
+              "enum": [
+                "assertionMethod",
+                "authentication",
+                "keyAgreement",
+                "contractAgreement",
+                "capabilityInvocation",
+                "capabilityDelegation"
+              ]
+            },
+            "primaryType": {
+              "type": "string"
+            },
+            "domain": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "chainId": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "verifyingContract": {
+                  "type": "string",
+                  "pattern": "^0x[a-fA-F0-9]{40}$"
+                },
+                "salt": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "types": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/typeField"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

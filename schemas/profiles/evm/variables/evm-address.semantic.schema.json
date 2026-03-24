@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/profiles/evm/variables/evm-address.semantic.schema.json",
+  "title": "EVM Address Variable Semantic",
+  "description": "Profile rule for variables that carry an EVM address.",
+  "allOf": [
+    {
+      "$ref": "../../../core/variables.schema.json#/$defs/variable"
+    },
+    {
+      "type": "object",
+      "required": ["type", "semanticType", "validation"],
+      "properties": {
+        "type": {
+          "const": "string"
+        },
+        "semanticType": {
+          "const": "evm/address"
+        },
+        "value": {
+          "type": ["string", "null"]
+        },
+        "defaultValue": {
+          "type": ["string", "null"]
+        },
+        "validation": {
+          "type": "object",
+          "required": ["pattern"],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "minLength": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxLength": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "pattern": {
+              "const": "^0x[a-fA-F0-9]{40}$"
+            },
+            "message": {
+              "type": "string"
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": ["value"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^0x[a-fA-F0-9]{40}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "defaultValue": {
+                "type": "string"
+              }
+            },
+            "required": ["defaultValue"]
+          },
+          "then": {
+            "properties": {
+              "defaultValue": {
+                "pattern": "^0x[a-fA-F0-9]{40}$"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
