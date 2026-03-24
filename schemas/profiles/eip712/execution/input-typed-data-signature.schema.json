@@ -91,7 +91,7 @@
               }
             }
           },
-          "additionalProperties": false
+          "additionalProperties": true
         }
       }
     }
