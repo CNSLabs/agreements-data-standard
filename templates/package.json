@@ -1,16 +1,16 @@
 {
-  "name": "@agreements-standard/fixtures",
+  "name": "@cns/agreements-fixtures",
   "version": "1.0.0-draft.0",
   "description": "Canonical example documents for the Agreements Standard.",
   "license": "Apache-2.0",
   "dependencies": {
-    "@agreements-standard/core": "1.1.0-draft.0",
-    "@agreements-standard/profile-evm": "1.0.0-draft.0",
-    "@agreements-standard/profile-vc": "1.0.0-draft.0",
-    "@agreements-standard/profile-eip712": "1.0.0-draft.0",
-    "@agreements-standard/composition-evm-eip712": "1.0.0-draft.0",
-    "@agreements-standard/composition-vc-eip712": "1.0.0-draft.0",
-    "@agreements-standard/composition-evm-vc-eip712": "1.0.0-draft.0"
+    "@cns/agreements-core": "1.1.0-draft.0",
+    "@cns/agreements-profile-evm": "1.0.0-draft.0",
+    "@cns/agreements-profile-vc": "1.0.0-draft.0",
+    "@cns/agreements-profile-eip712": "1.0.0-draft.0",
+    "@cns/agreements-composition-evm-eip712": "1.0.0-draft.0",
+    "@cns/agreements-composition-vc-eip712": "1.0.0-draft.0",
+    "@cns/agreements-composition-evm-vc-eip712": "1.0.0-draft.0"
   },
   "files": [
     "fixtures.manifest.json",

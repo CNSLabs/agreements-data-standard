@@ -6,7 +6,7 @@ Canonical example documents are organized into:
 - `profiles/` for single-profile examples
 - `compositions/` for multi-profile examples
 
-The canonical examples are also exposed as the `@agreements-standard/fixtures` workspace package, with [fixtures.manifest.json](./fixtures.manifest.json) as the package root export.
+The canonical examples are also exposed as the `@cns/agreements-fixtures` workspace package, with [fixtures.manifest.json](./fixtures.manifest.json) as the package root export.
 
 Current canonical examples:
 
