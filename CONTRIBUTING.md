@@ -1,26 +1,62 @@
-# Grant Agreement Protocol
+# Agreements Standard Contributing Guide
 
 ## IP PR Guidelines
 
-An IP (Improvement Proposal) is a proposed change to the protocol. In order to be fully integrated into the protocol, currently the protocol team votes on the over approval, and the following process must be followed.
+An IP (Improvement Proposal) is a proposed change to the standard.
 
-IP currently have two statuses:
-* `IDEA` - budding concept
-* `DRAFT` - a proposal that is not yet ready for review
-* `PROPOSED` - a proposal that is ready for review
-* `ACCEPTED` - a proposal that has been accepted and integrated into the protocol
+IP statuses:
 
-IP state PR requirements:
-* `IDEA`: a PR to the [README.md](README.me) file proposing it to be added to the list of IPs that might become drafter
-* `IDEA -> DRAFT`: a simple markdown file in the [definition](definition) directory. At this point your IP will get an assigned number.
-* `DRAFT -> PROPOSED`: a PR that includes the following:
-  * the IP markdown file
-  * modified [PROTOCOL.md](PROTOCOL.md) to include the new IP
-  * modified [templates json file](templates/grant-agreement.json) to showcase exact changes to the JSON template
-  * modified [templates description file](templates/grant-agreement.md) to showcase the changes to the prose
-* `PROPOSED -> ACCEPTED`: a vote by the protocol team to accept the proposal and merge the PROPOSED PR
+- `IDEA` - budding concept
+- `DRAFT` - proposal under active development
+- `PROPOSED` - proposal ready for review
+- `ACCEPTED` - proposal accepted and merged
 
+## Canonical Repo Layout
 
+When contributing to the current draft model, prefer these directories:
 
+- `schemas/core/`
+- `schemas/profiles/`
+- `schemas/compositions/`
+- `templates/core/`
+- `templates/profiles/`
+- `templates/compositions/`
 
+Root-level `schemas/*.json` and `templates/*.json` files are retained as legacy reference material and should not be treated as the canonical target for new work unless the change is explicitly about legacy compatibility.
 
+The canonical schema directories are also npm workspace packages. If you change package manifests, exports, or canonical files, run `npm run verify:modules`.
+
+## IP State Expectations
+
+### `IDEA`
+
+- Open a PR updating [README.md](./README.md) to add the proposed topic to the active IP list or roadmap discussion
+
+### `IDEA -> DRAFT`
+
+- Add a new markdown file under [improvement-proposals](./improvement-proposals)
+
+### `DRAFT -> PROPOSED`
+
+The PR should include:
+
+- the IP markdown file
+- the relevant canonical schemas under [schemas](./schemas)
+- the relevant canonical examples under [templates](./templates)
+- README updates if the public repo shape or entry points changed
+
+### `PROPOSED -> ACCEPTED`
+
+- maintainer review and acceptance
+
+## Practical Guidance
+
+- If your change affects the core document model, update `schemas/core/`
+- If your change affects one concern only, update the relevant profile under `schemas/profiles/`
+- If your change combines concerns, prefer an explicit composition schema under `schemas/compositions/`
+- Add or update example documents under the matching `templates/` directory
+- Keep the workspace package exports in sync with the canonical files they publish
+
+## Legacy Note
+
+If you need to touch the legacy root-level schemas or templates, call that out explicitly in the PR description so reviewers know the change is intentional.

@@ -1,0 +1,22 @@
+{
+  "name": "@cns-labs/agreements-profile-eip712",
+  "version": "1.0.0-draft.0",
+  "description": "EIP-712 profile schemas for the Agreements Standard.",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@cns-labs/agreements-core": "1.1.0-draft.0"
+  },
+  "files": [
+    "*.schema.json",
+    "execution/*.schema.json",
+    "proofs/*.schema.json",
+    "package.json"
+  ],
+  "exports": {
+    ".": "./agreement.schema.json",
+    "./agreement.schema.json": "./agreement.schema.json",
+    "./execution/input-typed-data-signature.schema.json": "./execution/input-typed-data-signature.schema.json",
+    "./proofs/typed-data-proof.schema.json": "./proofs/typed-data-proof.schema.json",
+    "./package.json": "./package.json"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@cns-labs/agreements-core",
+  "version": "1.1.0-draft.0",
+  "description": "Chain-neutral core schemas for the Agreements Standard.",
+  "license": "Apache-2.0",
+  "files": [
+    "*.schema.json",
+    "execution/*.schema.json",
+    "package.json"
+  ],
+  "exports": {
+    ".": "./agreement.schema.json",
+    "./agreement.schema.json": "./agreement.schema.json",
+    "./metadata.schema.json": "./metadata.schema.json",
+    "./variables.schema.json": "./variables.schema.json",
+    "./content.schema.json": "./content.schema.json",
+    "./mdast.schema.json": "./mdast.schema.json",
+    "./execution/dfsm.schema.json": "./execution/dfsm.schema.json",
+    "./execution/input.schema.json": "./execution/input.schema.json",
+    "./package.json": "./package.json"
+  }
+}

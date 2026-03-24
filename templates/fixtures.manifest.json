@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0-draft.0",
+  "fixtures": [
+    {
+      "id": "core/consulting-agreement",
+      "path": "./core/consulting-agreement.core.json",
+      "schemaPackage": "@cns-labs/agreements-core",
+      "schemaExport": "."
+    },
+    {
+      "id": "profiles/evm/grant-agreement-md",
+      "path": "./profiles/evm/grant-agreement.evm.json",
+      "schemaPackage": "@cns-labs/agreements-profile-evm",
+      "schemaExport": "."
+    },
+    {
+      "id": "profiles/evm/grant-agreement-mdast",
+      "path": "./profiles/evm/grant-agreement.evm.mdast.json",
+      "schemaPackage": "@cns-labs/agreements-profile-evm",
+      "schemaExport": "."
+    },
+    {
+      "id": "profiles/vc/consulting-agreement-envelope",
+      "path": "./profiles/vc/consulting-agreement.vc.json",
+      "schemaPackage": "@cns-labs/agreements-profile-vc",
+      "schemaExport": "."
+    },
+    {
+      "id": "compositions/evm-eip712/grant-agreement",
+      "path": "./compositions/evm-eip712/grant-agreement.eip712.json",
+      "schemaPackage": "@cns-labs/agreements-composition-evm-eip712",
+      "schemaExport": "."
+    },
+    {
+      "id": "compositions/vc-eip712/consulting-agreement-envelope",
+      "path": "./compositions/vc-eip712/consulting-agreement.vc-eip712.json",
+      "schemaPackage": "@cns-labs/agreements-composition-vc-eip712",
+      "schemaExport": "."
+    },
+    {
+      "id": "compositions/evm-vc-eip712/grant-agreement-envelope",
+      "path": "./compositions/evm-vc-eip712/grant-agreement.vc-eip712.json",
+      "schemaPackage": "@cns-labs/agreements-composition-evm-vc-eip712",
+      "schemaExport": "."
+    }
+  ]
+}

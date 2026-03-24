@@ -1,0 +1,20 @@
+{
+  "name": "agreements-standard-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "schemas/core",
+    "schemas/profiles/evm",
+    "schemas/profiles/vc",
+    "schemas/profiles/eip712",
+    "schemas/compositions/evm-eip712",
+    "schemas/compositions/vc-eip712",
+    "schemas/compositions/evm-vc-eip712",
+    "templates"
+  ],
+  "scripts": {
+    "verify:modules": "node ./scripts/verify-modules.mjs",
+    "verify": "npm run verify:modules"
+  }
+}
