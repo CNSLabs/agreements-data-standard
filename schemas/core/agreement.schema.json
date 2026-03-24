@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/agreement.schema.json",
+  "title": "Agreement Document (Core)",
+  "description": "Chain-neutral JSON agreement document.",
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": ["standard", "metadata", "variables", "content"],
+  "properties": {
+    "standard": {
+      "type": "object",
+      "required": ["id", "coreVersion", "profiles"],
+      "properties": {
+        "id": {
+          "const": "agreements"
+        },
+        "coreVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?$"
+        },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/profile"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadata": {
+      "$ref": "./metadata.schema.json"
+    },
+    "variables": {
+      "$ref": "./variables.schema.json"
+    },
+    "content": {
+      "$ref": "./content.schema.json"
+    },
+    "execution": {
+      "type": "object",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["dfsm"],
+          "description": "Execution model type"
+        },
+        "data": {}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dfsm"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "data": {
+                "$ref": "./execution/dfsm.schema.json"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

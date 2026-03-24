@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/core/metadata.schema.json",
+  "title": "Agreement Metadata",
+  "description": "Chain-neutral metadata for an agreement document.",
+  "type": "object",
+  "required": ["id", "templateId", "version", "createdAt", "name", "author", "description"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^did:.*$",
+      "description": "Unique identifier for the agreement instance"
+    },
+    "templateId": {
+      "type": "string",
+      "pattern": "^did:template:.*$",
+      "description": "Identifier for the template type"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the template payload"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the template"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author or organization that created the template"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the template's purpose"
+    }
+  },
+  "additionalProperties": false
+}

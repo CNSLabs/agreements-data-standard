@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/compositions/evm-vc-eip712/agreement-envelope.schema.json",
+  "title": "Agreement VC Envelope (EVM + VC + EIP-712 Composition)",
+  "description": "VC envelope with an EIP-712 proof that wraps an agreement composing the EVM and EIP-712 profiles.",
+  "allOf": [
+    {
+      "$ref": "../vc-eip712/agreement-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "credentialSubject": {
+          "type": "object",
+          "properties": {
+            "agreement": {
+              "$ref": "../evm-eip712/agreement.schema.json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/profiles/eip712/proofs/typed-data-proof.schema.json",
+  "title": "EIP-712 Typed Data Proof",
+  "description": "Proof object representing an EIP-712 typed-data signature.",
+  "$defs": {
+    "typeField": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": ["type", "created", "proofPurpose", "verificationMethod", "eip712", "proofValue"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["EthereumEip712Signature2021"]
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "proofPurpose": {
+      "type": "string",
+      "enum": [
+        "assertionMethod",
+        "authentication",
+        "keyAgreement",
+        "contractAgreement",
+        "capabilityInvocation",
+        "capabilityDelegation"
+      ]
+    },
+    "verificationMethod": {
+      "type": "string",
+      "format": "uri"
+    },
+    "eip712": {
+      "type": "object",
+      "required": ["domain", "types", "primaryType"],
+      "properties": {
+        "domain": {
+          "type": "object",
+          "required": ["name", "version"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "chainId": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "verifyingContract": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            },
+            "salt": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "types": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/typeField"
+            }
+          }
+        },
+        "primaryType": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "proofValue": {
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]+$"
+    }
+  },
+  "additionalProperties": false
+}

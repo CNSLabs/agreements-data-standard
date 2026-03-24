@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/profiles/eip712/agreement.schema.json",
+  "title": "Agreement Document (EIP-712 Profile)",
+  "description": "JSON agreement document that conforms to the core schema and the EIP-712 profile. The EIP-712 profile owns typed-data signature semantics only.",
+  "allOf": [
+    {
+      "$ref": "../../core/agreement.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "standard": {
+          "type": "object",
+          "properties": {
+            "profiles": {
+              "type": "array",
+              "contains": {
+                "type": "object",
+                "required": ["id", "version"],
+                "properties": {
+                  "id": {
+                    "const": "eip712"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minContains": 1
+            }
+          }
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "dfsm"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "inputs": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "allOf": [
+                      {
+                        "$ref": "../../core/execution/input.schema.json"
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "format": {
+                              "const": "eip712/typed-data-signature"
+                            }
+                          },
+                          "required": ["format"]
+                        },
+                        "then": {
+                          "$ref": "./execution/input-typed-data-signature.schema.json"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

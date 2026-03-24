@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/profiles/evm/agreement.schema.json",
+  "title": "Agreement Document (EVM Profile)",
+  "description": "JSON agreement document that conforms to the core schema and the EVM profile. The EVM profile owns runtime and value semantics only; it does not own VC or EIP-712 envelope semantics.",
+  "allOf": [
+    {
+      "$ref": "../../core/agreement.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "standard": {
+          "type": "object",
+          "properties": {
+            "profiles": {
+              "type": "array",
+              "contains": {
+                "type": "object",
+                "required": ["id", "version"],
+                "properties": {
+                  "id": {
+                    "const": "evm"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minContains": 1
+            }
+          }
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "../../core/variables.schema.json#/$defs/variable"
+              },
+              {
+                "if": {
+                  "properties": {
+                    "semanticType": {
+                      "const": "evm/address"
+                    }
+                  },
+                  "required": ["semanticType"]
+                },
+                "then": {
+                  "$ref": "./variables/evm-address.semantic.schema.json"
+                }
+              }
+            ]
+          }
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "dfsm"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "inputs": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "allOf": [
+                      {
+                        "$ref": "../../core/execution/input.schema.json"
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "format": {
+                              "const": "evm/transaction-receipt"
+                            }
+                          },
+                          "required": ["format"]
+                        },
+                        "then": {
+                          "$ref": "./execution/input-transaction-receipt.schema.json"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/compositions/vc-eip712/agreement-envelope.schema.json",
+  "title": "Agreement VC Envelope (VC + EIP-712 Composition)",
+  "description": "Verifiable Credential envelope whose proof is an EIP-712 typed-data proof.",
+  "allOf": [
+    {
+      "$ref": "../../profiles/vc/agreement-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "proof": {
+          "$ref": "../../profiles/eip712/proofs/typed-data-proof.schema.json"
+        }
+      }
+    }
+  ]
+}

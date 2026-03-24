@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/profiles/evm/execution/input-transaction-receipt.schema.json",
+  "title": "EVM Transaction Receipt Input",
+  "description": "Execution input describing an expected transaction receipt in the EVM profile.",
+  "allOf": [
+    {
+      "$ref": "../../../core/execution/input.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "format": {
+          "const": "evm/transaction-receipt"
+        },
+        "schemaRef": {
+          "const": "schemas/profiles/evm/execution/input-transaction-receipt.schema.json"
+        },
+        "constraints": {
+          "type": "object",
+          "required": ["chainId"],
+          "properties": {
+            "chainId": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "transactionHash": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            },
+            "contractAddress": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["success", "reverted"]
+            },
+            "event": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "args": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

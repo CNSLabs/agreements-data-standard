@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.dev/schemas/profiles/vc/agreement-envelope.schema.json",
+  "title": "Agreement VC Envelope",
+  "description": "Verifiable Credential envelope for wrapping an agreement document. This profile owns VC structure only and does not imply a specific proof system.",
+  "type": "object",
+  "required": ["@context", "type", "issuer", "issuanceDate", "credentialSubject", "proof"],
+  "properties": {
+    "@context": {
+      "type": ["string", "array"],
+      "description": "JSON-LD context for the credential"
+    },
+    "id": {
+      "type": "string",
+      "format": "uri",
+      "description": "Unique identifier for the credential"
+    },
+    "type": {
+      "type": ["string", "array"],
+      "description": "Credential type or types",
+      "items": {
+        "type": "string"
+      }
+    },
+    "issuer": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uri"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "description": "Entity that issued the credential"
+    },
+    "issuanceDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expirationDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "credentialSubject": {
+      "type": "object",
+      "required": ["agreement"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "agreement": {
+          "$ref": "../../core/agreement.schema.json"
+        }
+      },
+      "additionalProperties": true
+    },
+    "proof": {
+      "type": "object",
+      "required": ["type", "proofPurpose", "verificationMethod"],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "proofPurpose": {
+          "type": "string"
+        },
+        "verificationMethod": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
