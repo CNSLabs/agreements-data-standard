@@ -8,13 +8,13 @@ Canonical schemas are organized into three layers:
 
 These canonical schema directories are also npm workspace packages:
 
-- `core/` -> `@cns/agreements-core`
-- `profiles/evm/` -> `@cns/agreements-profile-evm`
-- `profiles/vc/` -> `@cns/agreements-profile-vc`
-- `profiles/eip712/` -> `@cns/agreements-profile-eip712`
-- `compositions/evm-eip712/` -> `@cns/agreements-composition-evm-eip712`
-- `compositions/vc-eip712/` -> `@cns/agreements-composition-vc-eip712`
-- `compositions/evm-vc-eip712/` -> `@cns/agreements-composition-evm-vc-eip712`
+- `core/` -> `@cns-labs/agreements-core`
+- `profiles/evm/` -> `@cns-labs/agreements-profile-evm`
+- `profiles/vc/` -> `@cns-labs/agreements-profile-vc`
+- `profiles/eip712/` -> `@cns-labs/agreements-profile-eip712`
+- `compositions/evm-eip712/` -> `@cns-labs/agreements-composition-evm-eip712`
+- `compositions/vc-eip712/` -> `@cns-labs/agreements-composition-vc-eip712`
+- `compositions/evm-vc-eip712/` -> `@cns-labs/agreements-composition-evm-vc-eip712`
 
 Use these as the authoritative schema entry points for new work:
 

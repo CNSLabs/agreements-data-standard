@@ -1,10 +1,10 @@
 {
-  "name": "@cns/agreements-profile-vc",
+  "name": "@cns-labs/agreements-profile-vc",
   "version": "1.0.0-draft.0",
   "description": "VC profile schemas for the Agreements Standard.",
   "license": "Apache-2.0",
   "dependencies": {
-    "@cns/agreements-core": "1.1.0-draft.0"
+    "@cns-labs/agreements-core": "1.1.0-draft.0"
   },
   "files": [
     "*.schema.json",

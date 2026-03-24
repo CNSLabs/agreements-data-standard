@@ -1,5 +1,5 @@
 {
-  "name": "@cns/agreements-core",
+  "name": "@cns-labs/agreements-core",
   "version": "1.1.0-draft.0",
   "description": "Chain-neutral core schemas for the Agreements Standard.",
   "license": "Apache-2.0",

@@ -256,14 +256,14 @@ More detail:
 
 The canonical schema trees are now also modeled as npm workspace modules:
 
-- `@cns/agreements-core`
-- `@cns/agreements-profile-evm`
-- `@cns/agreements-profile-vc`
-- `@cns/agreements-profile-eip712`
-- `@cns/agreements-composition-evm-eip712`
-- `@cns/agreements-composition-vc-eip712`
-- `@cns/agreements-composition-evm-vc-eip712`
-- `@cns/agreements-fixtures`
+- `@cns-labs/agreements-core`
+- `@cns-labs/agreements-profile-evm`
+- `@cns-labs/agreements-profile-vc`
+- `@cns-labs/agreements-profile-eip712`
+- `@cns-labs/agreements-composition-evm-eip712`
+- `@cns-labs/agreements-composition-vc-eip712`
+- `@cns-labs/agreements-composition-evm-vc-eip712`
+- `@cns-labs/agreements-fixtures`
 
 This keeps the schema source-of-truth in the repo while giving implementations a package boundary they can depend on directly. The canonical schema files remain under `schemas/`, and the canonical example documents remain under `templates/`.
 
@@ -272,7 +272,7 @@ This keeps the schema source-of-truth in the repo while giving implementations a
 Versioning is split by concern:
 
 - documents declare `standard.coreVersion` and explicit profile versions
-- `@cns/agreements-core` tracks the core schema version
+- `@cns-labs/agreements-core` tracks the core schema version
 - profile and composition packages track their own schema versions
 - implementations should declare the package version ranges they support and reject incompatible documents
 

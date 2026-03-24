@@ -7,7 +7,7 @@ const rootDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const specs = [
   {
     dir: "schemas/core",
-    name: "@cns/agreements-core",
+    name: "@cns-labs/agreements-core",
     version: "1.1.0-draft.0",
     primary: "agreement.schema.json",
     mode: "schema",
@@ -15,77 +15,77 @@ const specs = [
   },
   {
     dir: "schemas/profiles/evm",
-    name: "@cns/agreements-profile-evm",
+    name: "@cns-labs/agreements-profile-evm",
     version: "1.0.0-draft.0",
     primary: "agreement.schema.json",
     mode: "schema",
-    deps: ["@cns/agreements-core"]
+    deps: ["@cns-labs/agreements-core"]
   },
   {
     dir: "schemas/profiles/vc",
-    name: "@cns/agreements-profile-vc",
+    name: "@cns-labs/agreements-profile-vc",
     version: "1.0.0-draft.0",
     primary: "agreement-envelope.schema.json",
     mode: "schema",
-    deps: ["@cns/agreements-core"]
+    deps: ["@cns-labs/agreements-core"]
   },
   {
     dir: "schemas/profiles/eip712",
-    name: "@cns/agreements-profile-eip712",
+    name: "@cns-labs/agreements-profile-eip712",
     version: "1.0.0-draft.0",
     primary: "agreement.schema.json",
     mode: "schema",
-    deps: ["@cns/agreements-core"]
+    deps: ["@cns-labs/agreements-core"]
   },
   {
     dir: "schemas/compositions/evm-eip712",
-    name: "@cns/agreements-composition-evm-eip712",
+    name: "@cns-labs/agreements-composition-evm-eip712",
     version: "1.0.0-draft.0",
     primary: "agreement.schema.json",
     mode: "schema",
     deps: [
-      "@cns/agreements-core",
-      "@cns/agreements-profile-evm",
-      "@cns/agreements-profile-eip712"
+      "@cns-labs/agreements-core",
+      "@cns-labs/agreements-profile-evm",
+      "@cns-labs/agreements-profile-eip712"
     ]
   },
   {
     dir: "schemas/compositions/vc-eip712",
-    name: "@cns/agreements-composition-vc-eip712",
+    name: "@cns-labs/agreements-composition-vc-eip712",
     version: "1.0.0-draft.0",
     primary: "agreement-envelope.schema.json",
     mode: "schema",
     deps: [
-      "@cns/agreements-core",
-      "@cns/agreements-profile-vc",
-      "@cns/agreements-profile-eip712"
+      "@cns-labs/agreements-core",
+      "@cns-labs/agreements-profile-vc",
+      "@cns-labs/agreements-profile-eip712"
     ]
   },
   {
     dir: "schemas/compositions/evm-vc-eip712",
-    name: "@cns/agreements-composition-evm-vc-eip712",
+    name: "@cns-labs/agreements-composition-evm-vc-eip712",
     version: "1.0.0-draft.0",
     primary: "agreement-envelope.schema.json",
     mode: "schema",
     deps: [
-      "@cns/agreements-composition-evm-eip712",
-      "@cns/agreements-composition-vc-eip712"
+      "@cns-labs/agreements-composition-evm-eip712",
+      "@cns-labs/agreements-composition-vc-eip712"
     ]
   },
   {
     dir: "templates",
-    name: "@cns/agreements-fixtures",
+    name: "@cns-labs/agreements-fixtures",
     version: "1.0.0-draft.0",
     primary: "fixtures.manifest.json",
     mode: "fixtures",
     deps: [
-      "@cns/agreements-core",
-      "@cns/agreements-profile-evm",
-      "@cns/agreements-profile-vc",
-      "@cns/agreements-profile-eip712",
-      "@cns/agreements-composition-evm-eip712",
-      "@cns/agreements-composition-vc-eip712",
-      "@cns/agreements-composition-evm-vc-eip712"
+      "@cns-labs/agreements-core",
+      "@cns-labs/agreements-profile-evm",
+      "@cns-labs/agreements-profile-vc",
+      "@cns-labs/agreements-profile-eip712",
+      "@cns-labs/agreements-composition-evm-eip712",
+      "@cns-labs/agreements-composition-vc-eip712",
+      "@cns-labs/agreements-composition-evm-vc-eip712"
     ]
   }
 ];
@@ -196,7 +196,7 @@ for (const spec of specs) {
 
 const fixturesManifest = readJson("templates/fixtures.manifest.json");
 const fixturePaths = fixturesManifest.fixtures.map((fixture) => fixture.path.replace(/^\.\//, "")).sort();
-const expectedFixturePaths = listCanonicalFiles(specs.find((spec) => spec.name === "@cns/agreements-fixtures")).sort();
+const expectedFixturePaths = listCanonicalFiles(specs.find((spec) => spec.name === "@cns-labs/agreements-fixtures")).sort();
 assert(
   JSON.stringify(fixturePaths) === JSON.stringify(expectedFixturePaths),
   "templates/fixtures.manifest.json does not match the canonical fixtures package exports"

@@ -1,11 +1,11 @@
 {
-  "name": "@cns/agreements-composition-evm-vc-eip712",
+  "name": "@cns-labs/agreements-composition-evm-vc-eip712",
   "version": "1.0.0-draft.0",
   "description": "EVM + VC + EIP-712 composition schemas for the Agreements Standard.",
   "license": "Apache-2.0",
   "dependencies": {
-    "@cns/agreements-composition-evm-eip712": "1.0.0-draft.0",
-    "@cns/agreements-composition-vc-eip712": "1.0.0-draft.0"
+    "@cns-labs/agreements-composition-evm-eip712": "1.0.0-draft.0",
+    "@cns-labs/agreements-composition-vc-eip712": "1.0.0-draft.0"
   },
   "files": [
     "*.schema.json",
