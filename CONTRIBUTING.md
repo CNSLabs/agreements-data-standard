@@ -1,8 +1,8 @@
-# Agreements Protocol Contributing Guide
+# Agreements Standard Contributing Guide
 
 ## IP PR Guidelines
 
-An IP (Improvement Proposal) is a proposed change to the protocol.
+An IP (Improvement Proposal) is a proposed change to the standard.
 
 IP statuses:
 
@@ -45,7 +45,7 @@ The PR should include:
 
 ### `PROPOSED -> ACCEPTED`
 
-- protocol team review and acceptance
+- maintainer review and acceptance
 
 ## Practical Guidance
 

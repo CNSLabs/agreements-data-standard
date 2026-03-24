@@ -1,8 +1,8 @@
-# Agreements Protocol
+# Agreements Standard
 
 [![JSON Schema](https://img.shields.io/badge/schema-JSON-blue)](./schemas/core/agreement.schema.json)
 
-The Agreements Protocol is a JSON-based standard for authoring, validating, and executing structured agreements.
+The Agreements Standard is a JSON-based standard for authoring, validating, and executing structured agreements.
 
 The current repo is organized around a chain-neutral core plus composable profiles:
 
