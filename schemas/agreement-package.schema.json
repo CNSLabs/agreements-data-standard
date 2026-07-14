@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agreements.shodai.network/schemas/experimental/agreement-package-0.1.schema.json",
+  "title": "Experimental Canonical Agreement Package",
+  "description": "Experimental proof envelope binding an agreement, its target chain, and initialization values into one canonical digest without replacing the existing template schema.",
+  "type": "object",
+  "required": ["schemaVersion", "profile", "target", "agreement", "initialization"],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "profile": {
+      "type": "object",
+      "required": ["id", "version", "compiler"],
+      "properties": {
+        "id": { "const": "shodai.evm.agreement-engine" },
+        "version": { "const": "0.1" },
+        "compiler": { "const": "@shodai-network/agreements-protocol-evm/package-compiler-0.1" }
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["chainId"],
+      "properties": {
+        "chainId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "agreement": {
+      "type": "object",
+      "required": ["metadata", "variables", "content", "execution"],
+      "properties": {
+        "metadata": { "type": "object" },
+        "variables": { "type": "object" },
+        "contracts": { "type": "object" },
+        "content": { "type": "object" },
+        "execution": { "type": "object" }
+      }
+    },
+    "initialization": {
+      "type": "object",
+      "required": ["values"],
+      "properties": {
+        "values": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "boolean"]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

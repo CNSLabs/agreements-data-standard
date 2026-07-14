@@ -1,0 +1,16 @@
+{
+  "profile": "IP-005 experimental EVM package 0.1",
+  "source": "reference-package.json",
+  "sourceSha256": "35fed4884d64e9394b9ae0b353c56e8df1b925d39bbcef98e058f7f4323d0533",
+  "canonicalUtf8Length": 3114,
+  "packageDigest": "0xbadcf69305da75949634578328f3496dc4dec02e509c485f3df7421b05eca123",
+  "targetChainId": "59141",
+  "compiled": {
+    "inputDefs": 3,
+    "transitions": 3,
+    "initVars": 3,
+    "verifiers": 0,
+    "actions": 1
+  },
+  "expectedLossReport": []
+}

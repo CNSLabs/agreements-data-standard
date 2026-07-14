@@ -23,6 +23,7 @@ The protocol consists of five core components:
 - ✅ **[IP-002](./improvement-proposals/IP-002.md)**: MDAST Content Representation
 - 🚧 **[IP-003](https://github.com/ConsenSysMesh/agreements-protocol/pull/16)**: Proofs and Execution Flow specifications
 - ✅ **[IP-004](./improvement-proposals/IP-004.md)**: Standardized Metadata, Flat Variables, Schemas, and Content Types
+- 🚧 **[IP-005](./improvement-proposals/IP-005.md)**: Canonical Agreement Package and fail-closed EVM compilation (experimental)
 
 #### Planned
 

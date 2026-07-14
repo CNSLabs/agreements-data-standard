@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "0.1",
+  "profile": {
+    "id": "shodai.evm.agreement-engine",
+    "version": "0.1",
+    "compiler": "@shodai-network/agreements-protocol-evm/package-compiler-0.1"
+  },
+  "target": {
+    "chainId": "59141"
+  },
+  "agreement": {
+    "metadata": {
+      "id": "did:agreement:canonical-package-grant",
+      "templateId": "did:template:canonical-package-grant-v1",
+      "version": "0.1.0",
+      "createdAt": "2026-07-13T00:00:00.000Z",
+      "name": "Canonical Package Milestone Grant",
+      "author": "CNS Labs",
+      "description": "Bilateral milestone acceptance with one bounded adapter action"
+    },
+    "variables": {
+      "grantor": {
+        "type": "address",
+        "name": "Grantor",
+        "validation": {
+          "required": true
+        }
+      },
+      "recipient": {
+        "type": "address",
+        "name": "Recipient",
+        "validation": {
+          "required": true
+        }
+      },
+      "amount": {
+        "type": "uint256",
+        "name": "Settlement amount",
+        "validation": {
+          "required": true,
+          "min": 1
+        }
+      },
+      "evidenceHash": {
+        "type": "bytes32",
+        "name": "Milestone evidence hash",
+        "validation": {
+          "required": true
+        }
+      }
+    },
+    "contracts": {
+      "milestoneAdapter": {
+        "description": "Bounded action adapter used by the proof fixture",
+        "address": "0x4444444444444444444444444444444444444444",
+        "chainId": "59141"
+      }
+    },
+    "content": {
+      "type": "md",
+      "data": "# Milestone Grant\n\nThe recipient submits milestone evidence. Grantor acceptance advances the agreement and invokes the configured adapter."
+    },
+    "execution": {
+      "states": {
+        "AWAITING_ACCEPTANCE": {
+          "name": "Awaiting recipient acceptance"
+        },
+        "AWAITING_EVIDENCE": {
+          "name": "Awaiting milestone evidence"
+        },
+        "AWAITING_REVIEW": {
+          "name": "Awaiting grantor review"
+        },
+        "SETTLED": {
+          "name": "Settled"
+        }
+      },
+      "initialize": {
+        "initialState": "AWAITING_ACCEPTANCE",
+        "data": {
+          "grantor": "${variables.grantor}",
+          "recipient": "${variables.recipient}",
+          "amount": "${variables.amount}"
+        }
+      },
+      "inputs": {
+        "accept": {
+          "type": "VerifiedCredentialEIP712",
+          "displayName": "Accept grant",
+          "data": {},
+          "issuer": "${variables.recipient}"
+        },
+        "submitEvidence": {
+          "type": "VerifiedCredentialEIP712",
+          "displayName": "Submit milestone evidence",
+          "data": {
+            "evidenceHash": "${variables.evidenceHash}"
+          },
+          "issuer": "${variables.recipient}"
+        },
+        "acceptAndPay": {
+          "type": "VerifiedCredentialEIP712",
+          "displayName": "Accept evidence and settle",
+          "data": {},
+          "issuer": "${variables.grantor}"
+        }
+      },
+      "transitions": [
+        {
+          "from": "AWAITING_ACCEPTANCE",
+          "to": "AWAITING_EVIDENCE",
+          "conditions": [
+            {
+              "type": "isValid",
+              "input": "accept"
+            }
+          ]
+        },
+        {
+          "from": "AWAITING_EVIDENCE",
+          "to": "AWAITING_REVIEW",
+          "conditions": [
+            {
+              "type": "isValid",
+              "input": "submitEvidence"
+            }
+          ]
+        },
+        {
+          "from": "AWAITING_REVIEW",
+          "to": "SETTLED",
+          "conditions": [
+            {
+              "type": "isValid",
+              "input": "acceptAndPay"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "id": "recordMilestoneAcceptance",
+          "when": {
+            "from": "AWAITING_REVIEW",
+            "input": "acceptAndPay"
+          },
+          "call": {
+            "type": "evmCall",
+            "target": "${contracts.milestoneAdapter.address}",
+            "value": "0",
+            "abi": [
+              {
+                "type": "function",
+                "name": "recordMilestoneAcceptance",
+                "stateMutability": "nonpayable",
+                "inputs": [
+                  { "name": "grantor", "type": "address" },
+                  { "name": "recipient", "type": "address" },
+                  { "name": "amount", "type": "uint256" }
+                ],
+                "outputs": []
+              }
+            ],
+            "method": "recordMilestoneAcceptance",
+            "args": [
+              "${variables.grantor}",
+              "${variables.recipient}",
+              "${variables.amount}"
+            ]
+          },
+          "revertOnFailure": true
+        }
+      ]
+    }
+  },
+  "initialization": {
+    "values": {
+      "grantor": "0x1111111111111111111111111111111111111111",
+      "recipient": "0x2222222222222222222222222222222222222222",
+      "amount": "1000000"
+    }
+  }
+}
